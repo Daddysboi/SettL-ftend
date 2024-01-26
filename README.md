@@ -1,3 +1,7 @@
+# SettL-ftend
+
+A Repo for an escrow platform who helps create trust between buyers and sellers
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
