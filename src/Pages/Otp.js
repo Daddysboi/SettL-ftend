@@ -1,57 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import OtpInput from "react-otp-input";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const OtpInput = () => {
+const OtpVerification = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
+  const { userData } = useUser();
+  const [focusedInput, setFocusedInput] = useState(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleInputChange = (index, value) => {
-    if (/[0-9]/.test(value)) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-      setError("");
-    }
+  const handleChange = (value) => {
+    setOtp(value);
+    setError("");
   };
 
-  const handlePaste = (e) => {
-    const pastedData = e.clipboardData.getData("Text");
-    if (/^[0-9]{4}$/.test(pastedData)) {
-      setOtp(pastedData.split(""));
-      setError("");
+  const showToast = (message, type) => {
+    toast[type](message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+  const renderInput = (index, focus) => (
+    <input
+      key={index}
+      value={otp[index]}
+      onChange={(e) => handleChange(e.target.value)}
+      onFocus={() => handleInputFocus(index)} // Add this line
+      onBlur={() => {}} // You might want to handle onBlur as well
+    />
+  );
+  const handleInputFocus = (index) => {
+    setFocusedInput(index);
+  };
+
+  const handleSubmit = async () => {
+    if (/^[0-9]{4}$/.test(otp)) {
+      try {
+        const response = await axios.post(
+          "https://settl-core-dev.onrender.com/api/v1/verify-otp",
+          {
+            email: userData.email,
+            otp: otp,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+          }
+        );
+
+        if (response.status === 200) {
+          showToast("Registration successful!", "success");
+          // Redirect to the desired page
+          navigate.push("/login");
+        } else {
+          showToast("Invalid OTP. Please enter a valid OTP.", "error");
+        }
+      } catch (error) {
+        console.error("OTP verification failed:", error);
+        showToast("OTP verification failed. Please try again.", "error");
+      }
     } else {
-      setError("Invalid OTP format. Please enter a four-digit OTP.");
+      showToast("Invalid OTP. Please enter a four-digit OTP.", "error");
     }
   };
-
-  const handleSubmit = () => {
-    const enteredOtp = otp.join("");
-    if (/^[0-9]{4}$/.test(enteredOtp)) {
-      // Valid OTP, you can perform further actions here
-      setError("");
-      alert("OTP is valid!"); // Replace with your logic
-    } else {
-      setError("Invalid OTP. Please enter a four-digit OTP.");
-    }
-  };
-
   return (
     <div>
-      <div>
-        {otp.map((digit, index) => (
-          <input
-            key={index}
-            type="text"
-            maxLength="1"
-            value={digit}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            onPaste={(e) => handlePaste(e)}
-          />
-        ))}
-      </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <OtpInput
+        value={otp}
+        onChange={handleChange}
+        numInputs={4}
+        separator={<span>-</span>} // Customize separator if needed
+        isInputNum={true}
+        shouldAutoFocus={true}
+        inputStyle="otp-input" // Add this line to specify the input style
+        containerStyle="otp-container" // Add this line to specify the container style
+        renderInput={renderInput} // Pass the renderInput function
+      />
       <button onClick={handleSubmit}>Submit</button>
+      <ToastContainer />
     </div>
   );
 };
 
-export default OtpInput;
+export default OtpVerification;

@@ -1,13 +1,13 @@
-import RootLayout from "./RootLayout/RootLayout";
 import "./App.css";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import RootLayout from "./RootLayout/RootLayout";
 import SignIn from "./Pages/SignIn";
 import Error404 from "./Pages/Error404";
-import TermsAndConditions from "./Pages/TermsAndConditions";
+import TermsAndConditions from "./Pages/TermsofService";
 import Payment from "./Components/Payment";
-import Contracts from "./Components/Contracts";
+import Dashboard from "./Components/Dashboard/Dashboard";
 import Otp from "./Pages/Otp";
 import {
   createBrowserRouter,
@@ -15,30 +15,35 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import { UserProvider } from "./contexts/UserContext";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route path="/" element={<Home />} />
-      <Route path="/signup" element={<SignUp />} />
+    <Route>
       <Route path="/login" element={<SignIn />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-      <Route path="/contracts" element={<Contracts />} />
-      <Route path="/otp" element={<Otp />} />
-
-      <Route path="/payment" element={<Payment />} />
-
-      <Route path="*" element={<Error404 />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/dashboard/:sellerId" index element={<Dashboard />}></Route>
+      <Route path="/" element={<RootLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/otp" element={<Otp />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="*" element={<Error404 />} />
+      </Route>
     </Route>
   )
 );
 
 function App() {
   return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
+    <UserProvider>
+      <div className="App">
+        <RouterProvider router={router}>
+          <RootLayout />
+        </RouterProvider>
+      </div>
+    </UserProvider>
   );
 }
 
