@@ -135,7 +135,6 @@ const EyeIcon = styled.span`
   right: 5px;
   transform: translateY(-50%);
   cursor: pointer;
-
   transform: translateY(-50%);
 `;
 const StyledSelect = styled.select`
@@ -232,26 +231,18 @@ const SignupSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters"),
-  confirmPassword: Yup.string()
-    .required("Confirm Password is required")
-    .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  role: Yup.string().required("Role is required"),
+  role: Yup.string(),
 });
 const Signup = () => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
-  });
+
   const [errors, setErrors] = useState({});
   const [userAlert, setUserAlert] = useState("");
   const inputRef = useRef();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+
   const { storeUserData } = useUser();
   const navigate = useNavigate();
 
@@ -278,6 +269,7 @@ const Signup = () => {
     // onError: (error) => console.log("Signup Failed:", error),
   });
   console.log("working");
+  console.log("otp1");
 
   const formik = useFormik({
     initialValues: {
@@ -291,16 +283,20 @@ const Signup = () => {
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       try {
+        console.log("Formik Errors:", formik.errors);
+        console.log("otp5");
+        console.log("Submitting form data:", values);
         const response = await axios.post(
-          "https://settl-core-dev.onrender.com/api/v1/send-otp",
+          "https://jsonplaceholder.typicode.com/posts",
           {
             email: values.email,
           }
         );
+        console.log("otp2");
         console.log("Response:", response);
-        console.log("otp1");
-        if (response.status >= 200 && response.status < 300) {
-          console.log("otp2");
+
+        if (response.status === 200) {
+          console.log("otp3");
 
           storeUserData({
             firstName: values.firstName,
@@ -310,7 +306,7 @@ const Signup = () => {
           });
 
           console.log("Response:", response);
-          console.log("otp3");
+          console.log("otp4");
           toast.success("Registration successful!");
           navigate("/otp");
         } else {
@@ -322,8 +318,9 @@ const Signup = () => {
         toast.error("Registration failed. Please try again.");
       }
     },
+    touched: {},
   });
-  const { handleSubmit, handleChange, handleBlur, values } = formik;
+  const { handleSubmit, handleChange, handleBlur, values, touched } = formik;
 
   // const handleChange = useCallback(
   //   (e) => {
@@ -373,6 +370,7 @@ const Signup = () => {
 
         <StyledMiddle>
           <StyledLogo to="/">
+            <ToastContainer />
             <StyledImg src={logo} alt="logo" />
             Sett<span style={{ color: "#4db6ac" }}>L</span>
           </StyledLogo>
@@ -451,6 +449,7 @@ const Signup = () => {
                   type="button"
                   onClick={togglePasswordVisibility}
                 ></EyeIcon>
+                <span> {passwordVisibility ? <FaEye /> : <FaEyeSlash />}</span>
               </StyledLabel>
               <StyledLabel>
                 Role
@@ -466,12 +465,10 @@ const Signup = () => {
                   <option value="seller">Seller</option>
                 </StyledSelect>
               </StyledLabel>
-              {errors.confirmPassword && (
-                <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
+              {touched.password && formErrors.password && (
+                <ErrorMessage>{formErrors.password}</ErrorMessage>
               )}
-              {formik.touched.password && formik.errors.password ? (
-                <div>{formik.errors.password}</div>
-              ) : null}
+
               <StyledBtn type="submit">Sign Up</StyledBtn>
             </StyledForm>
           </div>
