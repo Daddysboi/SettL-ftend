@@ -9,15 +9,72 @@ import logo from "../assets/logo/White-removebg-preview.png";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
 import { useUser } from "../contexts/UserContext";
 import { useFormik } from "formik";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Input, Button, Form, Checkbox } from "antd";
+import {
+  Eye,
+  EyeInvisible,
+  CheckCircleFilled,
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+const toastStyle = css`
+  font-size: 14px; /* Adjust the font size as needed */
+  padding: 12px 16px; /* Adjust the padding as needed */
+`;
+
+const StyledCheckbox = styled(Checkbox)`
+  // Style for the Ant Design Checkbox
+  .ant-checkbox-inner {
+    border-color: #52c41a; // Green border color when checked
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #52c41a; // Green background color when checked
+    border-color: #52c41a; // Green border color when checked
+  }
+
+  .ant-checkbox-checked .ant-checkbox-check {
+    color: #fff; // White check color when checked
+  }
+`;
+
+const StyledLabelAntd = styled.label`
+  font-size: 0.65rem;
+  letter-spacing: -0.01rem;
+  position: relative;
+  display: flex;
+  align-items: center; // Center the Checkbox and its label
+`;
 
 //container
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
   overflow: hidden;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: block;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const SharedSideStyles = css`
@@ -36,6 +93,28 @@ const StyledLeft = styled.div`
     linear-gradient(90deg, #f8701c 0.6px, transparent 0.6px);
   background-size: 130px 130px;
   background-position: 0 0, 0 0;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+    flex: 0;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledInnerLeft = styled.div`
   border-color: black;
@@ -74,6 +153,29 @@ const StyledMiddle = styled.div`
   box-sizing: border-box;
   &::-webkit-scrollbar {
     width: 0;
+  }
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin: 2rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    margin: 2rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    margin: 3rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
   }
 `;
 const StyledLogo = styled(NavLink)`
@@ -123,20 +225,29 @@ const StyledInput = styled.input`
   border-radius: 0.3rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
   &:focus {
-    margin-top: 0;
-    margin-left: 5px;
     border: 2px solid #ff4500;
   }
 `;
 
 const EyeIcon = styled.span`
   position: absolute;
-  top: 50%;
-  right: 5px;
-  transform: translateY(-50%);
+  top: 37%;
+  position: absolute;
+  top: 37%;
   cursor: pointer;
 
-  transform: translateY(-50%);
+  @media screen and (max-width: 1400px) {
+    transform: translateX(2000%);
+  }
+
+  @media screen and (max-width: 1200px) {
+    transform: translateX(2500%);
+  }
+  cursor: pointer;
+
+  @media screen and (max-width: 1600px) {
+    transform: translateX(2600%);
+  }
 `;
 const StyledSelect = styled.select`
   width: 100%;
@@ -148,7 +259,6 @@ const StyledSelect = styled.select`
   border: 1px solid rgba(223, 140, 82, 0.3);
   &:focus {
     margin-top: 0;
-    margin-left: 5px;
     border: 1px solid #ff4500;
   }
 `;
@@ -217,6 +327,29 @@ const ErrorMessage = styled.div`
 const StyledRight = styled.div`
   flex: 0.8;
   ${SharedSideStyles}
+
+  // Mobile devices
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    display: none;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    display: none;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const SignupSchema = Yup.object().shape({
@@ -237,6 +370,7 @@ const SignupSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
   role: Yup.string().required("Role is required"),
 });
+
 const Signup = () => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -288,8 +422,11 @@ const Signup = () => {
       confirmPassword: "",
       role: "",
     },
-    validationSchema: SignupSchema,
+    // validationSchema: SignupSchema,
     onSubmit: async (values) => {
+      console.log("Form Values:", values);
+      console.log("Form Errors:", formik.errors);
+      console.log("otp0");
       try {
         const response = await axios.post(
           "https://settl-core-dev.onrender.com/api/v1/send-otp",
@@ -297,8 +434,8 @@ const Signup = () => {
             email: values.email,
           }
         );
-        console.log("Response:", response);
         console.log("otp1");
+        console.log("Response:", response);
         if (response.status >= 200 && response.status < 300) {
           console.log("otp2");
 
@@ -383,6 +520,20 @@ const Signup = () => {
             <StyledSubHead>
               Enter information to create an account
             </StyledSubHead>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              transition={Slide}
+              toastStyle={toastStyle}
+            />
+
             <StyledForm onSubmit={handleSubmit} ref={inputRef}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <StyledLabel>
@@ -394,7 +545,7 @@ const Signup = () => {
                     placeholder="Enter Firstname"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    style={{ width: "8rem" }}
+                    style={{ width: "9rem" }}
                   />
                 </StyledLabel>
 
@@ -407,7 +558,7 @@ const Signup = () => {
                     placeholder="Enter Lastname"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    style={{ width: "8rem" }}
+                    style={{ width: "9rem" }}
                   />
                 </StyledLabel>
               </div>
@@ -426,6 +577,9 @@ const Signup = () => {
 
               <StyledLabel>
                 Password
+                <EyeIcon onClick={togglePasswordVisibility}>
+                  {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
+                </EyeIcon>
                 <StyledInput
                   name="password"
                   value={values.password}
@@ -433,24 +587,21 @@ const Signup = () => {
                   onBlur={handleBlur}
                   type={passwordVisibility ? "text" : "password"}
                   {...formik.getFieldProps("password")}
-                />{" "}
-                <span onClick={togglePasswordVisibility}>
-                  {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
-                </span>
+                />
               </StyledLabel>
               <StyledLabel>
                 Confirm Password
                 <StyledInput
-                  type="password"
+                  type={passwordVisibility ? "text" : "password"}
                   name="confirmPassword"
                   value={values.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                <EyeIcon
+                {/* <EyeIcon
                   type="button"
                   onClick={togglePasswordVisibility}
-                ></EyeIcon>
+                ></EyeIcon> */}
               </StyledLabel>
               <StyledLabel>
                 Role

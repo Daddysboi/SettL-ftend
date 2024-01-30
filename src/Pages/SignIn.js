@@ -2,15 +2,36 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { NavLink, Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import { mockGoogleSignInEndpoint } from "../api/mockApi";
 import styled from "styled-components";
 import logo from "../assets/logo/White-removebg-preview.png";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //container
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: block;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 //Left
@@ -32,6 +53,28 @@ const StyledInnerLeft = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 20vh;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+    flex: 0;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const StyledInnerText = styled.div`
@@ -58,6 +101,29 @@ const StyledMiddle = styled.div`
   margin-top: 3rem;
   margin-left: 8rem;
   font-weight: 700;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin: 2rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    margin: 2rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    margin: 3rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledLogo = styled(NavLink)`
   color: #f26600;
@@ -92,6 +158,12 @@ const StyledForm = styled.form`
   }
 `;
 
+const StyledLabel = styled.label`
+  font-size: 0.65rem;
+  letter-spacing: -0.01rem;
+  position: relative;
+`;
+
 const StyledInput = styled.input`
   width: 100%;
   padding: 0.5rem;
@@ -104,6 +176,27 @@ const StyledInput = styled.input`
     margin-top: 0;
     margin-left: 5px;
     border: 2px solid #ff4500;
+  }
+`;
+
+const EyeIcon = styled.span`
+  position: absolute;
+  top: 37%;
+  position: absolute;
+  top: 55%;
+  cursor: pointer;
+
+  @media screen and (max-width: 1400px) {
+    transform: translateX(2000%);
+  }
+
+  @media screen and (max-width: 1200px) {
+    transform: translateX(2500%);
+  }
+  cursor: pointer;
+
+  @media screen and (max-width: 1600px) {
+    transform: translateX(2400%);
   }
 `;
 
@@ -173,26 +266,32 @@ const StyledRight = styled.div`
 `;
 
 const handleGoogleSignIn = async (googleUser, setErrors) => {
-  try {
-    const token = googleUser?.tokenId;
-    console.log("Google Sign-In Token:", token);
-
-    // const url = process.env.REACT_APP_GOOGLE_SIGNIN_API_ENDPOINT;
-    // const { data: res } = await axios.post(url, { token });
-
-    const res = await mockGoogleSignInEndpoint(token);
-    console.log("Mock API Response:", res);
-
-    localStorage.setItem("token", res.formData);
-
-    window.location = "/dasboard/1";
-  } catch (error) {
-    console.error("Google Sign-In Error:", error);
-    setErrors("Google Sign-In failed. Please try again.");
-  }
+  // try {
+  //   const token = googleUser?.tokenId;
+  //   console.log("Google Sign-In Token:", token);
+  //   // const url = process.env.REACT_APP_GOOGLE_SIGNIN_API_ENDPOINT;
+  //   // const { data: res } = await axios.post(url, { token });
+  //   const res = await mockGoogleSignInEndpoint(token);
+  //   console.log("Mock API Response:", res);
+  //   localStorage.setItem("token", res.formData);
+  //   const userId = res.user._id || 1;
+  //   window.location.href = `/dashboard/${userId}`;
+  // } catch (error) {
+  //   console.error("Google Sign-In Error:", error);
+  //   setErrors("Google Sign-In failed. Please try again.");
+  // }
 };
 
-const handleForgotPassword = () => {};
+const showToast = (message, type) => {
+  toast[type](message, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
+};
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState("");
@@ -200,34 +299,37 @@ const SignIn = () => {
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
   const inputRef = useRef();
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   const signIn = useGoogleLogin({
-    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    onSuccess: (googleUser) => handleGoogleSignIn(googleUser, setErrors),
-    onError: (error) => {
-      console.error("Google Sign-In Error:", error);
-      setErrors("Google Sign-In failed. Please try again.");
-    },
+    // clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    // onSuccess: (googleUser) => handleGoogleSignIn(googleUser, setErrors),
+    // onError: (error) => {
+    //   console.error("Google Sign-In Error:", error);
+    //   setErrors("Google Sign-In failed. Please try again.");
+    // },
   });
-
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility((prevVisibility) => !prevVisibility);
+  };
   const logOut = () => {
     localStorage.removeItem("token");
   };
 
   useEffect(() => {
     inputRef.current.focus();
-    if (signIn.googleUser) {
-      const accessToken = signIn.googleUser.getAuthResponse().access_token;
+    // if (signIn.googleUser) {
+    //   const accessToken = signIn.googleUser.getAuthResponse().access_token;
 
-      axios
-        .get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
-        )
-        .then((res) => {
-          setProfile(res.data);
-        })
-        .catch((err) => console.log(err));
-    }
+    //   axios
+    //     .get(
+    //       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
+    //     )
+    //     .then((res) => {
+    //       setProfile(res.data);
+    //     })
+    //     .catch((err) => console.log(err));
+    // }
   }, [signIn.googleUser]);
 
   const handleChange = (e) => {
@@ -243,21 +345,22 @@ const SignIn = () => {
       const { data: res } = await axios.post(url, formData);
 
       localStorage.setItem("token", res.formData);
-      window.location = "/dasboard/1";
+      window.location.href = "/dasboard/1";
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status < 500
-      ) {
-        setErrors(error.response.data.message);
-      } else {
-        setErrors("Login failed. Please check your credentials and try again.");
-      }
+      handleSignInError(error, setErrors);
     }
-    setFormData({ email: "", password: "" });
   };
-
+  const handleSignInError = (error, setErrors) => {
+    if (
+      error.response &&
+      error.response.status >= 400 &&
+      error.response.status < 500
+    ) {
+      setErrors(error.response.data.message);
+    } else {
+      setErrors("Login failed. Please check your credentials and try again.");
+    }
+  };
   return (
     <>
       <StyledContainer>
@@ -302,7 +405,7 @@ const SignIn = () => {
               Enter the information you entered while registering
             </StyledSubHead>
             <StyledForm onSubmit={handleSubmit} ref={inputRef}>
-              <label htmlFor="">
+              <StyledLabel htmlFor="">
                 Email
                 <StyledInput
                   type="text"
@@ -311,31 +414,31 @@ const SignIn = () => {
                   placeholder="Enter your e-mail"
                   onChange={handleChange}
                 />
-              </label>
-              <label htmlFor="">
+              </StyledLabel>
+              <StyledLabel htmlFor="">
                 Password
+                <EyeIcon onClick={togglePasswordVisibility}>
+                  {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
+                </EyeIcon>
                 <StyledInput
-                  type="password"
+                  type={passwordVisibility ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   placeholder="Enter your password"
                   onChange={handleChange}
                 />
-              </label>
+              </StyledLabel>
               {errors && <p style={{ color: "red" }}>{errors}</p>}
               <StyledBtn type="submit">Login</StyledBtn>
               <StyledCheckboxCont>
                 <div>
-                  <label>
+                  <StyledLabel>
                     <input type="checkbox" name="checkbox" />
                     Remember Me
-                  </label>
+                  </StyledLabel>
                 </div>
-                <span
-                  style={{ color: "#f26600" }}
-                  onClick={handleForgotPassword}
-                >
-                  Forgot Password
+                <span style={{ color: "#f26600", cursor: "pointer" }}>
+                  <Link to="/forgot-password">Forgot Password</Link>
                 </span>
               </StyledCheckboxCont>
             </StyledForm>
@@ -376,6 +479,7 @@ const SignIn = () => {
         </StyledMiddle>
         <StyledRight></StyledRight>
       </StyledContainer>
+      <ToastContainer />
     </>
   );
 };
