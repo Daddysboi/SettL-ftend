@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,7 +6,7 @@ import {
   faArrowCircleRight,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
-import CreateTransaction from "../CreateTransaction";
+import TransactionFormPopup from "./TransactionPopup.Home";
 
 const StyledCardContainerTop = styled.div`
   display: flex;
@@ -126,7 +126,44 @@ const StyledTd = styled.td`
 `;
 
 const Home = () => {
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [withdrawalCount, setWithdrawalCount] = useState(0);
+  const [depositCount, setDepositCount] = useState(0);
+  const [ongoingTransactions, setOngoingTransactions] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
   const [newTransaction, setNewTransaction] = useState(false);
+  const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
+
+  const handleCreateTransaction = () => {
+    setTransactionFormOpen(false);
+    // Additional logic if needed...
+  };
+
+  useEffect(() => {
+    // Mock API call to fetch data from the database
+    const fetchData = async () => {
+      try {
+        // Replace the following with your actual API endpoint
+        const response = await fetch("YOUR_API_ENDPOINT");
+        const data = await response.json();
+
+        // Update state variables with the fetched data or use default values
+        setTotalTransactions(data.totalTransactions || 0);
+        setWalletBalance(data.walletBalance || 0);
+        setWithdrawalCount(data.withdrawalCount || 0);
+        setDepositCount(data.depositCount || 0);
+        setOngoingTransactions(data.ongoingTransactions || []);
+        setRecentTransactions(data.recentTransactions || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    // Call the fetchData function
+    fetchData();
+  }, []); // The em
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -134,19 +171,19 @@ const Home = () => {
           <StyledCardContainerTop>
             <StyledCard>
               <StyledCardTxt>Total Transactions</StyledCardTxt>
-              <p>15</p>
+              <p>{totalTransactions}</p>
             </StyledCard>
             <StyledCard>
               <StyledCardTxt>Wallet Balance</StyledCardTxt>
-              <p>NGN 5,500.99</p>
+              <p>NGN {walletBalance.toFixed(2)}</p>
             </StyledCard>
             <StyledCard>
               <StyledCardTxt>Withdrawal</StyledCardTxt>
-              <p>15</p>
+              <p>{withdrawalCount}</p>
             </StyledCard>
             <StyledCard>
               <StyledCardTxt>Deposit</StyledCardTxt>
-              <p>NGN 5,500.99</p>
+              <p>NGN {depositCount.toFixed(2)}</p>
             </StyledCard>
           </StyledCardContainerTop>
           <StyledCardContainerMid>
@@ -156,7 +193,7 @@ const Home = () => {
                 icon={faWallet}
                 style={{ color: "white", fontSize: "8rem" }}
               />
-              <StyledBtnCreate onClick={(e) => setNewTransaction(true)}>
+              <StyledBtnCreate onClick={(e) => setTransactionFormOpen(true)}>
                 Create
               </StyledBtnCreate>
             </StyledWalletCard>
@@ -259,7 +296,15 @@ const Home = () => {
             </table>
           </StyledCardContainerBtm>{" "}
         </div>
-        <div>{newTransaction && <CreateTransaction />}</div>
+        <div>
+          {isTransactionFormOpen && (
+            <TransactionFormPopup
+              isOpen={isTransactionFormOpen}
+              onRequestClose={() => setTransactionFormOpen(false)}
+              onCreateTransaction={handleCreateTransaction}
+            />
+          )}
+        </div>
       </div>
     </>
   );

@@ -1,11 +1,11 @@
-import React, { useReducer, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { styled, css } from "styled-components";
-import Home from "./Home.Dashboard.js";
-import Settings from "./Settings.Dashboard.js";
-import Transactions from "./Transactions.Dashboard.js";
-import Wallet from "./Wallet.Dashboard.js";
-import Profile from "./Profile.Dashboard.js";
+import React, { useReducer, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import styled, { css } from "styled-components";
+import Home from "./Home/Home.Dashboard";
+import Settings from "./Settings.Dashboard";
+import Transactions from "./Transactions.Dashboard";
+import Wallet from "./Wallet.Dashboard";
+import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,9 +17,7 @@ import {
   faReceipt,
   faTruck,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 
-//Sidebar
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -45,7 +43,6 @@ const StyledSideBar = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  /* height: 100%; */
   bottom: 0;
   left: 0;
   top: 5rem;
@@ -64,6 +61,12 @@ const StyledBtn = styled.button`
   text-align: left;
   color: #ffffff;
   font-weight: 200;
+
+  ${(props) =>
+    props.active &&
+    css`
+      background-color: #yourActiveColor;
+    `}
 `;
 
 const SignoutLink = styled(Link)`
@@ -76,7 +79,6 @@ const SignoutLink = styled(Link)`
   text-decoration: none;
 `;
 
-//Right
 const StyledRight = styled.div`
   flex: 7;
   margin-left: 12rem;
@@ -91,6 +93,7 @@ const initialState = {
   page: "home",
   initialLoad: true,
 };
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "navigate":
@@ -103,7 +106,7 @@ const reducer = (state, action) => {
   }
 };
 
-const SellerDashboard = () => {
+const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
   const { sellerId } = useParams();
@@ -114,6 +117,10 @@ const SellerDashboard = () => {
     }
   }, [initialLoad]);
 
+  const navigateTo = (destination) => {
+    dispatch({ type: "navigate", payload: destination });
+  };
+
   return (
     <>
       <DashboardHeader />
@@ -122,7 +129,7 @@ const SellerDashboard = () => {
           <StyledBtnContainer>
             <StyledBtn
               active={page === "home"}
-              onClick={() => dispatch({ type: "navigate", payload: "home" })}
+              onClick={() => navigateTo("home")}
             >
               <FontAwesomeIcon
                 icon={faHome}
@@ -132,7 +139,7 @@ const SellerDashboard = () => {
             </StyledBtn>
             <StyledBtn
               active={page === "profile"}
-              onClick={() => dispatch({ type: "navigate", payload: "profile" })}
+              onClick={() => navigateTo("profile")}
             >
               <FontAwesomeIcon
                 icon={faUser}
@@ -142,9 +149,7 @@ const SellerDashboard = () => {
             </StyledBtn>
             <StyledBtn
               active={page === "transactions"}
-              onClick={() =>
-                dispatch({ type: "navigate", payload: "transactions" })
-              }
+              onClick={() => navigateTo("transactions")}
             >
               <FontAwesomeIcon
                 icon={faReceipt}
@@ -154,7 +159,7 @@ const SellerDashboard = () => {
             </StyledBtn>
             <StyledBtn
               active={page === "wallet"}
-              onClick={() => dispatch({ type: "navigate", payload: "wallet" })}
+              onClick={() => navigateTo("wallet")}
             >
               <FontAwesomeIcon
                 icon={faWallet}
@@ -164,9 +169,7 @@ const SellerDashboard = () => {
             </StyledBtn>
             <StyledBtn
               active={page === "settings"}
-              onClick={() =>
-                dispatch({ type: "navigate", payload: "settings" })
-              }
+              onClick={() => navigateTo("settings")}
             >
               <FontAwesomeIcon
                 icon={faGear}
@@ -176,7 +179,7 @@ const SellerDashboard = () => {
             </StyledBtn>
             <StyledBtn
               active={page === "tracker"}
-              onClick={() => dispatch({ type: "navigate", payload: "tracker" })}
+              onClick={() => navigateTo("tracker")}
             >
               <FontAwesomeIcon
                 icon={faTruck}
@@ -203,4 +206,4 @@ const SellerDashboard = () => {
   );
 };
 
-export default SellerDashboard;
+export default Dashboard;

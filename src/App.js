@@ -8,6 +8,9 @@ import Error404 from "./Pages/Error404";
 import TermsAndConditions from "./Pages/TermsofService";
 import Payment from "./Components/Payment";
 import Dashboard from "./Components/Dashboard/Dashboard";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
+
 import Otp from "./Pages/Otp";
 import {
   createBrowserRouter,
@@ -22,6 +25,9 @@ const router = createBrowserRouter(
     <Route>
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/forgot-password" element={<ResetPassword />} />
+      <Route path="/reset-password/:token" element={<ForgotPassword />} />
+
       <Route path="/dashboard/:sellerId" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />

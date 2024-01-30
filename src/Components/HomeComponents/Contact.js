@@ -1,151 +1,167 @@
-import React, { useReducer, useCallback } from "react";
+import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
+import contactImg from "../../assets/images/contact-banner.png";
 
-const initialState = {
-  form: {
-    fullname: "",
-    email: "",
-    message: "",
-  },
-  errors: {
-    fullname: "",
-    email: "",
-    message: "",
-  },
-  verified: false,
-  loading: false,
-};
+const StyledContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "SET_FORM":
-      return {
-        ...state,
-        form: { ...state.form, [action.payload.name]: action.payload.value },
-      };
-    case "SET_ERRORS":
-      return { ...state, errors: action.payload };
-    case "SET_VERIFIED":
-      return { ...state, verified: action.payload };
-    case "SET_LOADING":
-      return { ...state, loading: action.payload };
-    case "RESET_FORM":
-      return {
-        ...state,
-        form: { fullname: "", email: "", message: "" },
-        errors: { fullname: "", email: "", message: "" },
-      };
-    default:
-      return state;
+  width: 100vw;
+  padding: 5rem 0;
+  margin: 0;
+  flex-direction: column;
+  color: #fff;
+  background: url(${contactImg});
+  background-size: cover;
+`;
+
+const StyledForm = styled.form`
+  /* gap: 2rem; */
+`;
+
+const StyledHeader = styled.h1`
+  color: #183153;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+`;
+const StyledInput = styled.input`
+  width: 20rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: none;
+  &::placeholder {
+    opacity: 0.5;
   }
-};
+`;
+
+const StyledTextarea = styled.textarea`
+  width: 20rem;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  &::placeholder {
+    opacity: 0.5;
+  }
+`;
+const StyledBtn = styled.button`
+  /* background: linear-gradient(to right, #ff4500, #ff8c00, #f26600); */
+  background-color: #183153;
+  border: none;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  color: #fff;
+  &:hover {
+    color: #183153;
+    border: 1px solid #183153;
+    background: transparent;
+  }
+`;
 
 const Contact = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { form, errors, verified, loading } = state;
-
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = {};
-
-    if (!form.fullname.trim()) {
-      newErrors.fullname = "Name is required";
-      isValid = false;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!form.email.trim() || !emailRegex.test(form.email.trim())) {
-      newErrors.email = "A valid email address is required";
-      isValid = false;
-    }
-
-    if (!form.message.trim()) {
-      newErrors.message = "Message is required";
-      isValid = false;
-    }
-
-    dispatch({ type: "SET_ERRORS", payload: newErrors });
-    return isValid;
+  const initialValues = {
+    fullname: "",
+    email: "",
+    message: "",
   };
 
-  const handleChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      dispatch({ type: "SET_FORM", payload: { name, value } });
-      dispatch({ type: "SET_ERRORS", payload: { ...errors, [name]: "" } });
-    },
-    [errors]
-  );
+  const validationSchema = Yup.object().shape({
+    fullname: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    message: Yup.string().required("Message is required"),
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [serverSuccess, setServerSuccess] = useState(false);
 
-    if (validateForm()) {
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        dispatch({ type: "SET_LOADING", payload: true });
-        console.log(form);
-        const apiUrl = "https://dummyjson.com/";
-        const response = await axios.post(apiUrl, form);
+        const apiUrl = "https://jsonplaceholder.typicode.com/posts/1";
+        const response = await axios.post(apiUrl, values);
 
         if (response.status === 201) {
-          dispatch({ type: "SET_VERIFIED", payload: true });
-          dispatch({ type: "RESET_FORM" });
-          console.log("State after RESET_FORM:", state);
+          toast.success("Form submitted successfully!");
+          resetForm();
+          setServerSuccess(true);
         } else {
-          dispatch({ type: "SET_VERIFIED", payload: false });
+          toast.error("Form submission failed");
+          setServerSuccess(false);
         }
       } catch (error) {
         console.error("Error submitting form:", error);
-        dispatch({ type: "SET_VERIFIED", payload: false });
+        // Handle errors here
+        setServerSuccess(false);
       } finally {
-        dispatch({ type: "SET_LOADING", payload: false });
+        setSubmitting(false);
       }
-    } else {
-      dispatch({ type: "SET_VERIFIED", payload: false });
-    }
-  };
+    },
+  });
 
   return (
-    <div>
-      <form action="" onSubmit={handleSubmit}>
-        <input
+    <StyledContainer id="contact">
+      <StyledHeader>Contact Our Support</StyledHeader>
+      <StyledForm onSubmit={formik.handleSubmit}>
+        <StyledInput
           type="text"
           placeholder="Full Name"
           name="fullname"
-          value={form.fullname}
-          onChange={handleChange}
+          value={formik.values.fullname}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          // style={{ marginBottom: "10rem" }}
         />
-        <div style={{ color: "red" }}>{errors.fullname}</div>
+        <div style={{ color: "red" }}>
+          {formik.touched.fullname && formik.errors.fullname}
+        </div>
 
-        <input
+        <StyledInput
           type="text"
           placeholder="E-mail"
           name="email"
-          value={form.email}
-          onChange={handleChange}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
-        <div style={{ color: "red" }}>{errors.email}</div>
+        <div style={{ color: "red" }}>
+          {formik.touched.email && formik.errors.email}
+        </div>
 
-        <textarea
+        <StyledTextarea
           cols="30"
           rows="10"
           type="text"
           name="message"
-          value={form.message}
+          value={formik.values.message}
           placeholder="Message"
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
-        <div style={{ color: "red" }}>{errors.message}</div>
+        <div style={{ color: "red" }}>
+          {formik.touched.message && formik.errors.message}
+        </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-        {/* include a recaptcha */}
-        {verified && (
+        <StyledBtn type="submit" disabled={formik.isSubmitting}>
+          {formik.isSubmitting ? "Submitting..." : "Submit"}
+        </StyledBtn>
+
+        {/* include recaptcha */}
+        <ToastContainer />
+
+        {serverSuccess && (
           <p style={{ color: "green" }}>Form submitted successfully!</p>
         )}
-      </form>
-    </div>
+      </StyledForm>
+    </StyledContainer>
   );
 };
 
