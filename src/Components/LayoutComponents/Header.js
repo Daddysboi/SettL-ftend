@@ -15,7 +15,7 @@ const StyledContainer = styled.div`
   z-index: 1;
   background-color: #fff;
 
-  @media (max-width: 768px) {
+  @media (max-width: 769px) {
     flex-direction: column;
     padding: 1rem;
     align-items: flex-start;
@@ -30,8 +30,11 @@ const StyledLogo = styled(NavLink)`
   font-size: 2.5rem;
   font-weight: 600;
 
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    flex-direction: column;
+    flex: 0.8;
+
+    align-items: flex-start;
   }
 `;
 
@@ -46,17 +49,17 @@ const StyledLinks = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    /* display: none; */
-    align-items: flex-start;
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    flex: 1.5;
+    align-items: center;
   }
 `;
 
 const StyledLink = styled(Link)`
   cursor: pointer;
   margin-right: 1rem;
-
+  align-items: center;
+  padding-top: 1rem;
   &:hover {
     color: #f26600;
   }

@@ -16,6 +16,7 @@ import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
 
 const StyledModal = styled(Modal)`
+  margin-top: 5rem;
   overlay {
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
@@ -31,7 +32,7 @@ const StyledModal = styled(Modal)`
     bottom: auto;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    width: 300px; /* Adjust the width as needed */
+    width: 50%; /* Adjust the width as needed */
     padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
@@ -40,9 +41,12 @@ const StyledModal = styled(Modal)`
 
   .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 1.5rem;
+    right: 2rem;
     cursor: pointer;
+  }
+  .bm-burger-bars {
+    background: #373a47;
   }
 `;
 
@@ -54,10 +58,14 @@ const StyledButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-left: 1rem;
+  position: absolute;
+  top: 8.5rem;
+  right: 2rem;
 
   &:hover {
-    background-color: #f8701c;
+    background-color: transparent;
+    border: 2px solid #f8701c;
+    color: #f8701c;
   }
 `;
 
@@ -75,7 +83,9 @@ const StyledBackButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-
+  position: absolute;
+  top: 12rem;
+  right: 2rem;
   &:hover {
     background-color: #f26600;
     color: #ffffff;
@@ -313,7 +323,7 @@ const TransactionFormPopup = ({
       case 2:
         return (
           <StyledFormDiv>
-            <h2>Select Transaction Type</h2>
+            <h2>Transaction Type</h2>
             <label htmlFor="transactionType">Select transaction type:</label>
             <div>
               <button
@@ -346,7 +356,7 @@ const TransactionFormPopup = ({
       case 3:
         return (
           <div>
-            <h2>Enter Transaction Details</h2>
+            <h2>Transaction Details</h2>
             {formik.values.transactionType && (
               <div>
                 <label htmlFor="amount">Enter transaction amount:</label>
@@ -536,7 +546,7 @@ const TransactionFormPopup = ({
               handleNext();
             }}
           >
-            Save Details & Next
+            Save & Next
           </StyledButton>
         )}
         {currentModalStep === 5 && (

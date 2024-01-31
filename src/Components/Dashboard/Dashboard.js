@@ -8,6 +8,8 @@ import Wallet from "./Wallet.Dashboard";
 import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
+import Resolution from "./Resolution.Dashboard";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -16,6 +18,7 @@ import {
   faGear,
   faReceipt,
   faTruck,
+  faHandshake,
 } from "@fortawesome/free-solid-svg-icons";
 
 const StyledContainer = styled.div`
@@ -187,6 +190,16 @@ const Dashboard = () => {
               />
               Order Tracker
             </StyledBtn>
+            <StyledBtn
+              active={page === "resolution"}
+              onClick={() => navigateTo("resolution")}
+            >
+              <FontAwesomeIcon
+                icon={faHandshake}
+                style={{ paddingRight: "0.5rem" }}
+              />
+              Resolution
+            </StyledBtn>
           </StyledBtnContainer>
 
           <SignoutLink to="/">Sign Out</SignoutLink>
@@ -200,6 +213,7 @@ const Dashboard = () => {
           {page === "wallet" && <Wallet />}
           {page === "settings" && <Settings />}
           {page === "tracker" && <Tracker />}
+          {page === "resolution" && <Resolution />}
         </StyledRight>
       </StyledContainer>
     </>

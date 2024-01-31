@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext";
+import { userContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
 import { toast, ToastContainer } from "react-toastify";
@@ -11,26 +11,30 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  margin-top: 4rem;
 `;
 
 const SubmitButton = styled.button`
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #f26600;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 8rem;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: transparent;
+    border: 2px solid #f26600;
+    color: #f26600;
   }
 `;
 
 const OtpVerification = () => {
-  const { userData } = useUser();
+  const [userData, setUserData] = useContext(userContext);
+
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
 
@@ -46,27 +50,32 @@ const OtpVerification = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("user Data: " + userData);
+    console.log("user Data: " + JSON.stringify(userData));
+
     if (/^[0-9]{4}$/.test(otp)) {
       try {
+        console.log(otp);
         const response = await axios.post(
-          "https://settl-core-dev.onrender.com/api/v1/verify-otp",
+          "https://settl-core-dev.onrender.com/api/v1/register",
           {
             email: userData.email,
             otp: otp,
             firstName: userData.firstName,
             lastName: userData.lastName,
+            password: userData.password,
           }
         );
-
-        if (response.status === 200) {
+        console.log(response);
+        if (response.status == 200) {
           showToast("Registration successful!", "success");
           navigate("/login");
+          // setOtp("");
         } else {
           showToast("Invalid OTP. Please enter a valid OTP.", "error");
         }
       } catch (error) {
         console.error("OTP verification failed:", error);
+        console.log("Response Data:", error.response.data);
         showToast("OTP verification failed. Please try again.", "error");
       }
     } else {
@@ -84,6 +93,10 @@ const OtpVerification = () => {
   };
   return (
     <Container>
+      <h4>
+        Please enter the OTP sent to{" "}
+        {userData && userData.email ? `your ${userData.email}` : "your email"}
+      </h4>
       <OtpInput
         value={otp}
         onChange={setOtp}
@@ -91,10 +104,20 @@ const OtpVerification = () => {
         separator={<span>-</span>}
         isInputNum={true}
         shouldAutoFocus={true}
-        containerStyle="otp-container"
-        inputStyle="otp-input"
+        containerStyle={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "0.5rem",
+        }}
+        inputStyle={{
+          width: "4rem",
+          height: "4rem",
+          fontSize: "3rem",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+        }}
         isInputSecure={true}
-        renderSeparator={<span>-</span>}
+        renderSeparator={(props) => <span {...props}> </span>}
         renderInput={(props) => <input {...props} />}
       />
       <SubmitButton onClick={handleSubmit} disabled={!otp}>

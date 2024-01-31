@@ -1,3 +1,4 @@
+import { createContext, useState } from "react";
 import "./App.css";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
@@ -18,7 +19,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { UserProvider } from "./contexts/UserContext";
+
+export const userContext = createContext();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,14 +44,16 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  const [userData, setUserData] = useState("");
+
   return (
-    <UserProvider>
+    <userContext.Provider value={[userData, setUserData]}>
       <div className="App">
         <RouterProvider router={router}>
           <RootLayout />
         </RouterProvider>
       </div>
-    </UserProvider>
+    </userContext.Provider>
   );
 }
 

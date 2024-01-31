@@ -5,9 +5,10 @@ import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "../assets/logo/White-removebg-preview.png";
+import logo from "../assets/logo/favicon.png";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
-import { useUser } from "../contexts/UserContext";
+import { useContext } from "react";
+import { userContext } from "../App";
 import { useFormik } from "formik";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -20,10 +21,6 @@ import {
   LockOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-const toastStyle = css`
-  font-size: 14px; /* Adjust the font size as needed */
-  padding: 12px 16px; /* Adjust the padding as needed */
-`;
 
 const StyledCheckbox = styled(Checkbox)`
   // Style for the Ant Design Checkbox
@@ -212,7 +209,6 @@ const StyledForm = styled.form`
 const StyledLabel = styled.label`
   font-size: 0.65rem;
   letter-spacing: -0.01rem;
-  position: relative;
 `;
 
 const StyledInput = styled.input`
@@ -223,6 +219,7 @@ const StyledInput = styled.input`
   display: block;
   border-radius: 0.3rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
+
   &:focus {
     border: 2px solid #ff4500;
   }
@@ -230,22 +227,21 @@ const StyledInput = styled.input`
 
 const EyeIcon = styled.span`
   position: absolute;
-  top: 37%;
-  position: absolute;
-  top: 37%;
+  top: 47%;
+  z-index: 2;
   cursor: pointer;
 
   @media screen and (max-width: 1400px) {
-    transform: translateX(2000%);
+    transform: translateX(1000%);
   }
 
   @media screen and (max-width: 1200px) {
-    transform: translateX(2500%);
+    transform: translateX(1500%);
   }
   cursor: pointer;
 
   @media screen and (max-width: 1600px) {
-    transform: translateX(2600%);
+    transform: translateX(2150%);
   }
 `;
 const StyledSelect = styled.select`
@@ -344,6 +340,7 @@ const StyledRight = styled.div`
 
   // Desktops, large screens
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    flex: 0.2;
   }
 
   // Extra large screens, TV
@@ -360,7 +357,11 @@ const SignupSchema = Yup.object().shape({
     .min(2, "Must be at least 2 characters"),
   email: Yup.string()
     .email("Invalid email address")
-    .required("Email is required"),
+    .required("Email is required")
+    .matches(
+      /^(?=.*[a-zA-Z0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
+      "Password must contain at least one alphanumeric character and one symbol"
+    ),
   password: Yup.string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters"),
@@ -377,7 +378,7 @@ const Signup = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
-  const { storeUserData } = useUser();
+  const [userData, setUserData] = useContext(userContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -402,7 +403,6 @@ const Signup = () => {
     // },
     // onError: (error) => console.log("Signup Failed:", error),
   });
-  console.log("working");
   console.log("otp1");
 
   const formik = useFormik({
@@ -414,35 +414,43 @@ const Signup = () => {
       confirmPassword: "",
       role: "",
     },
-    // validationSchema: SignupSchema,
+    // validationSchema: SignupSchema, //causin problems so i comment it out
     onSubmit: async (values) => {
-      console.log("Form Values:", values);
-      console.log("Form Errors:", formik.errors);
-      console.log("otp0");
       try {
-        console.log("Formik Errors:", formik.errors);
-        console.log("otp5");
-        console.log("Submitting form data:", values);
+        if (!values.password) {
+          toast.error("Password is required");
+          return;
+        }
+        const passwordRegex =
+          /^(?=.*[a-zA-Z0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/;
+        if (!passwordRegex.test(values.password)) {
+          toast.error(
+            "Password must contain at least one alphanumeric character and one symbol"
+          );
+          return;
+        }
+
         const response = await axios.post(
-          "https://jsonplaceholder.typicode.com/posts",
+          "https://settl-core-dev.onrender.com/api/v1/send-otp",
           {
             email: values.email,
           }
         );
-        console.log("otp1");
-        console.log("Response:", response);
-        if (response.status >= 200 && response.status < 300) {
+
+        if (response.status === 200) {
           console.log("otp2");
 
-          storeUserData({
+          setUserData({
             firstName: values.firstName,
             lastName: values.lastName,
             email: values.email,
             role: values.role,
+            password: values.password,
           });
 
           console.log("Response:", response);
           console.log("otp4");
+          console.log("userdata Signup:", userData);
           toast.success("Registration successful!");
           navigate("/otp");
         } else {
@@ -450,12 +458,28 @@ const Signup = () => {
         }
       } catch (error) {
         console.error("Registration failed:", error);
-        console.log("Server Response:", error.response);
-        toast.error("Registration failed. Please try again.");
+
+        if (error.response) {
+          const { data } = error.response;
+
+          if (data.errors) {
+            // Iterate through the errors and show toast messages
+            Object.keys(data.errors).forEach((field) => {
+              toast.error(`${field}: ${data.errors[field]}`);
+            });
+          } else {
+            // Show a generic error toast
+            toast.error("Registration failed. Please try again.");
+          }
+        } else {
+          // Show a generic error toast
+          toast.error("Registration failed. Please try again.");
+        }
       }
     },
     touched: {},
   });
+
   const { handleSubmit, handleChange, handleBlur, values, touched } = formik;
 
   // const handleChange = useCallback(
@@ -506,7 +530,6 @@ const Signup = () => {
 
         <StyledMiddle>
           <StyledLogo to="/">
-            <ToastContainer />
             <StyledImg src={logo} alt="logo" />
             Sett<span style={{ color: "#4db6ac" }}>L</span>
           </StyledLogo>
@@ -528,12 +551,20 @@ const Signup = () => {
               draggable
               pauseOnHover
               transition={Slide}
-              toastStyle={toastStyle}
             />
 
-            <StyledForm onSubmit={handleSubmit} ref={inputRef}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <StyledLabel>
+            <StyledForm
+              onSubmit={handleSubmit}
+              disabled={formik.isSubmitting}
+              ref={inputRef}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <StyledLabel htmlFor="firstName">
                   Fistname
                   <StyledInput
                     type="text"
@@ -542,11 +573,11 @@ const Signup = () => {
                     placeholder="Enter Firstname"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    style={{ width: "9rem" }}
+                    style={{ width: "9rem", marginRight: "0.2rem" }}
                   />
                 </StyledLabel>
 
-                <StyledLabel>
+                <StyledLabel htmlFor="lastName">
                   Last Name
                   <StyledInput
                     type="text"
@@ -560,7 +591,7 @@ const Signup = () => {
                 </StyledLabel>
               </div>
 
-              <StyledLabel>
+              <StyledLabel htmlFor="email">
                 Email
                 <StyledInput
                   type="text"
@@ -572,12 +603,13 @@ const Signup = () => {
                 />
               </StyledLabel>
 
-              <StyledLabel>
+              <StyledLabel htmlFor="password">
                 Password
                 <EyeIcon onClick={togglePasswordVisibility}>
                   {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
                 </EyeIcon>
                 <StyledInput
+                  style={{ position: "relative" }}
                   name="password"
                   value={values.password}
                   onChange={handleChange}
@@ -586,7 +618,7 @@ const Signup = () => {
                   {...formik.getFieldProps("password")}
                 />
               </StyledLabel>
-              <StyledLabel>
+              <StyledLabel htmlFor="confirmPassword">
                 Confirm Password
                 <StyledInput
                   type={passwordVisibility ? "text" : "password"}
@@ -600,7 +632,7 @@ const Signup = () => {
                   onClick={togglePasswordVisibility}
                 ></EyeIcon> */}
               </StyledLabel>
-              <StyledLabel>
+              <StyledLabel htmlFor="role">
                 Role
                 <StyledSelect
                   name="role"
@@ -618,7 +650,9 @@ const Signup = () => {
                 <ErrorMessage>{formErrors.password}</ErrorMessage>
               )}
 
-              <StyledBtn type="submit">Sign Up</StyledBtn>
+              <StyledBtn type="submit" disabled={formik.isSubmitting}>
+                Sign Up
+              </StyledBtn>
             </StyledForm>
           </div>
           <StyledLineCont>

@@ -38,6 +38,28 @@ const StyledInput = styled.input`
   &::placeholder {
     color: #ffffff;
   }
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 35rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    width: 35rem;
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -50,6 +72,15 @@ const StyledBtn = styled.button`
     color: #ffff;
     background-color: transparent;
     border: 2px solid #d9d9d9;
+  }
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 8rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    width: 8rem;
   }
 `;
 

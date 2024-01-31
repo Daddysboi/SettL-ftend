@@ -21,7 +21,7 @@ const StyledContainer = styled.div`
   @media only screen and (min-width: 481px) and (max-width: 768px) {
   }
 
-  // Small screens, laptops
+  //   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
   }
 
@@ -29,23 +29,23 @@ const StyledContainer = styled.div`
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
   }
 
-  // Extra large screens, TV
+  //   // Extra large screens, TV
   @media only screen and (min-width: 1201px) {
   }
 `;
 
-//Left
 const StyledLeft = styled.div`
   flex: 0.6;
   background-color: #f26600;
-  background-image: linear-gradient(#f8701c 0.6px, transparent 0.6px),
-    linear-gradient(90deg, #f8701c 0.6px, transparent 0.6px);
-  background-size: 130px 130px;
-  background-position: 0 0, 0 0;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  background-image: linear-gradient(#f8701c 0.6px, transparent 0.6px);
+      linear-gradient(90deg, #f8701c 0.6px, transparent 0.6px);
+    background-size: 130pSx 130px;
+    background-position: 0 0, 0 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
 `;
+
 const StyledInnerLeft = styled.div`
   border-color: black;
   color: white;
@@ -56,7 +56,7 @@ const StyledInnerLeft = styled.div`
 
   // Mobile devices
   @media only screen and (min-width: 320px) and (max-width: 480px) {
-    display: none;
+    display: none;t
     flex: 0;
   }
 
@@ -295,11 +295,8 @@ const showToast = (message, type) => {
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState("");
-  const [userAlert, setUserAlert] = useState("");
-  const [user, setUser] = useState([]);
-  const [profile, setProfile] = useState([]);
-  const inputRef = useRef();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const inputRef = useRef();
 
   const signIn = useGoogleLogin({
     // clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
@@ -341,24 +338,35 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const url = "";
+      console.log("testing");
+      const url = "https://settl-core-dev.onrender.com/api/v1/signin";
       const { data: res } = await axios.post(url, formData);
+      console.log("testing 2");
+      // console.log(data);
 
-      localStorage.setItem("token", res.formData);
-      window.location.href = "/dasboard/1";
+      if (res.status === 200) {
+        localStorage.setItem("token", res.token);
+        // console.log(data);
+        console.log(token);
+
+        window.location.href = "/dashboard/1";
+      }
     } catch (error) {
       handleSignInError(error, setErrors);
     }
   };
+
   const handleSignInError = (error, setErrors) => {
-    if (
-      error.response &&
-      error.response.status >= 400 &&
-      error.response.status < 500
-    ) {
-      setErrors(error.response.data.message);
+    if (error.response) {
+      if (error.response.status === 401) {
+        setErrors("Invalid email or password. Please try again.");
+      } else if (error.response.status >= 400 && error.response.status < 500) {
+        setErrors("Client-side error. Please check your inputs.");
+      } else {
+        setErrors("Sign-In failed. Please try again.");
+      }
     } else {
-      setErrors("Login failed. Please check your credentials and try again.");
+      setErrors("Network error. Please try again.");
     }
   };
   return (
