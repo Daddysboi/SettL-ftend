@@ -12,6 +12,7 @@ const StyledCardContainerTop = styled.div`
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 `;
 
 const StyledCard = styled.div`
@@ -28,6 +29,7 @@ const StyledCardTxt = styled.p`
 `;
 const StyledCardContainerMid = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 3rem;
 `;
 
@@ -107,7 +109,21 @@ const StyledCardContainerBtm = styled.div`
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   padding: 1rem 2rem 0 2rem;
   margin-top: 1rem;
-  width: 50vw;
+  /* width: 50vw; */
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    height: 13rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+    width: 43rem;
+  }
 `;
 
 const StyledTh = styled.th`

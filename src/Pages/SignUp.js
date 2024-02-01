@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { styled, css } from "styled-components";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
@@ -7,44 +7,11 @@ import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/logo/favicon.png";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
-import { useContext } from "react";
 import { userContext } from "../App";
 import { useFormik } from "formik";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Input, Button, Form, Checkbox } from "antd";
-import {
-  Eye,
-  EyeInvisible,
-  CheckCircleFilled,
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-} from "@ant-design/icons";
-
-const StyledCheckbox = styled(Checkbox)`
-  // Style for the Ant Design Checkbox
-  .ant-checkbox-inner {
-    border-color: #52c41a; // Green border color when checked
-  }
-
-  .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #52c41a; // Green background color when checked
-    border-color: #52c41a; // Green border color when checked
-  }
-
-  .ant-checkbox-checked .ant-checkbox-check {
-    color: #fff; // White check color when checked
-  }
-`;
-
-const StyledLabelAntd = styled.label`
-  font-size: 0.65rem;
-  letter-spacing: -0.01rem;
-  position: relative;
-  display: flex;
-  align-items: center; // Center the Checkbox and its label
-`;
+import { TailSpin as Loader } from "react-loader-spinner";
 
 //container
 const StyledContainer = styled.div`
@@ -90,26 +57,12 @@ const StyledLeft = styled.div`
   background-size: 130px 130px;
   background-position: 0 0, 0 0;
 
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    display: none;
-    flex: 0;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-  }
-
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
   }
 
   // Desktops, large screens
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
   }
 `;
 const StyledInnerLeft = styled.div`
@@ -226,23 +179,31 @@ const StyledInput = styled.input`
 `;
 
 const EyeIcon = styled.span`
-  position: absolute;
-  top: 47%;
-  z-index: 2;
   cursor: pointer;
+  color: gray;
+`;
 
-  @media screen and (max-width: 1400px) {
-    transform: translateX(1000%);
-  }
+const PasswordContainer = styled.div`
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 3px;
+  box-sizing: border-box;
+  display: block;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  @media screen and (max-width: 1200px) {
-    transform: translateX(1500%);
+  &:focus {
+    border: 2px solid #ff4500;
   }
-  cursor: pointer;
+`;
 
-  @media screen and (max-width: 1600px) {
-    transform: translateX(2150%);
-  }
+const StyledPasswordInput = styled.input`
+  width: 95%;
+  outline: none;
+  border: none;
 `;
 const StyledSelect = styled.select`
   width: 100%;
@@ -357,23 +318,20 @@ const SignupSchema = Yup.object().shape({
     .min(2, "Must be at least 2 characters"),
   email: Yup.string()
     .email("Invalid email address")
-    .required("Email is required")
+    .required("Email is required"),
+
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
     .matches(
       /^(?=.*[a-zA-Z0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
       "Password must contain at least one alphanumeric character and one symbol"
     ),
-  password: Yup.string()
-    .required("Password is required")
-    .min(8, "Password must be at least 8 characters"),
   role: Yup.string(),
 });
 
 const Signup = () => {
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-
-  const [errors, setErrors] = useState({});
-  const [userAlert, setUserAlert] = useState("");
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [formErrors, setFormErrors] = useState({});
@@ -414,9 +372,10 @@ const Signup = () => {
       confirmPassword: "",
       role: "",
     },
-    // validationSchema: SignupSchema, //causin problems so i comment it out
+    validationSchema: SignupSchema, //causin problems so i comment it out
     onSubmit: async (values) => {
       try {
+        setLoading(true);
         if (!values.password) {
           toast.error("Password is required");
           return;
@@ -451,14 +410,18 @@ const Signup = () => {
           console.log("Response:", response);
           console.log("otp4");
           console.log("userdata Signup:", userData);
-          toast.success("Registration successful!");
+          formik.resetForm();
+
+          setLoading(false);
+          toast.success(response.data.message);
           navigate("/otp");
         } else {
-          toast.error("Registration failed. Please try again.");
+          setLoading(false);
+          toast.error(response.data.message);
         }
       } catch (error) {
         console.error("Registration failed:", error);
-
+        setLoading(false);
         if (error.response) {
           const { data } = error.response;
 
@@ -469,11 +432,11 @@ const Signup = () => {
             });
           } else {
             // Show a generic error toast
-            toast.error("Registration failed. Please try again.");
+            toast.error(data.message);
           }
         } else {
           // Show a generic error toast
-          toast.error("Registration failed. Please try again.");
+          toast.error(data.message);
         }
       }
     },
@@ -605,18 +568,19 @@ const Signup = () => {
 
               <StyledLabel htmlFor="password">
                 Password
-                <EyeIcon onClick={togglePasswordVisibility}>
-                  {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
-                </EyeIcon>
-                <StyledInput
-                  style={{ position: "relative" }}
-                  name="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  type={passwordVisibility ? "text" : "password"}
-                  {...formik.getFieldProps("password")}
-                />
+                <PasswordContainer>
+                  <StyledPasswordInput
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type={passwordVisibility ? "text" : "password"}
+                    {...formik.getFieldProps("password")}
+                  />
+                  <EyeIcon onClick={togglePasswordVisibility}>
+                    {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
+                  </EyeIcon>
+                </PasswordContainer>
               </StyledLabel>
               <StyledLabel htmlFor="confirmPassword">
                 Confirm Password
@@ -649,9 +613,17 @@ const Signup = () => {
               {touched.password && formErrors.password && (
                 <ErrorMessage>{formErrors.password}</ErrorMessage>
               )}
-
+              {loading && (
+                <Loader
+                  type="TailSpin"
+                  color="#ff4500"
+                  height={20}
+                  width={20}
+                  style={{ margin: "auto" }}
+                />
+              )}
               <StyledBtn type="submit" disabled={formik.isSubmitting}>
-                Sign Up
+                {loading ? "Signing up..." : "Sign Up"}
               </StyledBtn>
             </StyledForm>
           </div>

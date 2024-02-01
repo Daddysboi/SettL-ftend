@@ -150,8 +150,7 @@ const Footer = () => {
         </StyledMidLeft>
         <StyledMidRight>
           <StyledHeaderMid style={{ fontSize: "1.5rem", textAlign: "center" }}>
-            Connect with us on <br />
-            Social Media
+            Connect with us
           </StyledHeaderMid>
           <div style={{ textAlign: "center" }}>
             <StyledImg src={instagram} alt="" />

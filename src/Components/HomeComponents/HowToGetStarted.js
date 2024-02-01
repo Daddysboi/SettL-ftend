@@ -23,10 +23,34 @@ const StyledCardTop = styled.div`
   display: flex;
   padding-bottom: 4rem;
   position: relative;
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    gap: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledCardBtm = styled.div`
   display: flex;
   gap: 4rem;
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    gap: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledCard = styled.div`
   background-color: #ffffff;
@@ -37,18 +61,44 @@ const StyledCard = styled.div`
   display: flex;
   box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 20rem;
+    height: 10rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledNums = styled.h4`
   color: #f26600;
   font-family: Poppins;
-  font-size: 96px;
+  font-size: 5rem;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 4rem;
+    padding-left: 1rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const StyledTxt = styled.p`
-  padding: 0 2rem;
+  padding: 1rem 2rem;
   text-align: justify;
   width: 15rem;
 `;
@@ -98,7 +148,12 @@ const HowToGetStarted = () => {
             <StyledNums>1</StyledNums>
 
             <StyledTxt>
-              <span style={{ position: "absolute", top: "1rem" }}>
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-0.5rem",
+                }}
+              >
                 <NavLink to="/login">
                   <StyledSigninBtn>Log in</StyledSigninBtn>
                 </NavLink>

@@ -11,6 +11,18 @@ import MobileApp from "../Components/HomeComponents/MobileApp";
 const StyledContainer = styled.div`
   margin: 2rem 5rem;
   overflow-x: hidden;
+
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    margin: 2rem 0;
+  }
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    margin: 2rem 0;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    margin: 2rem 3rem;
+  }
 `;
 const Home = () => {
   return (

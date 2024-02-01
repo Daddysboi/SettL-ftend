@@ -120,7 +120,7 @@ const Contact = () => {
           onBlur={formik.handleBlur}
           // style={{ marginBottom: "10rem" }}
         />
-        <div style={{ color: "red" }}>
+        <div style={{ color: "#f26600", fontSize: "0.7rem" }}>
           {formik.touched.fullname && formik.errors.fullname}
         </div>
 
@@ -132,7 +132,7 @@ const Contact = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        <div style={{ color: "red" }}>
+        <div style={{ color: "#f26600", fontSize: "0.7rem" }}>
           {formik.touched.email && formik.errors.email}
         </div>
 
@@ -146,7 +146,7 @@ const Contact = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        <div style={{ color: "red" }}>
+        <div style={{ color: "#f26600", fontSize: "0.7rem" }}>
           {formik.touched.message && formik.errors.message}
         </div>
 

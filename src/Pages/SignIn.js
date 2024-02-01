@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { NavLink, Link } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo/White-removebg-preview.png";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { TailSpin as Loader } from "react-loader-spinner";
 
 //container
 const StyledContainer = styled.div`
@@ -37,13 +37,14 @@ const StyledContainer = styled.div`
 const StyledLeft = styled.div`
   flex: 0.6;
   background-color: #f26600;
-  background-image: linear-gradient(#f8701c 0.6px, transparent 0.6px);
-      linear-gradient(90deg, #f8701c 0.6px, transparent 0.6px);
-    background-size: 130pSx 130px;
-    background-position: 0 0, 0 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
+  background-image: linear-gradient(#f8701c 0.6px, transparent 0.6px),
+    linear-gradient(90deg, #f8701c 0.6px, transparent 0.6px);
+  background-size: 130px 130px;
+  background-position: 0 0, 0 0;
+  height: 100%;
+  overflow: auto;
+  padding: 2rem;
+  box-sizing: border-box;
 `;
 
 const StyledInnerLeft = styled.div`
@@ -56,24 +57,8 @@ const StyledInnerLeft = styled.div`
 
   // Mobile devices
   @media only screen and (min-width: 320px) and (max-width: 480px) {
-    display: none;t
+    display: none;
     flex: 0;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
   }
 `;
 
@@ -137,7 +122,15 @@ const StyledImg = styled.img`
 const StyledHeader = styled.h1`
   padding: 1rem 0 0 0;
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 2.5rem; // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 2rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 2rem;
+  }
 `;
 
 const StyledSubHead = styled.p`
@@ -146,6 +139,14 @@ const StyledSubHead = styled.p`
   opacity: 0.5;
   margin-top: 0;
   margin-bottom: 3rem;
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    margin-bottom: 2rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    margin-bottom: 2rem;
+  }
 `;
 
 //Form
@@ -174,30 +175,35 @@ const StyledInput = styled.input`
   border: 1px solid rgba(223, 140, 82, 0.3);
   &:focus {
     margin-top: 0;
-    margin-left: 5px;
+    outline: none;
     border: 2px solid #ff4500;
   }
 `;
 
 const EyeIcon = styled.span`
-  position: absolute;
-  top: 37%;
-  position: absolute;
-  top: 55%;
   cursor: pointer;
+  color: gray;
+`;
+const PasswordContainer = styled.div`
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 3px;
+  box-sizing: border-box;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  @media screen and (max-width: 1400px) {
-    transform: translateX(2000%);
+  &:focus {
+    border: 2px solid #ff4500;
   }
+`;
 
-  @media screen and (max-width: 1200px) {
-    transform: translateX(2500%);
-  }
-  cursor: pointer;
-
-  @media screen and (max-width: 1600px) {
-    transform: translateX(2400%);
-  }
+const StyledPasswordInput = styled.input`
+  width: 95%;
+  border: none;
+  outline: none;
 `;
 
 const StyledBtn = styled.button`
@@ -265,23 +271,6 @@ const StyledRight = styled.div`
   flex: 0.8;
 `;
 
-const handleGoogleSignIn = async (googleUser, setErrors) => {
-  // try {
-  //   const token = googleUser?.tokenId;
-  //   console.log("Google Sign-In Token:", token);
-  //   // const url = process.env.REACT_APP_GOOGLE_SIGNIN_API_ENDPOINT;
-  //   // const { data: res } = await axios.post(url, { token });
-  //   const res = await mockGoogleSignInEndpoint(token);
-  //   console.log("Mock API Response:", res);
-  //   localStorage.setItem("token", res.formData);
-  //   const userId = res.user._id || 1;
-  //   window.location.href = `/dashboard/${userId}`;
-  // } catch (error) {
-  //   console.error("Google Sign-In Error:", error);
-  //   setErrors("Google Sign-In failed. Please try again.");
-  // }
-};
-
 const showToast = (message, type) => {
   toast[type](message, {
     position: "top-right",
@@ -293,40 +282,20 @@ const showToast = (message, type) => {
   });
 };
 const SignIn = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const inputRef = useRef();
+  const navigate = useNavigate();
 
-  const signIn = useGoogleLogin({
-    // clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    // onSuccess: (googleUser) => handleGoogleSignIn(googleUser, setErrors),
-    // onError: (error) => {
-    //   console.error("Google Sign-In Error:", error);
-    //   setErrors("Google Sign-In failed. Please try again.");
-    // },
-  });
+  const signIn = () => {};
   const togglePasswordVisibility = () => {
     setPasswordVisibility((prevVisibility) => !prevVisibility);
-  };
-  const logOut = () => {
-    localStorage.removeItem("token");
   };
 
   useEffect(() => {
     inputRef.current.focus();
-    // if (signIn.googleUser) {
-    //   const accessToken = signIn.googleUser.getAuthResponse().access_token;
-
-    //   axios
-    //     .get(
-    //       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
-    //     )
-    //     .then((res) => {
-    //       setProfile(res.data);
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
   }, [signIn.googleUser]);
 
   const handleChange = (e) => {
@@ -339,36 +308,45 @@ const SignIn = () => {
 
     try {
       console.log("testing");
+      setLoading(true);
+
       const url = "https://settl-core-dev.onrender.com/api/v1/signin";
       const { data: res } = await axios.post(url, formData);
       console.log("testing 2");
-      // console.log(data);
+      toast.success(res.data.message);
+      console.log("API Response:", res);
 
       if (res.status === 200) {
-        localStorage.setItem("token", res.token);
-        // console.log(data);
-        console.log(token);
+        console.log("User ID:", res.data[0]._id);
 
-        window.location.href = "/dashboard/1";
+        localStorage.setItem("token", res.token);
+        console.log(res.token);
+        setLoading(false);
+        toast.success(res.data.message);
+        console.log("Data received:", res);
+        navigate(`/dashboard/${res.data[0]._id}`); // Access user ID using res.data[0]._id
       }
     } catch (error) {
+      setLoading(false);
       handleSignInError(error, setErrors);
     }
   };
 
   const handleSignInError = (error, setErrors) => {
+    console.error(error);
     if (error.response) {
-      if (error.response.status === 401) {
-        setErrors("Invalid email or password. Please try again.");
-      } else if (error.response.status >= 400 && error.response.status < 500) {
-        setErrors("Client-side error. Please check your inputs.");
+      if (error.responsestatus === 401) {
+        setErrors(error.respons.edata.message);
+      } else if (error.respons.estatus >= 400 && error.responsestatus < 500) {
+        setErrors(error.response.data.message);
       } else {
-        setErrors("Sign-In failed. Please try again.");
+        setErrors(error.response.data.message);
       }
     } else {
-      setErrors("Network error. Please try again.");
+      setErrors("An unexpected error occurred.");
     }
   };
+
   return (
     <>
       <StyledContainer>
@@ -425,19 +403,33 @@ const SignIn = () => {
               </StyledLabel>
               <StyledLabel htmlFor="">
                 Password
-                <EyeIcon onClick={togglePasswordVisibility}>
-                  {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
-                </EyeIcon>
-                <StyledInput
-                  type={passwordVisibility ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  placeholder="Enter your password"
-                  onChange={handleChange}
-                />
+                <PasswordContainer>
+                  <StyledPasswordInput
+                    type={passwordVisibility ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    placeholder="Enter your password"
+                    onChange={handleChange}
+                  />
+                  <EyeIcon onClick={togglePasswordVisibility}>
+                    {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
+                  </EyeIcon>
+                </PasswordContainer>
               </StyledLabel>
-              {errors && <p style={{ color: "red" }}>{errors}</p>}
-              <StyledBtn type="submit">Login</StyledBtn>
+              {errors && <p style={{ color: "red" }}>{errors}</p>}{" "}
+              {loading && (
+                <Loader
+                  type="TailSpin"
+                  color="#ff4500"
+                  height={20}
+                  width={20}
+                  style={{ margin: "auto" }}
+                />
+              )}
+              <StyledBtn type="submit">
+                {" "}
+                {loading ? "Signing in..." : "Sign in"}
+              </StyledBtn>
               <StyledCheckboxCont>
                 <div>
                   <StyledLabel>
@@ -468,21 +460,6 @@ const SignIn = () => {
             <StyledLineTxt style={{ marginLeft: "0" }}>
               Haven't registered? <NavLink to="/signup"> Sign up</NavLink>
             </StyledLineTxt>
-            <div>
-              {/* {profile ? (
-                <div>
-                  <img src={profile.picture} alt="user image" />
-                  <h3>User Logged in</h3>
-                  <p>Name: {profile.name}</p>
-                  <p>Email Address: {profile.email}</p>
-                  <br />
-                  <br />
-                  <button onClick={logOut}>Log out</button>
-                </div>
-              ) : (
-                <button onClick={signIn}>Sign in with Google </button>
-              )} */}
-            </div>
           </div>
         </StyledMiddle>
         <StyledRight></StyledRight>

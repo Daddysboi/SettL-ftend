@@ -12,6 +12,15 @@ const StyledContainer = styled.div`
 const StyledHeader = styled.h1`
   margin: 0;
   font-size: 3rem;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 2.2rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 2.8rem;
+  }
 `;
 
 const StyledTxt = styled.p`
@@ -19,6 +28,15 @@ const StyledTxt = styled.p`
   text-align: justify;
   /* word-spacing: 0.09rem; */
   font-weight: 600;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 1rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 1.3rem;
+  }
 `;
 const About = () => {
   return (

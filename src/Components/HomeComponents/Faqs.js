@@ -16,8 +16,29 @@ const StyledContainer = styled.div`
 const StyledHeader = styled.h1`
   margin: 0;
   font-size: 3rem;
-`;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 2.5rem;
+  }
 
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 2.8rem;
+  }
+`;
+const StyledSubHeader = styled.p`
+  color: #f26600;
+  font-size: 1.5rem;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 1.4rem;
+  }
+`;
 const StyledQuestion = styled.h1`
   font-size: 1.3rem;
   text-align: justify;
@@ -28,12 +49,30 @@ const StyledQuestion = styled.h1`
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
   /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
   padding: 0.5rem 0.9rem;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 1rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 1.2rem;
+  }
 `;
 const StyledAnswer = styled.p`
   font-size: 1rem;
   text-align: justify;
   font-weight: 400;
   padding-left: 2rem;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 0.8rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const Faqs = () => {
@@ -48,9 +87,9 @@ const Faqs = () => {
       <div style={{ flex: "1.2" }}>
         <StyledHeader>
           Frequently Asked Questions <br />
-          <p style={{ color: "#f26600", fontSize: "1.5rem" }}>
+          <StyledSubHeader>
             Here are answers to questions you might have about SettL.
-          </p>
+          </StyledSubHeader>
         </StyledHeader>
       </div>
       <div style={{ flex: "4" }}>

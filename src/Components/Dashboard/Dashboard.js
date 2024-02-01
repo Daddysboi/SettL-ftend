@@ -112,7 +112,11 @@ const reducer = (state, action) => {
 const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
-  const { sellerId } = useParams();
+  const { userId } = useParams();
+
+  const logOut = () => {
+    localStorage.removeItem("token");
+  };
 
   useEffect(() => {
     if (initialLoad) {
@@ -202,8 +206,9 @@ const Dashboard = () => {
             </StyledBtn>
           </StyledBtnContainer>
 
-          <SignoutLink to="/">Sign Out</SignoutLink>
-          {/* create signout logic to remove user from local storage */}
+          <SignoutLink to="/" onClick={logOut}>
+            Sign Out
+          </SignoutLink>
         </StyledSideBar>
 
         <StyledRight>

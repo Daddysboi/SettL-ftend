@@ -10,8 +10,21 @@ const StyledContainer = styled.div`
   padding: 0 2rem;
 `;
 const StyledHeader = styled.h1`
-  font-size: 60px;
+  font-size: 3rem;
   margin-bottom: 0;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    font-size: 2.5rem;
+    margin-top: 5rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledLeft = styled.div``;
 
@@ -20,6 +33,18 @@ const StyledTxt = styled.h4`
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 0;
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const StyledBtn = styled.button`
@@ -41,6 +66,18 @@ const StyledBtn = styled.button`
 const StyledImg = styled.img`
   height: 38rem;
   position: relative;
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    height: 30rem;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const Hero = () => {
   return (
@@ -70,7 +107,7 @@ const Hero = () => {
           alt=""
           style={{
             position: "absolute",
-            bottom: "-5rem",
+            bottom: "2rem",
             right: "5rem",
             height: "4rem",
           }}

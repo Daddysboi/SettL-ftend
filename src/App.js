@@ -30,7 +30,7 @@ const router = createBrowserRouter(
       <Route path="/forgot-password" element={<ResetPassword />} />
       <Route path="/reset-password/:token" element={<ForgotPassword />} />
 
-      <Route path="/dashboard/:sellerId" index element={<Dashboard />}></Route>
+      <Route path="/dashboard/:userId" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
