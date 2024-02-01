@@ -8,18 +8,21 @@
   font-size: 10px;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
-  background-color: #11ef1d;
+  background-color: #00ff00;
   font-weight: bold;
-  color: #e0eafc;
+  color: #ffffff;
   border: none;
   border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  margin-top: 40px;
+  width: 5rem;
+  height: 2rem;
+  margin: 2rem 0;
+
+  transition: background-color 0.3s;
+  display: block;
 }
 
 .paystack-button:hover {
-  background-color: #dadada;
+  background-color: #00cc00;
 }
 
 .paystack-button:focus {
