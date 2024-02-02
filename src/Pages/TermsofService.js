@@ -6,7 +6,6 @@ const TermsAndConditions = () => {
       <article>
         <header>
           <h1>Terms and Conditions</h1>
-          <p>Last Updated: [Insert Date]</p>
         </header>
 
         <section>
@@ -65,9 +64,6 @@ const TermsAndConditions = () => {
             If you have any questions about these Terms and Conditions, please
             contact us at:
           </p>
-          <p>[Your Company Name]</p>
-          <p>[Your Address]</p>
-          <p>Email: [Your Email]</p>
         </section>
       </article>
     </div>

@@ -11,10 +11,47 @@ const StyledContainer = styled.div`
   padding: 4rem;
   text-align: center;
   margin-top: 3rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-top: 1rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    padding: 0;
+    margin-top: 1rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
 `;
 const StyledHeader = styled.h1`
   margin-top: 2rem;
   font-size: 3rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    margin-top: 1rem;
+    font-size: 1.8rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
 `;
 const StyledCardContainer = styled.div``;
 

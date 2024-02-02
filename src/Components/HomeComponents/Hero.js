@@ -7,26 +7,38 @@ import ChatImg from "../../assets/images/message.png";
 
 const StyledContainer = styled.div`
   display: flex;
-  padding: 0 2rem;
+  padding-left: 2rem;
+  justify-content: center;
+  align-items: center;
 `;
 const StyledHeader = styled.h1`
-  font-size: 3rem;
+  font-size: 3.8rem;
   margin-bottom: 0;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 1.5rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    padding-top: 0;
+    margin-top: 2rem;
     font-size: 2.5rem;
-    margin-top: 5rem;
   }
 
   // Desktops, large screens
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
+    /* margin-top: 2rem; */
+    font-size: 3rem;
   }
 `;
-const StyledLeft = styled.div``;
+const StyledLeft = styled.div`
+  width: 40%;
+`;
 
 const StyledTxt = styled.h4`
   font-style: italic;
@@ -34,6 +46,15 @@ const StyledTxt = styled.h4`
   font-weight: 600;
   margin-top: 0;
 
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 1rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 1rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
   }
@@ -61,14 +82,23 @@ const StyledBtn = styled.button`
     background-color: #fff;
     border: 1px solid #f26600;
   }
-`;
 
-const StyledImg = styled.img`
-  height: 38rem;
-  position: relative;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 10rem;
+    font-size: 1.2rem;
+    border-radius: 0.7rem;
+    height: 3rem;
+  }
+
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    height: 30rem;
+    width: 15rem;
+    height: 4rem;
   }
 
   // Desktops, large screens
@@ -77,6 +107,67 @@ const StyledImg = styled.img`
 
   // Extra large screens, TV
   @media only screen and (min-width: 1201px) {
+    /* height: 30rem; */
+  }
+`;
+
+const StyledImg = styled.img`
+  position: relative;
+  width: 100%;
+  background-size: cover;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 80%;
+    height: 90%;
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+    /* height: 30rem; */
+  }
+`;
+
+const StyledChatImg = styled.img`
+  position: absolute;
+  bottom: 2rem;
+  right: 5rem;
+  height: 4rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    bottom: 6rem;
+    right: 1rem;
+    height: 3rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+    /* height: 30rem; */
   }
 `;
 const Hero = () => {
@@ -100,18 +191,15 @@ const Hero = () => {
           </StyledBtn>
         </Link>
       </StyledLeft>
-      <div>
+      <div
+        style={{
+          padding: 0,
+          margin: 0,
+          width: "70%",
+        }}
+      >
         <StyledImg src={HeroImg} alt="" />
-        <img
-          src={ChatImg}
-          alt=""
-          style={{
-            position: "absolute",
-            bottom: "2rem",
-            right: "5rem",
-            height: "4rem",
-          }}
-        />
+        <StyledChatImg src={ChatImg} alt="" />
       </div>
     </StyledContainer>
   );

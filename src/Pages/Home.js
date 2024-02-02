@@ -21,7 +21,7 @@ const StyledContainer = styled.div`
 
   // Desktops, large screens
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    margin: 2rem 3rem;
+    margin: 2rem 0rem;
   }
 `;
 const Home = () => {

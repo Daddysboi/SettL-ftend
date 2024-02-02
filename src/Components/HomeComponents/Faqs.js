@@ -12,10 +12,37 @@ const StyledContainer = styled.div`
   padding: 4rem;
   background-color: #f1f4fa;
   margin: 4rem 0;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    gap: 1rem;
+    padding: 2rem;
+  }
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
 `;
+
 const StyledHeader = styled.h1`
   margin: 0;
   font-size: 3rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 1.5rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 1.8rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 2.5rem;
@@ -29,6 +56,15 @@ const StyledHeader = styled.h1`
 const StyledSubHeader = styled.p`
   color: #f26600;
   font-size: 1.5rem;
+
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 0.7rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 1.2rem;
@@ -49,6 +85,16 @@ const StyledQuestion = styled.h1`
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
   /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
   padding: 0.5rem 0.9rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 0.7rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 1rem;
@@ -64,6 +110,15 @@ const StyledAnswer = styled.p`
   text-align: justify;
   font-weight: 400;
   padding-left: 2rem;
+
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 0.5rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 0.6rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 0.8rem;

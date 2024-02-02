@@ -11,7 +11,6 @@ import Payment from "./Components/Payment";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
-
 import Otp from "./Pages/Otp";
 import {
   createBrowserRouter,

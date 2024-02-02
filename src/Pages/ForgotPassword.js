@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import emailValidator from "email-validator"; // Import email-validator library
+import emailValidator from "email-validator";
 
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
@@ -9,7 +9,6 @@ const PasswordReset = () => {
   const [emailError, setEmailError] = useState("");
 
   const handleResetPassword = async () => {
-    // Basic email validation
     if (!email.trim() || !emailValidator.validate(email)) {
       setEmailError("Invalid email format");
       return;
@@ -41,7 +40,6 @@ const PasswordReset = () => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    // Clear email error when user starts typing
     setEmailError("");
   };
 

@@ -156,7 +156,7 @@ const TransactionFormPopup = ({
           Yup.string().required("Please enter counterparty phone number"),
       }),
       setConditions: Yup.string().when("currentStep", {
-        is: "setConditions", // Update this accordingly
+        is: "setConditions",
         then: () =>
           Yup.string().required("Please enter terms for seller to review"),
       }),
@@ -432,7 +432,7 @@ const TransactionFormPopup = ({
           bottom: "auto",
           marginRight: "-50%",
           transform: "translate(-50%, -50%)",
-          width: "20rem", // Adjust the width as needed
+          width: "20rem",
           padding: "20px",
           height: "20rem",
           borderRadius: "1rem",

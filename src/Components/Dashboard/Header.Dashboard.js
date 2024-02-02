@@ -80,7 +80,7 @@ const Header = () => {
         const res = await axios.get(url, userData, {
           responseType: "arraybuffer",
         });
-        console.log(res); // Log the entire response
+        console.log(res);
         console.log("hi");
 
         if (res.status === 200) {
@@ -105,7 +105,7 @@ const Header = () => {
     };
 
     fetchImage();
-  }, []); // Empty dependency array to run the effect once on mount
+  }, []);
 
   return (
     <StyledContainer>

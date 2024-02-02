@@ -6,7 +6,6 @@ const PrivacyPolicy = () => {
       <article>
         <header>
           <h1>Privacy Policy</h1>
-          <p>Last Updated: [Insert Date]</p>
         </header>
 
         <section>
@@ -42,13 +41,8 @@ const PrivacyPolicy = () => {
           <h2>How We Use Your Information</h2>
           <p>
             We use information that we collect about you or that you provide to
-            us, including any personal information, for various purposes,
-            including:
+            us, including any personal information, for various purposes
           </p>
-          <ul>
-            <li>...</li>
-            <li>...</li>
-          </ul>
         </section>
 
         <section>
@@ -57,7 +51,6 @@ const PrivacyPolicy = () => {
           <ul>
             <li>Our subsidiaries and affiliates.</li>
             <li>Service providers.</li>
-            <li>...</li>
           </ul>
         </section>
 
@@ -85,9 +78,6 @@ const PrivacyPolicy = () => {
             If you have any questions about this Privacy Policy, please contact
             us at:
           </p>
-          <p>[Your Company Name]</p>
-          <p>[Your Address]</p>
-          <p>Email: [Your Email]</p>
         </section>
       </article>
     </div>

@@ -146,25 +146,19 @@ const Home = () => {
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
   const [depositCount, setDepositCount] = useState(0);
-  const [ongoingTransactions, setOngoingTransactions] = useState([]);
-  const [recentTransactions, setRecentTransactions] = useState([]);
-  const [newTransaction, setNewTransaction] = useState(false);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
 
   const handleCreateTransaction = () => {
     setTransactionFormOpen(false);
-    // Additional logic if needed...
   };
 
   useEffect(() => {
-    // Mock API call to fetch data from the database
     const fetchData = async () => {
       try {
-        // Replace the following with your actual API endpoint
-        const response = await fetch("YOUR_API_ENDPOINT");
+        url = "";
+        const response = await fetch(url);
         const data = await response.json();
 
-        // Update state variables with the fetched data or use default values
         setTotalTransactions(data.totalTransactions || 0);
         setWalletBalance(data.walletBalance || 0);
         setWithdrawalCount(data.withdrawalCount || 0);
@@ -176,9 +170,8 @@ const Home = () => {
       }
     };
 
-    // Call the fetchData function
     fetchData();
-  }, []); // The em
+  }, []);
 
   return (
     <>

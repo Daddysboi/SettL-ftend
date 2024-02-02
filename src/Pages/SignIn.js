@@ -324,24 +324,25 @@ const SignIn = () => {
         toast.success(res.data.message);
         setUserData({
           id: res.data[0]._id,
-          firstName: res.data[0].firstName,
+          firstName: res.data[0].firstName, //still working to pass data to dashboard
           lastName: res.data[0].lastName,
         });
         console.log("User Data:", userData[0]);
-        // navigate(`/dashboard/${res.data[0]._id}`);
+        // navigate(`/dashboard/${res.data[0]._id}`); //trying use effect so i can cause side effects
       }
     } catch (error) {
       setLoading(false);
       handleSignInError(error, setErrors);
     }
   };
+
   useEffect(() => {
-    // This will be triggered after userData is updated
     console.log("User Data:", userData);
     if (userData.id) {
       navigate(`/dashboard/${userData.id}`);
     }
   }, [userData, navigate]);
+
   const handleSignInError = (error, setErrors) => {
     console.error(error);
     if (error.response) {

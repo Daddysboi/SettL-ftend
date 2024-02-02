@@ -17,6 +17,7 @@ const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
   overflow: hidden;
+
   // Mobile devices
   @media only screen and (min-width: 320px) and (max-width: 480px) {
     display: block;
@@ -72,6 +73,7 @@ const StyledLeft = styled.div`
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
   }
 `;
+
 const StyledInnerLeft = styled.div`
   border-color: black;
   color: white;
@@ -134,11 +136,13 @@ const StyledMiddle = styled.div`
   @media only screen and (min-width: 1201px) {
   }
 `;
+
 const StyledLogo = styled(NavLink)`
   color: #f26600;
   font-size: 2rem;
   text-decoration: none;
 `;
+
 const StyledImg = styled.img`
   height: 2rem;
 `;
@@ -354,8 +358,6 @@ const Signup = () => {
     setPasswordVisibility((prevVisibility) => !prevVisibility);
   };
 
-  const login = () => {};
-
   console.log("otp1");
 
   const formik = useFormik({
@@ -405,8 +407,8 @@ const Signup = () => {
           });
 
           console.log("Response:", response);
-          console.log("otp4");
-          console.log("userdata Signup:", userData);
+          console.log("otp3");
+          console.log("userdata Signup:", userData); //not logging due to asynchroneous nature
           formik.resetForm();
 
           setLoading(false);
@@ -423,16 +425,13 @@ const Signup = () => {
           const { data } = error.response;
 
           if (data.errors) {
-            // Iterate through the errors and show toast messages
             Object.keys(data.errors).forEach((field) => {
               toast.error(`${field}: ${data.errors[field]}`);
             });
           } else {
-            // Show a generic error toast
             toast.error(data.message);
           }
         } else {
-          // Show a generic error toast
           toast.error("unknown swever error");
         }
       }
@@ -441,20 +440,6 @@ const Signup = () => {
   });
 
   const { handleSubmit, handleChange, handleBlur, values, touched } = formik;
-
-  // const handleChange = useCallback(
-  //   (e) => {
-  //     handleChange(e);
-  //   },
-  //   [formik]
-  // );
-
-  // const handleBlur = useCallback(
-  //   (e) => {
-  //     handleBlur(e);
-  //   },
-  //   [formik]
-  // );
 
   return (
     <>
@@ -588,10 +573,6 @@ const Signup = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {/* <EyeIcon
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                ></EyeIcon> */}
               </StyledLabel>
               <StyledLabel htmlFor="role">
                 Role

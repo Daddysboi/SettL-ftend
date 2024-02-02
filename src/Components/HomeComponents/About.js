@@ -8,10 +8,30 @@ const StyledContainer = styled.div`
   align-items: center;
   box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.05);
   padding: 4rem;
+
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    gap: 1.5rem;
+    padding: 2rem;
+  }
 `;
 const StyledHeader = styled.h1`
   margin: 0;
   font-size: 3rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 2rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 2.2rem;
@@ -19,7 +39,7 @@ const StyledHeader = styled.h1`
 
   // Desktops, large screens
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 2.8rem;
+    font-size: 2.7rem;
   }
 `;
 
@@ -28,6 +48,16 @@ const StyledTxt = styled.p`
   text-align: justify;
   /* word-spacing: 0.09rem; */
   font-weight: 600;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 0.7rem;
+  }
+
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 1rem;
@@ -35,7 +65,7 @@ const StyledTxt = styled.p`
 
   // Desktops, large screens
   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 `;
 const About = () => {

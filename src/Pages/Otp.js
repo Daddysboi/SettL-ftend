@@ -33,7 +33,7 @@ const SubmitButton = styled.button`
 `;
 
 const OtpVerification = () => {
-  const [userData, setUserData] = useContext(userContext);
+  const [userData, setUserData] = useContext(userContext); //consuming userData
 
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
@@ -77,16 +77,13 @@ const OtpVerification = () => {
           const { data } = error.response;
 
           if (data.errors) {
-            // Iterate through the errors and show more specific messages
             Object.keys(data.errors).forEach((field) => {
               showToast(`${field}: ${data.errors[field]}`, "error");
             });
           } else {
-            // Show a generic error message
             showToast(data.message, "error");
           }
         } else {
-          // Show a generic error message
           showToast("Registration failed. Please try again.", "error");
         }
       }
@@ -101,9 +98,8 @@ const OtpVerification = () => {
     setOtp(newOtp.join(""));
   };
 
-  const handleInputFocus = (index) => {
-    // Handle focus if needed
-  };
+  const handleInputFocus = (index) => {};
+
   return (
     <Container>
       <h4>

@@ -15,7 +15,6 @@ const ResetPassword = ({ match }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   useEffect(() => {
-    // Fetch user ID from your backend or extract it from the token
     const fetchUserId = async () => {
       try {
         const response = await axios.get(

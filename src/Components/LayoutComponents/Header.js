@@ -14,13 +14,6 @@ const StyledContainer = styled.div`
   top: 0;
   z-index: 1;
   background-color: #fff;
-
-  @media (max-width: 769px) {
-    flex-direction: column;
-    padding: 1rem;
-    align-items: flex-start;
-    position: relative;
-  }
 `;
 
 const StyledLogo = styled(NavLink)`
@@ -67,10 +60,6 @@ const StyledLink = styled(Link)`
   &.active {
     color: #f26600;
   }
-
-  @media (max-width: 768px) {
-    margin-bottom: 0.5rem;
-  }
 `;
 
 const StyledHamburgerMenu = styled.div`
@@ -93,11 +82,6 @@ const HamburgerIcon = styled(FaBars)`
   font-size: 1.5rem;
   color: #333;
   transition: 0.3s;
-
-  @media (max-width: 768px) {
-    display: block;
-    z-index: 2;
-  }
 `;
 
 const CloseIcon = styled(FaTimes)`
@@ -140,8 +124,24 @@ const StyledSignUpBtn = styled.button`
     color: #ffff;
   }
 
-  @media (max-width: 768px) {
-    display: none;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
   }
 `;
 
@@ -158,10 +158,6 @@ const StyledSigninBtn = styled.button`
     color: #f26600;
     box-shadow: -1px 2px 2px rgba(0, 0, 0, 0.5);
     border: solid 1px #f26600;
-  }
-
-  @media (max-width: 768px) {
-    display: none;
   }
 `;
 
