@@ -284,6 +284,7 @@ const showToast = (message, type) => {
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [userData, setUserData] = useState({});
   const [errors, setErrors] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const inputRef = useRef();
@@ -293,10 +294,6 @@ const SignIn = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisibility((prevVisibility) => !prevVisibility);
   };
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, [signIn.googleUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -312,7 +309,9 @@ const SignIn = () => {
 
       const url = "https://settl-core-dev.onrender.com/api/v1/signin";
       const { data: res } = await axios.post(url, formData);
+
       console.log("testing 2");
+
       toast.success(res.data.message);
       console.log("API Response:", res);
 
@@ -323,15 +322,26 @@ const SignIn = () => {
         console.log(res.token);
         setLoading(false);
         toast.success(res.data.message);
-        console.log("Data received:", res);
-        navigate(`/dashboard/${res.data[0]._id}`); // Access user ID using res.data[0]._id
+        setUserData({
+          id: res.data[0]._id,
+          firstName: res.data[0].firstName,
+          lastName: res.data[0].lastName,
+        });
+        console.log("User Data:", userData[0]);
+        // navigate(`/dashboard/${res.data[0]._id}`);
       }
     } catch (error) {
       setLoading(false);
       handleSignInError(error, setErrors);
     }
   };
-
+  useEffect(() => {
+    // This will be triggered after userData is updated
+    console.log("User Data:", userData);
+    if (userData.id) {
+      navigate(`/dashboard/${userData.id}`);
+    }
+  }, [userData, navigate]);
   const handleSignInError = (error, setErrors) => {
     console.error(error);
     if (error.response) {

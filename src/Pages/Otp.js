@@ -50,11 +50,8 @@ const OtpVerification = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("user Data: " + JSON.stringify(userData));
-
     if (/^[0-9]{4}$/.test(otp)) {
       try {
-        console.log(otp);
         const response = await axios.post(
           "https://settl-core-dev.onrender.com/api/v1/register",
           {
@@ -65,23 +62,39 @@ const OtpVerification = () => {
             password: userData.password,
           }
         );
-        console.log(response);
-        if (response.status == 200) {
+
+        if (response.data.status === 201) {
           showToast("Registration successful!", "success");
+          setOtp("");
           navigate("/login");
-          // setOtp("");
         } else {
-          showToast("Invalid OTP. Please enter a valid OTP.", "error");
+          showToast("Registration failed. Please try again.", "error");
         }
       } catch (error) {
         console.error("OTP verification failed:", error);
-        console.log("Response Data:", error.response.data);
-        showToast("OTP verification failed. Please try again.", "error");
+
+        if (error.response && error.response.data) {
+          const { data } = error.response;
+
+          if (data.errors) {
+            // Iterate through the errors and show more specific messages
+            Object.keys(data.errors).forEach((field) => {
+              showToast(`${field}: ${data.errors[field]}`, "error");
+            });
+          } else {
+            // Show a generic error message
+            showToast(data.message, "error");
+          }
+        } else {
+          // Show a generic error message
+          showToast("Registration failed. Please try again.", "error");
+        }
       }
     } else {
       showToast("Invalid OTP. Please enter a four-digit OTP.", "error");
     }
   };
+
   const handleChange = (value, index) => {
     const newOtp = [...otp];
     newOtp[index] = value;

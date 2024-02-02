@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { styled, css } from "styled-components";
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
@@ -57,6 +56,14 @@ const StyledLeft = styled.div`
   background-size: 130px 130px;
   background-position: 0 0, 0 0;
 
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
   }
@@ -347,20 +354,8 @@ const Signup = () => {
     setPasswordVisibility((prevVisibility) => !prevVisibility);
   };
 
-  const login = useGoogleLogin({
-    // onSuccess: async (codeResponse) => {
-    //   try {
-    //     const response = await axios.post("/api/google/signup", {
-    //       access_token: codeResponse.access_token,
-    //     });
-    //     const signedUpUser = response.data;
-    //     setUser(signedUpUser);
-    //   } catch (error) {
-    //     console.error("Signup failed:", error);
-    //   }
-    // },
-    // onError: (error) => console.log("Signup Failed:", error),
-  });
+  const login = () => {};
+
   console.log("otp1");
 
   const formik = useFormik({
@@ -373,7 +368,9 @@ const Signup = () => {
       role: "",
     },
     validationSchema: SignupSchema, //causin problems so i comment it out
-    onSubmit: async (values) => {
+    onSubmit: async (values, actions) => {
+      console.log("Formik values:", values);
+      console.log("Formik actions:", actions);
       try {
         setLoading(true);
         if (!values.password) {
@@ -436,7 +433,7 @@ const Signup = () => {
           }
         } else {
           // Show a generic error toast
-          toast.error(data.message);
+          toast.error("unknown swever error");
         }
       }
     },
@@ -536,7 +533,7 @@ const Signup = () => {
                     placeholder="Enter Firstname"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    style={{ width: "9rem", marginRight: "0.2rem" }}
+                    style={{ width: "95%", marginRight: "1rem" }}
                   />
                 </StyledLabel>
 
@@ -549,7 +546,7 @@ const Signup = () => {
                     placeholder="Enter Lastname"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    style={{ width: "9rem" }}
+                    style={{ width: "100%" }}
                   />
                 </StyledLabel>
               </div>
@@ -650,22 +647,6 @@ const Signup = () => {
               <Link to="/privacy-policy">Privacy Policy </Link>, and our default
               Notification Settings.
             </StyleTermsTxt>
-
-            <div>
-              {/* {profile ? (
-              <div>
-                <img src={profile.picture} alt="user image" />
-                <h3>User Signed Up</h3>
-                <p>Name: {profile.name}</p>
-                <p>Email Address: {profile.email}</p>
-                <br />
-                <br />
-                <button onClick={logOut}>Log out</button>
-              </div>
-            ) : (
-              <button onClick={() => login()}>Sign up with Google  </button>
-            )} */}
-            </div>
           </div>
         </StyledMiddle>
         <StyledRight></StyledRight>

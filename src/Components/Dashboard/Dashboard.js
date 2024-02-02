@@ -64,12 +64,6 @@ const StyledBtn = styled.button`
   text-align: left;
   color: #ffffff;
   font-weight: 200;
-
-  ${(props) =>
-    props.active &&
-    css`
-      background-color: #yourActiveColor;
-    `}
 `;
 
 const SignoutLink = styled(Link)`

@@ -77,7 +77,9 @@ const Header = () => {
       try {
         const url =
           "https://res.cloudinary.com/daj31htoa/image/upload/v1706072203/WhatsApp_Image_2022-12-22_at_4.29.04_AM_-_Copy_b0ui8d.jpg";
-        const res = await axios.get(url, { responseType: "arraybuffer" });
+        const res = await axios.get(url, userData, {
+          responseType: "arraybuffer",
+        });
         console.log(res); // Log the entire response
         console.log("hi");
 
@@ -85,10 +87,10 @@ const Header = () => {
           const contentType = res.headers["content-type"];
           if (contentType.includes("image")) {
             console.log("Image data:", res.data);
-            setUserData({
-              // name: res.name,
-              // profilePicture: res.profilePicture,
-            });
+            setUserData((prevUserData) => ({
+              ...prevUserData,
+              profilePicture: url,
+            }));
           }
         } else {
           console.error("Failed to fetch user data");
@@ -122,9 +124,9 @@ const Header = () => {
                   <StyledProfilePix
                     src={userData.profilePicture}
                     alt={userData.name}
-                    onError={(e) => {
-                      e.target.style.display = "none"; // Hide the image if an error occurs
-                    }}
+                    // onError={(e) => {
+                    //   e.target.style.display = "none"; // Hide the image if an error occurs
+                    // }}
                   />
                 ) : (
                   <FontAwesomeIcon icon={faUser} />
