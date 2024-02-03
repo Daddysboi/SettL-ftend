@@ -610,7 +610,7 @@ const Signup = () => {
             <StyledLineTxt>or</StyledLineTxt>
             <StyledLine></StyledLine>
           </StyledLineCont>
-          <StyledGoogleBtn type="button" onClick={login}>
+          <StyledGoogleBtn type="button" onClick={() => {}}>
             <img
               src={googleImg}
               alt="googleImg"
