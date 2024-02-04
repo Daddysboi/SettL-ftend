@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import logo from "../assets/logo/White-removebg-preview.png";
+import logo from "../assets/logo/favicon.png";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";

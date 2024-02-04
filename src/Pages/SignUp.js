@@ -360,6 +360,8 @@ const Signup = () => {
 
   console.log("otp1");
 
+  const login = () => {};
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
