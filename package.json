@@ -32,6 +32,7 @@
     "react-otp-input": "^3.1.1",
     "react-paystack": "^5.0.0",
     "react-router-dom": "6.4",
+    "react-scripts": "^5.0.1",
     "react-scroll": "^1.9.0",
     "react-switch": "^7.0.0",
     "react-toastify": "^10.0.4",
