@@ -9,10 +9,17 @@ import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
+<<<<<<< HEAD
 import { googleLogout } from "@react-oauth/google";
 import { userContext } from "../../App";
 import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 
+=======
+import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
+
+import { googleLogout } from "@react-oauth/google";
+import { userContext } from "../../App";
+>>>>>>> staging
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -122,6 +129,8 @@ const Dashboard = () => {
     setUser({}); // Clear user state
     setProfile({}); // Clear profile state
     localStorage.removeItem("token");
+    localStorage.removeItem(USER_TOKEN);
+    localStorage.removeItem(USER_ID);
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
   };

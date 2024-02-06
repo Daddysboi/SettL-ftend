@@ -106,24 +106,10 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const inputRef = useRef();
-  const [passwordVisibility, setPasswordVisibility] = useState(false);
-  const [formErrors, setFormErrors] = useState({});
-  const [userData, setUserData] = useContext(userContext);
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisibility((prevVisibility) => !prevVisibility);
-  };
-
-  console.log("otp1");
-
-  const login = () => {};
-
-  const formik = useFormik({
+  const registerFormik = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
