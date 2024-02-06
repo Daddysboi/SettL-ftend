@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo/favicon.png";
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import Switch from "react-switch";
+import { userContext } from "../../App";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -31,6 +32,11 @@ const StyledImg = styled.img`
 `;
 
 const StyledAccount = styled.div``;
+
+const StyledNavLink = styled(NavLink)`
+  color: black;
+  text-decoration: none;
+`;
 
 const StyledProfilePix = styled.img`
   height: 1.5rem;
@@ -64,7 +70,11 @@ const StyledLoader = styled.div`
 
 const Header = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState({ name: "", profilePicture: "" });
+  const { profile } = useContext(userContext);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [profile]);
 
   // const [isSellerMode, setIsSellerMode] = useState(true);
 
@@ -114,30 +124,24 @@ const Header = () => {
         Sett<span style={{ color: "#4db6ac" }}>L</span>
       </StyledLogo>
       <div>
-        <NavLink to="signup">
+        <StyledNavLink to="signup">
           <StyledAccount>
             {isLoading ? (
               <StyledLoader />
             ) : (
               <>
-                {userData.profilePicture ? (
-                  <StyledProfilePix
-                    src={userData.profilePicture}
-                    alt={userData.name}
-                    // onError={(e) => {
-                    //   e.target.style.display = "none"; // Hide the image if an error occurs
-                    // }}
-                  />
+                {profile.picture ? (
+                  <StyledProfilePix src={profile.picture} alt={profile.name} />
                 ) : (
-                  <FontAwesomeIcon icon={faUser} />
+                  <StyledAccountIcon icon={faUser} />
                 )}
-                <span style={{ marginLeft: "0.5rem" }}>
-                  {userData.name || "User"}
+                <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
+                  {profile.name || "User"}
                 </span>
               </>
             )}
           </StyledAccount>
-        </NavLink>
+        </StyledNavLink>
       </div>
     </StyledContainer>
   );

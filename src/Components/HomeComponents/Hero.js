@@ -142,7 +142,7 @@ const StyledImg = styled.img`
 
 const StyledChatImg = styled.img`
   position: absolute;
-  bottom: 2rem;
+  bottom: -12rem;
   right: 5rem;
   height: 4rem;
 
@@ -167,7 +167,6 @@ const StyledChatImg = styled.img`
 
   // Extra large screens, TV
   @media only screen and (min-width: 1201px) {
-    /* height: 30rem; */
   }
 `;
 const Hero = () => {
