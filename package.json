@@ -1,5 +1,4 @@
 {
-  "homepage": "https://daddysboi.github.io/",
   "name": "settl-ftend",
   "version": "1.0.0",
   "description": "A Repo for an escrow platform who helps create trust between buyers and sellers",
@@ -52,6 +51,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@4.0.2"
+  }
 }
