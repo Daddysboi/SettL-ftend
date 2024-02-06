@@ -9,13 +9,10 @@ import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
-<<<<<<< HEAD
 import { googleLogout } from "@react-oauth/google";
 import { userContext } from "../../App";
-=======
 import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 
->>>>>>> staging
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -114,8 +111,8 @@ const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
   const { userId } = useParams();
-  const { user, setUser, profile, setProfile, userData, setUserData } =
-    useContext(userContext);
+  // const { user, setUser, profile, setProfile, userData, setUserData } =
+  //   useContext(userContext);
 
   const { user } = useAppSelector((state) => state.user);
   console.log("my user", user);

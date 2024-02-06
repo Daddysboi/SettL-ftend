@@ -76,107 +76,6 @@ const ResetPassword = () => {
   });
 
   return (
-<<<<<<< HEAD
-    <>
-      <StyledContainer>
-        <StyledLeft>
-          <StyledInnerLeft>
-            <StyledInnerText>
-              Where
-              <br />
-              trust meets
-              <br />
-              seamless <br />
-              <span
-                style={{
-                  fontSize: "2rem",
-                  fontWeight: "bold",
-                  background:
-                    "linear-gradient(to right, #EAF7FF, #5BC2FF, #8E6CF9)",
-                  color: "transparent",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                }}
-              >
-                Transactions
-              </span>
-              <StyledInnerText2>
-                We won't have everyone but we guuarantee our clients will have
-                the best e-commerce experience
-              </StyledInnerText2>
-            </StyledInnerText>
-          </StyledInnerLeft>
-        </StyledLeft>
-        <StyledMiddle>
-          <StyledHeader>Reset Password</StyledHeader>
-          <StyledFormik
-            initialValues={{
-              newPassword: "",
-              confirmPassword: "",
-            }}
-            validate={(values) => {
-              const errors = {};
-              const result = zxcvbn(values.newPassword);
-              if (result.score < 3) {
-                toast.error("Password is too weak");
-              }
-              return errors;
-            }}
-            onSubmit={(values) => {
-              handleResetPassword(values);
-            }}
-          >
-            <Form>
-              <div>
-                <StyledLabel htmlFor="">Enter new password</StyledLabel>
-                <PasswordContainer>
-                  <StyledField
-                    type={passwordVisible ? "text" : "password"}
-                    name="newPassword"
-                    placeholder="Enter new password"
-                  />
-                  <EyeIcon onClick={togglePasswordVisibility}>
-                    {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
-                  </EyeIcon>
-                </PasswordContainer>
-              </div>
-              <ErrorMessage name="newPassword" component="div" />
-
-              <div>
-                <StyledLabel htmlFor="">Confirm new password</StyledLabel>
-                <StyledPasswordField
-                  type={passwordVisible ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="Confirm new password"
-                />
-              </div>
-
-              <StyledBtn type="submit" disabled={loading}>
-                {loading ? "Resetting..." : "Reset Password"}
-              </StyledBtn>
-            </Form>
-          </StyledFormik>
-          {resetStatus === "success" && <p>Password updated successfully!</p>}
-          {resetStatus === "error" && (
-            <p>Failed to update password. Please try again.</p>
-          )}
-        </StyledMiddle>
-        <StyledRight></StyledRight>
-      </StyledContainer>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
-    </>
-=======
     <AuthBackground
       headText="Reset Password"
       subText="Enter and confirm your new password."
@@ -216,7 +115,6 @@ const ResetPassword = () => {
         {loading ? "Resetting..." : "Reset Password"}
       </StyledBtn>
     </AuthBackground>
->>>>>>> staging
   );
 };
 
