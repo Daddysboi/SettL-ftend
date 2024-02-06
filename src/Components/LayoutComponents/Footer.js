@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import instagram from "../../assets/Icon/InstagramFilled.png";
 import facebook from "../../assets/Icon/FacebookFilled.png";
 import twitter from "../../assets/Icon/TwitterCircleFilled.png";
 import Linkedin from "../../assets/Icon/LinkedinFilled.png";
+import axios from "axios";
 
 const StyledContainer = styled.div``;
 const StyledContainerTop = styled.div`
@@ -124,6 +125,22 @@ const StyledLink = styled(Link)`
   }
 `;
 const Footer = () => {
+  const [email, setEmail] = useState("");
+
+  const handleSubscribe = async () => {
+    try {
+      const url = "https://settl-core-dev.onrender.com/api/v1/mailing-list";
+      const response = await axios.post(url, { email });
+
+      if (response.ok) {
+        console.log("Subscribed successfully!");
+      } else {
+        console.error("Subscription failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   return (
     <StyledContainer>
       <StyledContainerTop>
@@ -136,8 +153,10 @@ const Footer = () => {
           <StyledInput
             type="text"
             placeholder="Enter your email here (e.g tkz@settl.com)"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <StyledBtn>Subscribe</StyledBtn>
+          <StyledBtn onClick={handleSubscribe}>Subscribe</StyledBtn>
         </div>
       </StyledContainerTop>
       <StyledContainerMid>
