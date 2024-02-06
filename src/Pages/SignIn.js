@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
@@ -102,45 +102,44 @@ const loginValidationSchema = Yup?.object()?.shape({
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const { user, setUser, profile, setProfile, userData, setUserData } =
-    useContext(userContext);
+  // const { user, setUser, profile, setProfile, userData, setUserData } =
+  //   useContext(userContext);
   const inputRef = useRef();
   const navigate = useNavigate();
 
-  const logOut = () => {
-    googleLogout();
-    setUser({}); // Clear user state
-    setProfile({}); // Clear profile state
-  };
+  // const logOut = () => {
+  //   googleLogout();
+  //   setUser({}); // Clear user state
+  //   setProfile({}); // Clear profile state
+  // };
 
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      setUser(codeResponse);
-      navigate(`/dashboard/${codeResponse.id}`);
-    },
-    onError: (error) => console.log("Login Failed:", error),
-  });
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: (codeResponse) => {
+  //     setUser(codeResponse);
+  //     navigate(`/dashboard/${codeResponse.id}`);
+  //   },
+  //   onError: (error) => console.log("Login Failed:", error),
+  // });
 
-  useEffect(() => {
-    if (user && user.access_token) {
-      axios
-        .get("https://www.googleapis.com/oauth2/v1/userinfo", {
-          params: { access_token: user.access_token },
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: "application/json",
-          },
-        })
-        .then((res) => {
-          setProfile(res.data);
-        })
-        .catch((err) => {
-          console.error("Google API Error:", err);
-          // Handle the error gracefully
-        });
-    }
-  }, [user]);
-  const signIn = () => {};
+  // useEffect(() => {
+  //   if (user && user.access_token) {
+  //     axios
+  //       .get("https://www.googleapis.com/oauth2/v1/userinfo", {
+  //         params: { access_token: user.access_token },
+  //         headers: {
+  //           Authorization: `Bearer ${user.access_token}`,
+  //           Accept: "application/json",
+  //         },
+  //       })
+  //       .then((res) => {
+  //         setProfile(res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.error("Google API Error:", err);
+  //         // Handle the error gracefully
+  //       });
+  //   }
+  // }, [user]);
 
   const loginFormik = useFormik({
     validationSchema: loginValidationSchema,
@@ -226,7 +225,7 @@ const SignIn = () => {
         <StyledLineTxt>or</StyledLineTxt>
         <StyledLine></StyledLine>
       </StyledLineCont>
-      <StyledGoogleBtn type="button" onClick={() => login()}>
+      <StyledGoogleBtn type="button" onClick={() => {}}>
         <img
           src={googleImg}
           alt="googleImg"
