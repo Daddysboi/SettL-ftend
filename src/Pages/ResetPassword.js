@@ -111,22 +111,6 @@ const StyledHeader = styled.h1`
   }
 `;
 
-// const StyledSubHead = styled.p`
-//   letter-spacing: -0.05rem;
-//   font-size: 0.8rem;
-//   opacity: 0.5;
-//   margin-top: 0;
-//   margin-bottom: 3rem;
-//   @media only screen and (min-width: 769px) and (max-width: 1024px) {
-//     margin-bottom: 2rem;
-//   }
-
-//   // Desktops, large screens
-//   @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-//     margin-bottom: 2rem;
-//   }
-// `;
-
 // //Form
 const StyledFormik = styled(Formik)`
   display: block;
@@ -140,7 +124,6 @@ const StyledFormik = styled(Formik)`
 const StyledLabel = styled.label`
   font-size: 0.8rem;
   letter-spacing: -0.01rem;
-  position: relative;
   font-weight: 400;
 `;
 
@@ -165,8 +148,6 @@ const StyledPasswordField = styled.input`
     border: 2px solid #ff4500;
   }
 `;
-
-StyledPasswordField;
 
 const EyeIcon = styled.span`
   cursor: pointer;
@@ -233,7 +214,12 @@ const ResetPassword = ({ match }) => {
     const fetchUserId = async () => {
       try {
         const response = await axios.get(
-          `https://settl-core-dev.onrender.com/api/v1/get-user-id?token=${token}`
+          `https://settl-core-dev.onrender.com/api/v1/password-reset`,
+          {
+            userId: userId,
+            resetString: "",
+            newPassword: password,
+          }
         );
 
         if (response.status === 200) {
@@ -312,7 +298,7 @@ const ResetPassword = ({ match }) => {
               </StyledInnerText2>
             </StyledInnerText>
           </StyledInnerLeft>
-        </StyledLeft>{" "}
+        </StyledLeft>
         <StyledMiddle>
           <StyledHeader>Reset Password</StyledHeader>
           <StyledFormik

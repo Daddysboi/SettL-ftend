@@ -346,7 +346,6 @@ const Signup = () => {
   const inputRef = useRef();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-
   const [userData, setUserData] = useContext(userContext);
   const navigate = useNavigate();
 
