@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import Home from "./Home/Home.Dashboard";
@@ -9,7 +9,8 @@ import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
-
+import { googleLogout } from "@react-oauth/google";
+import { userContext } from "../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -107,9 +108,14 @@ const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
   const { userId } = useParams();
+  const { user, setUser, profile, setProfile, userData, setUserData } =
+    useContext(userContext);
 
   const logOut = () => {
     localStorage.removeItem("token");
+    googleLogout();
+    setUser({}); // Clear user state
+    setProfile({}); // Clear profile state
   };
 
   useEffect(() => {

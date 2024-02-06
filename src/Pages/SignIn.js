@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -8,6 +8,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TailSpin as Loader } from "react-loader-spinner";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { userContext } from "../App";
 
 //container
 const StyledContainer = styled.div`
@@ -162,7 +164,6 @@ const StyledForm = styled.form`
 const StyledLabel = styled.label`
   font-size: 0.65rem;
   letter-spacing: -0.01rem;
-  position: relative;
 `;
 
 const StyledInput = styled.input`
@@ -284,12 +285,46 @@ const showToast = (message, type) => {
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [userData, setUserData] = useState({});
   const [errors, setErrors] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const { user, setUser, profile, setProfile, userData, setUserData } =
+    useContext(userContext);
   const inputRef = useRef();
   const navigate = useNavigate();
 
+  const logOut = () => {
+    googleLogout();
+    setUser({}); // Clear user state
+    setProfile({}); // Clear profile state
+  };
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      navigate(`/dashboard/${codeResponse.id}`);
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
+
+  useEffect(() => {
+    if (user && user.access_token) {
+      axios
+        .get("https://www.googleapis.com/oauth2/v1/userinfo", {
+          params: { access_token: user.access_token },
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: "application/json",
+          },
+        })
+        .then((res) => {
+          setProfile(res.data);
+        })
+        .catch((err) => {
+          console.error("Google API Error:", err);
+          // Handle the error gracefully
+        });
+    }
+  }, [user]);
   const signIn = () => {};
   const togglePasswordVisibility = () => {
     setPasswordVisibility((prevVisibility) => !prevVisibility);
@@ -459,7 +494,7 @@ const SignIn = () => {
             <StyledLineTxt>or</StyledLineTxt>
             <StyledLine></StyledLine>
           </StyledLineCont>
-          <StyledGoogleBtn type="button" onClick={signIn}>
+          <StyledGoogleBtn type="button" onClick={() => login()}>
             <img
               src={googleImg}
               alt="googleImg"
@@ -473,6 +508,25 @@ const SignIn = () => {
             </StyledLineTxt>
           </div>
         </StyledMiddle>
+        {/* <div>
+          <div>
+            <h2>React Google Login</h2>
+            <br />
+            <br />
+
+            <div>
+              <img src={profile.picture} alt="user image" />
+              <h3>User Logged in</h3>
+              <p>Name: {profile.name}</p>
+              <p>Email Address: {profile.email}</p>
+              <br />
+              <br />
+              <button onClick={() => logOut()}>Log out</button>
+            </div>
+
+            <button onClick={() => login()}>Sign in with Google 🚀</button>
+          </div>
+        </div> */}
         <StyledRight></StyledRight>
       </StyledContainer>
       <ToastContainer />
