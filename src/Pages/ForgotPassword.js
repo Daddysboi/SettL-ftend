@@ -207,114 +207,63 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [resetStatus, setResetStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
 
-  const handleResetPassword = async () => {
-    if (!email.trim() || !emailValidator.validate(email)) {
-      setEmailError("Invalid email format");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await axios.post(
-        "https://settl-core-dev.onrender.com/api/v1/request-password-reset",
-        {
-          email: email,
-          redirectUrl: `http://localhost:3000/reset-password/${token}`,
-        }
-      );
-
-      if (response.status === 200) {
-        setResetStatus("success");
-      } else {
-        setResetStatus("error");
-      }
-    } catch (error) {
-      console.error("Password reset request failed:", error);
-      setResetStatus("error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    setEmailError("");
-  };
+  const forgotPasswordFormik = useFormik({
+    validationSchema: forgotPasswordValidationSchema,
+    initialValues: {
+      email: "",
+    },
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      dispatch(
+        requestResetPassword({
+          email: values?.email,
+          redirectUrl: "http://localhost:3000/reset-password", // change to hosted frontend link
+        })
+      )
+        .then((resp) => {
+          if (resp?.payload?.status !== 200) {
+            toast.error(resp?.payload?.message || "Something went wrong");
+            setLoading(false);
+            return;
+          }
+          toast.success(resp?.payload?.message || "Operation Successful");
+          resetForm();
+          setLoading(false);
+        })
+        .catch((error) => {
+          toast.error(error.message || "Something went wrong");
+          setLoading(false);
+        });
+    },
+  });
 
   return (
-    <StyledContainer>
-      {" "}
-      <StyledLeft>
-        <StyledInnerLeft>
-          <StyledInnerText>
-            Where
-            <br />
-            trust meets
-            <br />
-            seamless <br />
-            <span
-              style={{
-                fontSize: "2rem",
-                fontWeight: "bold",
-                background:
-                  "linear-gradient(to right, #EAF7FF, #5BC2FF, #8E6CF9)",
-                color: "transparent",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-              }}
-            >
-              Transactions
-            </span>
-            <StyledInnerText2>
-              We won't have everyone but we guuarantee our clients will have the
-              best e-commerce experience
-            </StyledInnerText2>
-          </StyledInnerText>
-        </StyledInnerLeft>
-      </StyledLeft>
-      <StyledMiddle>
-        {" "}
-        <StyledLogo to="/">
-          <StyledImg src={logo} alt="logo" />
-          Sett<span style={{ color: "#4db6ac" }}>L</span>
-        </StyledLogo>
-        <StyledHeader>Forgot Password</StyledHeader>
-        <StyledSubHead>Enter your email to reset your password.</StyledSubHead>
-        <StyledLabel htmlFor="">Email</StyledLabel>
-        <StyledInput
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={handleEmailChange}
-        />
-        {emailError && <p style={{ color: "red" }}>{emailError}</p>}
-        <StyledBtn onClick={handleResetPassword} disabled={loading}>
-          {loading ? "Resetting..." : "Reset Password"}
-        </StyledBtn>
-        {resetStatus === "success" && (
-          <p>Password reset email sent successfully!</p>
-        )}
-        {resetStatus === "error" && (
-          <p>Failed to send password reset email. Please try again.</p>
-        )}{" "}
-      </StyledMiddle>
-      <StyledRight></StyledRight>{" "}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
+    <AuthBackground
+      headText="Forgot Password"
+      subText="Enter your email to reset your password."
+    >
+      <AppInput
+        label="Email"
+        type="text"
+        name="email"
+        value={forgotPasswordFormik.values.email}
+        placeholder="Enter your e-mail"
+        onChange={forgotPasswordFormik.handleChange}
+        error={
+          forgotPasswordFormik.submitCount > 0 &&
+          forgotPasswordFormik.errors.email
+        }
       />
-    </StyledContainer>
+      <StyledBtn
+        type="button"
+        onClick={forgotPasswordFormik.handleSubmit}
+        disabled={loading}
+      >
+        {" "}
+        {loading ? "Resetting..." : "Reset Password"}
+      </StyledBtn>
+    </AuthBackground>
   );
 };
 
