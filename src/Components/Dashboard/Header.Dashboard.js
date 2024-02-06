@@ -80,13 +80,13 @@ const Header = () => {
         const res = await axios.get(url, userData, {
           responseType: "arraybuffer",
         });
-        console.log(res);
-        console.log("hi");
+        // console.log(res);
+        // console.log("hi");
 
         if (res.status === 200) {
           const contentType = res.headers["content-type"];
           if (contentType.includes("image")) {
-            console.log("Image data:", res.data);
+            // console.log("Image data:", res.data);
             setUserData((prevUserData) => ({
               ...prevUserData,
               profilePicture: url,

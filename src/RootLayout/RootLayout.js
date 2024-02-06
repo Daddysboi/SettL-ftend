@@ -1,13 +1,16 @@
+import { Outlet } from "react-router-dom";
 import Header from "../Components/LayoutComponents/Header";
 import Footer from "../Components/LayoutComponents/Footer";
-import { Outlet } from "react-router-dom";
+import AuthGuard from "../AuthGuard";
 
 const RootLayout = () => {
   return (
     <div>
-      <Header />
-      <Outlet />
-      {/* <Footer /> */}
+      <AuthGuard>
+        <Header />
+        <Outlet />
+        <Footer />
+      </AuthGuard>
     </div>
   );
 };

@@ -1,69 +1,93 @@
 import React, { useState } from "react";
-import axios from "axios";
-import emailValidator from "email-validator";
+import { styled } from "styled-components";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "../redux/hooks";
+import AppInput from "../Components/ReUseableComponent/AppInput";
+import AuthBackground from "../Components/LayoutComponents/AuthBackground";
+import { requestResetPassword } from "../features/forgotPasswordSlice";
+
+const StyledBtn = styled.button`
+  padding: 0.6rem 1rem;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0.2rem;
+  background: linear-gradient(to right, #ff4500, #ff8c00, #f26600);
+  color: #ffff;
+  margin: 1rem 0 0 0;
+  &:hover {
+    background: #f26600;
+  }
+`;
+
+const forgotPasswordValidationSchema = Yup?.object()?.shape({
+  email: Yup?.string()?.email()?.required("Email is required"),
+});
 
 const PasswordReset = () => {
-  const [email, setEmail] = useState("");
-  const [resetStatus, setResetStatus] = useState(null);
+  const dispatch = useAppDispatch();
+
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
 
-  const handleResetPassword = async () => {
-    if (!email.trim() || !emailValidator.validate(email)) {
-      setEmailError("Invalid email format");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await axios.post(
-        "https://settl-core-dev.onrender.com/api/v1/request-password-reset",
-        {
-          email: email,
-          redirectUrl: "http://localhost:3000/reset-password",
-        }
-      );
-
-      if (response.status === 200) {
-        setResetStatus("success");
-      } else {
-        setResetStatus("error");
-      }
-    } catch (error) {
-      console.error("Password reset request failed:", error);
-      setResetStatus("error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    setEmailError("");
-  };
+  const forgotPasswordFormik = useFormik({
+    validationSchema: forgotPasswordValidationSchema,
+    initialValues: {
+      email: "",
+    },
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      dispatch(
+        requestResetPassword({
+          email: values?.email,
+          redirectUrl: "http://localhost:3000/reset-password", // change to hosted frontend link
+        })
+      )
+        .then((resp) => {
+          if (resp?.payload?.status !== 200) {
+            toast.error(resp?.payload?.message || "Something went wrong");
+            setLoading(false);
+            return;
+          }
+          toast.success(resp?.payload?.message || "Operation Successful");
+          resetForm();
+          setLoading(false);
+        })
+        .catch((error) => {
+          toast.error(error.message || "Something went wrong");
+          setLoading(false);
+        });
+    },
+  });
 
   return (
-    <div>
-      <h2>Forgot Password</h2>
-      <p>Enter your email to reset your password.</p>
-      <input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={handleEmailChange}
+    <AuthBackground
+      headText="Forgot Password"
+      subText="Enter your email to reset your password."
+    >
+      <AppInput
+        label="Email"
+        type="text"
+        name="email"
+        value={forgotPasswordFormik.values.email}
+        placeholder="Enter your e-mail"
+        onChange={forgotPasswordFormik.handleChange}
+        error={
+          forgotPasswordFormik.submitCount > 0 &&
+          forgotPasswordFormik.errors.email
+        }
       />
-      {emailError && <p style={{ color: "red" }}>{emailError}</p>}
-      <button onClick={handleResetPassword} disabled={loading}>
+      <StyledBtn
+        type="button"
+        onClick={forgotPasswordFormik.handleSubmit}
+        disabled={loading}
+      >
+        {" "}
         {loading ? "Resetting..." : "Reset Password"}
-      </button>
-      {resetStatus === "success" && (
-        <p>Password reset email sent successfully!</p>
-      )}
-      {resetStatus === "error" && (
-        <p>Failed to send password reset email. Please try again.</p>
-      )}
-    </div>
+      </StyledBtn>
+    </AuthBackground>
   );
 };
 

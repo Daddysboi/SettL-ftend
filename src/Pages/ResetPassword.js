@@ -1,125 +1,120 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import toastify from "react-toastify";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import zxcvbn from "zxcvbn";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { styled } from "styled-components";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "../redux/hooks";
+import AppInput from "../Components/ReUseableComponent/AppInput";
+import AuthBackground from "../Components/LayoutComponents/AuthBackground";
+import { resetPassword } from "../features/forgotPasswordSlice";
 
-const ResetPassword = ({ match }) => {
-  const { params } = match || {};
-  const { token } = params || {};
-  const [resetStatus, setResetStatus] = useState(null);
+const StyledBtn = styled.button`
+  padding: 0.6rem 1rem;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0.2rem;
+  background: linear-gradient(to right, #ff4500, #ff8c00, #f26600);
+  color: #ffff;
+  margin: 1rem 0 0 0;
+  &:hover {
+    background: #f26600;
+  }
+`;
+
+export const resetPasswordValidationSchema = Yup?.object()?.shape({
+  password: Yup.string()
+    .required("Required")
+    .min(8, "Must be at least 8 characters long")
+    .matches(/[A-Z]/, "Must contain at least one uppercase letter")
+    .matches(/([a-z])/, "Must contain at least one lowercase letter")
+    .matches(/(\W)/, "Must contain at least one special character"),
+  confirmPassword: Yup.string()
+    .required("Required")
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .nullable(),
+});
+
+const ResetPassword = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
-  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await axios.get(
-          `https://settl-core-dev.onrender.com/api/v1/get-user-id?token=${token}`
-        );
+  const { userId, resetString } = useParams();
 
-        if (response.status === 200) {
-          setUserId(response.data.userId);
-        }
-      } catch (error) {
-        console.error("Failed to fetch user ID:", error);
-      }
-    };
-
-    fetchUserId();
-  }, [token]);
-
-  const handleResetPassword = async (values) => {
-    if (values.newPassword !== values.confirmPassword) {
-      setResetStatus("error");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await axios.post(
-        "https://settl-core-dev.onrender.com/api/v1/password-reset",
-        {
-          userId: userId,
-          resetString: token,
-          newPassword: values.newPassword,
-        }
-      );
-
-      if (response.status === 200) {
-        setResetStatus("success");
-      } else {
-        setResetStatus("error");
-      }
-    } catch (error) {
-      console.error("Password reset failed:", error);
-      setResetStatus("error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible((prev) => !prev);
-  };
+  const resetPasswordFormik = useFormik({
+    validationSchema: resetPasswordValidationSchema,
+    initialValues: {
+      password: "",
+      confirmPassword: "",
+    },
+    onSubmit: async (values) => {
+      setLoading(true);
+      let request = {
+        userId,
+        resetString,
+        newPassword: values?.password,
+      };
+      dispatch(resetPassword(request))
+        .then((resp) => {
+          if (resp?.payload?.status !== 200) {
+            toast.error(resp?.payload?.message || "Something went wrong");
+            setLoading(false);
+            return;
+          }
+          toast.success(resp?.payload?.message || "Operation successful");
+          navigate("/login");
+          setLoading(false);
+        })
+        .catch((error) => {
+          toast.error(error?.message || "Something went wrong");
+          setLoading(false);
+        });
+    },
+  });
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <Formik
-        initialValues={{
-          newPassword: "",
-          confirmPassword: "",
-        }}
-        validate={(values) => {
-          const errors = {};
-          const result = zxcvbn(values.newPassword);
-          if (result.score < 3) {
-            errors.newPassword = "Password is too weak";
-          }
-          return errors;
-        }}
-        onSubmit={(values) => {
-          handleResetPassword(values);
-        }}
+    <AuthBackground
+      headText="Reset Password"
+      subText="Enter and confirm your new password."
+    >
+      <AppInput
+        inputType="password"
+        label="Password"
+        name="password"
+        value={resetPasswordFormik.values.password}
+        placeholder="Enter your password"
+        onChange={resetPasswordFormik.handleChange}
+        error={
+          resetPasswordFormik.submitCount > 0 &&
+          resetPasswordFormik.errors.password
+        }
+      />
+
+      <AppInput
+        inputType="password"
+        label="Confirm Password"
+        name="confirmPassword"
+        value={resetPasswordFormik.values.confirmPassword}
+        placeholder="Confirm your password"
+        onChange={resetPasswordFormik.handleChange}
+        error={
+          resetPasswordFormik.submitCount > 0 &&
+          resetPasswordFormik.errors.confirmPassword
+        }
+      />
+
+      <StyledBtn
+        type="button"
+        onClick={resetPasswordFormik.handleSubmit}
+        disabled={loading}
       >
-        <Form>
-          <div>
-            <label htmlFor="">Enter new password</label>
-            <Field
-              type={passwordVisible ? "text" : "password"}
-              name="newPassword"
-              placeholder="Enter new password"
-            />
-            <button type="button" onClick={togglePasswordVisibility}>
-              {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-            </button>
-          </div>
-          <ErrorMessage name="newPassword" component="div" />
-
-          <div>
-            <label htmlFor="">Confirm new password</label>
-            <Field
-              type={passwordVisible ? "text" : "password"}
-              name="confirmPassword"
-              placeholder="Confirm new password"
-            />
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Resetting..." : "Reset Password"}
-          </button>
-        </Form>
-      </Formik>
-      {resetStatus === "success" && <p>Password updated successfully!</p>}
-      {resetStatus === "error" && (
-        <p>Failed to update password. Please try again.</p>
-      )}
-    </div>
+        {" "}
+        {loading ? "Resetting..." : "Reset Password"}
+      </StyledBtn>
+    </AuthBackground>
   );
 };
 
