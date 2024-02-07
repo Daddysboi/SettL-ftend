@@ -27,13 +27,13 @@ const router = createBrowserRouter(
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/dashboard" index element={<Dashboard />}></Route>
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
       <Route path="/otp" element={<Otp />} />
       <Route path="/" element={<RootLayout />}>
-        <Route path="/dashboard" index element={<Dashboard />}></Route>
         <Route path="/" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
@@ -45,14 +45,12 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const [userData, setUserData] = useState("");
+  // const [userData, setUserData] = useState("");
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
   return (
-    <userContext.Provider
-      value={{ user, setUser, profile, setProfile, userData, setUserData }}
-    >
+    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
       <div className="App">
         <RouterProvider router={router}>
           <RootLayout />

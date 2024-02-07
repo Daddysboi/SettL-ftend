@@ -31,6 +31,7 @@ const EyeIcon = styled.span`
   cursor: pointer;
   color: gray;
 `;
+
 const PasswordContainer = styled.div`
   position: relative;
 `;
@@ -69,6 +70,7 @@ const AppInput = ({
   error,
   inputType,
   label,
+  width,
   ...props
 }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -114,6 +116,7 @@ const AppInput = ({
         value={value}
         placeholder={placeholder}
         onChange={onChange}
+        style={{ width }}
         {...props}
       />
       {error && <ErrorContainer>{error}</ErrorContainer>}

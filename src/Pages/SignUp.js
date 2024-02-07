@@ -17,12 +17,13 @@ import "react-toastify/dist/ReactToastify.css";
 //Form
 const StyledForm = styled.form`
   display: block;
-  margin-top: 1rem; /* Adjust the margin as needed */
+  margin-top: 1rem;
   &:focus {
     margin-top: 18px;
     padding-left: 2px;
   }
 `;
+
 const StyledBtn = styled.button`
   padding: 0.6rem 1rem;
   box-sizing: border-box;
@@ -162,6 +163,7 @@ const Signup = () => {
           }}
         >
           <AppInput
+            width="95%"
             label="First Name"
             type="text"
             name="firstName"

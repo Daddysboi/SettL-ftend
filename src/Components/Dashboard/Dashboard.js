@@ -9,17 +9,9 @@ import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
-<<<<<<< HEAD
+import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 import { googleLogout } from "@react-oauth/google";
 import { userContext } from "../../App";
-import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
-
-=======
-import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
-
-import { googleLogout } from "@react-oauth/google";
-import { userContext } from "../../App";
->>>>>>> staging
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
