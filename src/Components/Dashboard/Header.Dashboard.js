@@ -88,8 +88,6 @@ const Header = () => {
         const url =
           "https://res.cloudinary.com/daj31htoa/image/upload/v1706072203/WhatsApp_Image_2022-12-22_at_4.29.04_AM_-_Copy_b0ui8d.jpg";
         const res = await axios.get(url, userData, {});
-        // console.log(res);
-        // console.log("hi");
 
         if (res.status === 200) {
           const contentType = res.headers["content-type"];

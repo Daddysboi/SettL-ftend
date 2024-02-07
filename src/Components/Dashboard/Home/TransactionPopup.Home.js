@@ -109,8 +109,6 @@ const StyledInput = styled.input`
 `;
 
 Modal.setAppElement("#root");
-const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
-// const publicKey = "pk_live_9e4dff60d2339d111376de1f86b831b332afad9f";
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,
@@ -179,7 +177,7 @@ const TransactionFormPopup = ({
       name: formik.values.counterpartyName,
       phone: formik.values.counterpartyPhone,
     },
-    publicKey,
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
     text: "Pay",
     onSuccess: ({ reference }) => {
       alert(

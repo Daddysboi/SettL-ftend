@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import { PaystackButton } from "react-paystack";
 
 const Payment = () => {
-  // const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
-  const publicKey = "pk_live_9e4dff60d2339d111376de1f86b831b332afad9f";
-  console.log(publicKey);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -35,7 +32,7 @@ const Payment = () => {
       name: formData.name,
       phone: formData.phone,
     },
-    publicKey,
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
     text: "Buy Now",
     onSuccess: ({ reference }) => {
       alert(
