@@ -127,7 +127,7 @@ const Signup = () => {
         email: values?.email?.toLowerCase(),
         password: values?.password,
       };
-      dispatch(sendOtp({ email: values?.email }))
+      dispatch(sendOtp({ email: request?.email }))
         .then((resp) => {
           if (resp?.payload?.status !== 200) {
             toast.error(resp?.payload?.message || "Something went wrong");
