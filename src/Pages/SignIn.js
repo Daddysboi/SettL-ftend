@@ -106,12 +106,6 @@ const SignIn = () => {
   const inputRef = useRef();
   const navigate = useNavigate();
 
-  // const logOut = () => {
-  //   googleLogout();
-  //   setUser({}); // Clear user state
-  //   setProfile({}); // Clear profile state
-  // };
-
   const googleLogin = useGoogleLogin({
     onSuccess: (codeResponse) => {
       setUser(codeResponse);
