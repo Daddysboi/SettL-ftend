@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { TailSpin as Loader } from "react-loader-spinner";
 import * as Yup from "yup";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
@@ -11,7 +12,6 @@ import { login } from "../features/loginSlice";
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import AppInput from "../Components/ReUseableComponent/AppInput";
 import googleImg from "../assets/images/flat-color-icons_google.svg";
-import "react-toastify/dist/ReactToastify.css";
 import { userContext } from "../App";
 import axios from "axios";
 

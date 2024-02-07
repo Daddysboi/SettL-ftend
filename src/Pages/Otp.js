@@ -56,7 +56,6 @@ const OtpVerification = () => {
         }
         toast.success(resp?.payload?.message || "Successfully Registered");
         navigate("/login");
-        resetForm();
         setLoading(false);
       })
       .catch((error) => {

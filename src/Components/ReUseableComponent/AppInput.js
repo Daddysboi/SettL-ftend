@@ -22,6 +22,9 @@ const StyledInput = styled.input`
   border-radius: 0.3rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
   outline: none;
+  &::placeholder {
+    opacity: 0.5;
+  }
   &:focus {
     border: 1px solid rgb(194, 194, 194);
   }
@@ -47,6 +50,9 @@ const StyledPasswordInput = styled.input`
   justify-content: center;
   align-items: center;
   outline: none;
+  &::placeholder {
+    opacity: 0.5;
+  }
   &:focus {
     border: 1px solid rgb(194, 194, 194);
   }
@@ -61,6 +67,20 @@ const ErrorContainer = styled.div`
   line-height: 10px;
 `;
 
+const StyledTextarea = styled.textarea`
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  &::placeholder {
+    opacity: 0.5;
+  }
+  &:focus {
+    border: 1px solid rgb(194, 194, 194);
+  }
+`;
+
 const AppInput = ({
   type,
   name,
@@ -71,6 +91,9 @@ const AppInput = ({
   inputType,
   label,
   width,
+  cols = "30",
+  rows = "10",
+  onBlur,
   ...props
 }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -103,6 +126,33 @@ const AppInput = ({
             {passwordVisibility ? <FaEye /> : <FaEyeSlash />}
           </EyeIcon>
         </PasswordContainer>
+        {error && <ErrorContainer>{error}</ErrorContainer>}
+      </StyledInputContainer>
+    );
+  }
+
+  if (type === "textarea") {
+    return (
+      <StyledInputContainer>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <StyledLabel htmlFor="">{label}</StyledLabel>
+          <StyledTextarea
+            cols={cols}
+            rows={rows}
+            type={type}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+        </div>
         {error && <ErrorContainer>{error}</ErrorContainer>}
       </StyledInputContainer>
     );

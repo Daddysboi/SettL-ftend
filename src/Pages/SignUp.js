@@ -125,10 +125,10 @@ const Signup = () => {
       let request = {
         firstName: values?.firstName,
         lastName: values?.lastName,
-        email: values?.email,
+        email: values?.email?.toLowerCase(),
         password: values?.password,
       };
-      dispatch(sendOtp({ email: values?.email }))
+      dispatch(sendOtp({ email: request?.email }))
         .then((resp) => {
           if (resp?.payload?.status !== 200) {
             toast.error(resp?.payload?.message || "Something went wrong");
@@ -154,7 +154,7 @@ const Signup = () => {
   ];
 
   return (
-    <AuthBackground>
+    <AuthBackground subText="Welcome! Please enter the required information to create your account.">
       <StyledForm onSubmit={registerFormik.handleSubmit} ref={inputRef}>
         <div
           style={{

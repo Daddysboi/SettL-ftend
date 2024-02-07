@@ -8,125 +8,75 @@ const StyledContainer = styled.div`
   display: flex;
   gap: 3rem;
   justify-content: center;
-  box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.1);
-  padding: 4rem;
-  background-color: #f1f4fa;
-  margin: 4rem 0;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  align-items: center;
+  padding: 20px;
+  @media (min-width: 710px) {
+    padding: 0 4rem 4rem;
   }
 
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    gap: 1rem;
+  @media (min-width: 920px) {
+    gap: 3rem;
+    padding: 0 7rem;
+  }
+`;
+
+const StyledWrapper = styled.div`
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f1f4fa;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 710px) {
+    gap: 30px;
+    flex-direction: row;
     padding: 2rem;
   }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
 
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  @media (min-width: 920px) {
+    gap: 60px;
+    padding: 4rem;
   }
 `;
 
 const StyledHeader = styled.h1`
-  margin: 0;
-  font-size: 3rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 1.5rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 1.8rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 2.5rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 2.8rem;
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  @media (min-width: 490px) {
+    font-size: 3rem;
   }
 `;
 const StyledSubHeader = styled.p`
   color: #f26600;
-  font-size: 1.5rem;
-
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 0.7rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 0.8rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 1.2rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 1.4rem;
+  margin-top: 2rem;
+  font-size: 0.7rem;
+  @media (min-width: 490px) {
+    font-size: 1.5rem;
   }
 `;
 const StyledQuestion = styled.h1`
-  font-size: 1.3rem;
   text-align: justify;
   font-weight: 600;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
-  /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
   padding: 0.5rem 0.9rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 0.7rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 0.8rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 1rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 1.2rem;
+  font-size: 0.7rem;
+  @media (min-width: 490px) {
+    font-size: 1.3rem;
   }
 `;
 const StyledAnswer = styled.p`
-  font-size: 1rem;
   text-align: justify;
   font-weight: 400;
   padding-left: 2rem;
-
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 0.5rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 0.6rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 0.8rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 0.9rem;
+  font-size: 0.5rem;
+  @media (min-width: 490px) {
+    font-size: 1rem;
   }
 `;
 
@@ -139,34 +89,36 @@ const Faqs = () => {
 
   return (
     <StyledContainer id="faq">
-      <div style={{ flex: "1.2" }}>
-        <StyledHeader>
-          Frequently Asked Questions <br />
-          <StyledSubHeader>
-            Here are answers to questions you might have about SettL.
-          </StyledSubHeader>
-        </StyledHeader>
-      </div>
-      <div style={{ flex: "4" }}>
-        {Faqs_data.map((item, index) => (
-          <div
-            key={index}
-            open={accordion === index}
-            onClick={() => toggleAccordion(index)}
-          >
-            <StyledQuestion>
-              {item.question}{" "}
-              <FontAwesomeIcon
-                style={{ fontSize: "0.8rem" }}
-                icon={accordion === index ? faChevronUp : faChevronDown}
-              />
-            </StyledQuestion>
-            <StyledAnswer>
-              {accordion === index && <p>{item.answer}</p>}
-            </StyledAnswer>
-          </div>
-        ))}
-      </div>
+      <StyledWrapper>
+        <div style={{ flex: "1.2" }}>
+          <StyledHeader>
+            Frequently Asked Questions <br />
+            <StyledSubHeader>
+              Here are answers to questions you might have about SettL.
+            </StyledSubHeader>
+          </StyledHeader>
+        </div>
+        <div style={{ flex: "4" }}>
+          {Faqs_data.map((item, index) => (
+            <div
+              key={index}
+              open={accordion === index}
+              onClick={() => toggleAccordion(index)}
+            >
+              <StyledQuestion>
+                {item.question}{" "}
+                <FontAwesomeIcon
+                  style={{ fontSize: "0.8rem" }}
+                  icon={accordion === index ? faChevronUp : faChevronDown}
+                />
+              </StyledQuestion>
+              <StyledAnswer>
+                {accordion === index && <p>{item.answer}</p>}
+              </StyledAnswer>
+            </div>
+          ))}
+        </div>
+      </StyledWrapper>
     </StyledContainer>
   );
 };

@@ -3,75 +3,63 @@ import styled from "styled-components";
 
 const StyledContainer = styled.div`
   display: flex;
-  gap: 3rem;
+  gap: 10px;
+  flex-direction: column;
+  padding: 20px;
   justify-content: center;
   align-items: center;
   box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.05);
-  padding: 4rem;
-
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  flex: 1;
+  @media (min-width: 710px) {
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 0 4rem 4rem;
   }
 
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    gap: 1.5rem;
-    padding: 2rem;
+  @media (min-width: 920px) {
+    gap: 3rem;
+    padding: 0 7rem 7rem;
   }
 `;
 const StyledHeader = styled.h1`
-  margin: 0;
-  font-size: 3rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 2rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  font-size: 2rem;
+  @media (min-width: 740px) {
     font-size: 1.5rem;
   }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 2.2rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 2.7rem;
+  @media (min-width: 1200px) {
+    font-size: 3rem;
+    max-width: 700px;
   }
 `;
 
 const StyledTxt = styled.p`
-  font-size: 1.6rem;
-  text-align: justify;
-  /* word-spacing: 0.09rem; */
+  font-size: 14px;
   font-weight: 600;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  @media (min-width: 740px) {
+    font-size: 0.8rem;
   }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 0.7rem;
+  @media (min-width: 1200px) {
+    font-size: 1.6rem;
   }
+`;
 
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 1rem;
+const StyledLeft = styled.div`
+  flex: 1;
+  @media (min-width: 740px) {
+    flex: 0.2;
   }
+`;
 
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    font-size: 1.2rem;
+const StyledRight = styled.div`
+  flex: 1;
+  @media (min-width: 740px) {
+    flex: 0.8;
   }
 `;
 const About = () => {
   return (
     <StyledContainer id="about">
-      <div style={{ flex: "1.2" }}>
+      <StyledLeft data-aos="fade-up">
         <StyledHeader>
           What is <br />
           <span style={{ color: "#f26600" }}>
@@ -80,8 +68,8 @@ const About = () => {
           </span>
           ?
         </StyledHeader>
-      </div>
-      <div style={{ flex: "4" }}>
+      </StyledLeft>
+      <StyledRight data-aos="fade-up">
         <StyledTxt>
           SettL is a payment platform and an escrow agent, which is a neutral
           third party responsible for holding and regulating the funds involved
@@ -89,7 +77,7 @@ const About = () => {
           that both parties fulfill their obligations before releasing the
           funds.
         </StyledTxt>
-      </div>
+      </StyledRight>
     </StyledContainer>
   );
 };
