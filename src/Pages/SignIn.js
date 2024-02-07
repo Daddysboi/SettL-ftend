@@ -1,19 +1,19 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { TailSpin as Loader } from "react-loader-spinner";
 import * as Yup from "yup";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { useFormik } from "formik";
-
 import { useAppDispatch } from "../redux/hooks";
 import { login } from "../features/loginSlice";
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import AppInput from "../Components/ReUseableComponent/AppInput";
-
 import googleImg from "../assets/images/flat-color-icons_google.svg";
-import "react-toastify/dist/ReactToastify.css";
+import { userContext } from "../App";
+import axios from "axios";
 
 //Form
 const StyledForm = styled.form`
@@ -102,44 +102,36 @@ const loginValidationSchema = Yup?.object()?.shape({
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  // const { user, setUser, profile, setProfile, userData, setUserData } =
-  //   useContext(userContext);
+  const { user, setUser, profile, setProfile } = useContext(userContext);
   const inputRef = useRef();
   const navigate = useNavigate();
 
-  // const logOut = () => {
-  //   googleLogout();
-  //   setUser({}); // Clear user state
-  //   setProfile({}); // Clear profile state
-  // };
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      navigate(`/dashboard`);
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
 
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: (codeResponse) => {
-  //     setUser(codeResponse);
-  //     navigate(`/dashboard/${codeResponse.id}`);
-  //   },
-  //   onError: (error) => console.log("Login Failed:", error),
-  // });
-
-  // useEffect(() => {
-  //   if (user && user.access_token) {
-  //     axios
-  //       .get("https://www.googleapis.com/oauth2/v1/userinfo", {
-  //         params: { access_token: user.access_token },
-  //         headers: {
-  //           Authorization: `Bearer ${user.access_token}`,
-  //           Accept: "application/json",
-  //         },
-  //       })
-  //       .then((res) => {
-  //         setProfile(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.error("Google API Error:", err);
-  //         // Handle the error gracefully
-  //       });
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user && user.access_token) {
+      axios
+        .get("https://www.googleapis.com/oauth2/v1/userinfo", {
+          params: { access_token: user.access_token },
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: "application/json",
+          },
+        })
+        .then((res) => {
+          setProfile(res.data);
+        })
+        .catch((err) => {
+          console.error("Google API Error:", err);
+        });
+    }
+  }, [user]);
 
   const loginFormik = useFormik({
     validationSchema: loginValidationSchema,
@@ -225,7 +217,12 @@ const SignIn = () => {
         <StyledLineTxt>or</StyledLineTxt>
         <StyledLine></StyledLine>
       </StyledLineCont>
-      <StyledGoogleBtn type="button" onClick={() => {}}>
+      <StyledGoogleBtn
+        type="button"
+        onClick={() => {
+          googleLogin();
+        }}
+      >
         <img
           src={googleImg}
           alt="googleImg"

@@ -156,8 +156,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         url = "";
-        const response = await fetch(url);
-        const data = await response.json();
+        const { data } = await axios.get(url);
 
         setTotalTransactions(data.totalTransactions || 0);
         setWalletBalance(data.walletBalance || 0);

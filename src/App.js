@@ -30,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
@@ -48,7 +49,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const [userData, setUserData] = useState("");
+  // const [userData, setUserData] = useState("");
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
@@ -59,9 +60,7 @@ function App() {
   }, []);
 
   return (
-    <userContext.Provider
-      value={{ user, setUser, profile, setProfile, userData, setUserData }}
-    >
+    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
       <div className="App">
         <RouterProvider router={router}>
           <RootLayout />
