@@ -153,7 +153,7 @@ const Signup = () => {
   ];
 
   return (
-    <AuthBackground>
+    <AuthBackground subText="Welcome! Please enter the required information to create your account.">
       <StyledForm onSubmit={registerFormik.handleSubmit} ref={inputRef}>
         <div
           style={{
