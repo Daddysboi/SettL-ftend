@@ -4,7 +4,10 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import Aos from "aos";
+import "aos/dist/aos.css";
+
 import "./App.css";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
@@ -27,13 +30,14 @@ const router = createBrowserRouter(
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
       <Route path="/otp" element={<Otp />} />
+      <Route path="/dashboard" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
-        <Route path="/dashboard" index element={<Dashboard />}></Route>
         <Route path="/" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
@@ -45,14 +49,18 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const [userData, setUserData] = useState("");
+  // const [userData, setUserData] = useState("");
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
+  useEffect(() => {
+    Aos.init({
+      duration: 2000,
+    });
+  }, []);
+
   return (
-    <userContext.Provider
-      value={{ user, setUser, profile, setProfile, userData, setUserData }}
-    >
+    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
       <div className="App">
         <RouterProvider router={router}>
           <RootLayout />

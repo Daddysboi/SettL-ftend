@@ -9,7 +9,7 @@ export const GetUserById = async (userId) => {
     `${process.env.REACT_APP_API_BASE_URL}/${GET_USER_BY_ID}/${id}`,
     {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
         "Access-Control-Allow-Origin": "*",
       },
     }

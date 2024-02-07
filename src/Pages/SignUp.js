@@ -17,12 +17,13 @@ import "react-toastify/dist/ReactToastify.css";
 //Form
 const StyledForm = styled.form`
   display: block;
-  margin-top: 1rem; /* Adjust the margin as needed */
+  margin-top: 1rem;
   &:focus {
     margin-top: 18px;
     padding-left: 2px;
   }
 `;
+
 const StyledBtn = styled.button`
   padding: 0.6rem 1rem;
   box-sizing: border-box;
@@ -124,10 +125,10 @@ const Signup = () => {
       let request = {
         firstName: values?.firstName,
         lastName: values?.lastName,
-        email: values?.email,
+        email: values?.email?.toLowerCase(),
         password: values?.password,
       };
-      dispatch(sendOtp({ email: values?.email }))
+      dispatch(sendOtp({ email: request?.email }))
         .then((resp) => {
           if (resp?.payload?.status !== 200) {
             toast.error(resp?.payload?.message || "Something went wrong");
@@ -153,7 +154,7 @@ const Signup = () => {
   ];
 
   return (
-    <AuthBackground>
+    <AuthBackground subText="Welcome! Please enter the required information to create your account.">
       <StyledForm onSubmit={registerFormik.handleSubmit} ref={inputRef}>
         <div
           style={{
@@ -162,6 +163,7 @@ const Signup = () => {
           }}
         >
           <AppInput
+            width="95%"
             label="First Name"
             type="text"
             name="firstName"

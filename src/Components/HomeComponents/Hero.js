@@ -7,64 +7,44 @@ import ChatImg from "../../assets/images/message.png";
 
 const StyledContainer = styled.div`
   display: flex;
-  padding-left: 2rem;
+  flex-direction: column;
+  padding: 20px;
   justify-content: center;
   align-items: center;
+
+  @media (min-width: 710px) {
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 4rem;
+  }
+
+  @media (min-width: 920px) {
+    padding: 7rem;
+  }
 `;
 const StyledHeader = styled.h1`
-  font-size: 3.8rem;
-  margin-bottom: 0;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  font-size: 12px;
+  @media (min-width: 80px) {
+    font-size: 2rem;
   }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 1.5rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    padding-top: 0;
-    margin-top: 2rem;
-    font-size: 2.5rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    /* margin-top: 2rem; */
-    font-size: 3rem;
+  @media (min-width: 1200px) {
+    font-size: 3.5rem;
+    max-width: 700px;
   }
 `;
 const StyledLeft = styled.div`
-  width: 40%;
+  width: 100%;
 `;
 
 const StyledTxt = styled.h4`
+  font-size: 10px;
   font-style: italic;
-  font-size: 1.5rem;
   font-weight: 600;
-  margin-top: 0;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 1rem;
+  @media (min-width: 800px) {
+    font-size: 0.8rem;
   }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 1rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
+  @media (min-width: 1200px) {
+    font-size: 1.5rem;
   }
 `;
 
@@ -72,107 +52,75 @@ const StyledBtn = styled.button`
   background-color: #f26600;
   color: #fff;
   border: none;
-  width: 17rem;
-  height: 5rem;
-  font-size: 32px;
+  padding: 0.6rem;
+  font-size: 16px;
   font-weight: 700;
-  border-radius: 1.3rem;
+  border-radius: 0.6rem;
   &:hover {
     color: #f26600;
     background-color: #fff;
     border: 1px solid #f26600;
   }
 
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  @media (min-width: 800px) {
+    padding: 0.8rem;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 1rem;
   }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    width: 10rem;
-    font-size: 1.2rem;
-    border-radius: 0.7rem;
-    height: 3rem;
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    width: 15rem;
-    height: 4rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-    /* height: 30rem; */
+  @media (min-width: 1200px) {
+    padding: 2rem;
+    font-size: 28px;
+    font-weight: 700;
+    border-radius: 1.3rem;
   }
 `;
 
 const StyledImg = styled.img`
-  position: relative;
-  width: 100%;
-  background-size: cover;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  max-width: 80%;
+  object-fit: contain;
+  @media (min-width: 480px) {
+    justify-content: space-between;
+    flex-direction: row;
+    max-width: 420px;
   }
 
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  @media (min-width: 900px) {
+    max-width: 520px;
   }
 
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    width: 80%;
-    height: 90%;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-    /* height: 30rem; */
+  @media (min-width: 1200px) {
+    max-width: 95%;
   }
 `;
 
 const StyledChatImg = styled.img`
   position: absolute;
-  bottom: -12rem;
-  right: 5rem;
-  height: 4rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  max-width: 3rem;
+  object-fit: contain;
+  bottom: 0rem;
+  right: 1rem;
+  max-width: 2rem;
+  @media (min-width: 480px) {
+    max-width: 4rem;
     bottom: 6rem;
+    right: -1rem;
+  }
+
+  @media (min-width: 900px) {
+    bottom: 5rem;
+    right: -2rem;
+  }
+
+  @media (min-width: 1200px) {
+    bottom: 10rem;
     right: 1rem;
-    height: 3rem;
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
   }
 `;
 const Hero = () => {
   return (
     <StyledContainer id="home">
-      <StyledLeft>
+      <StyledLeft data-aos="fade-down">
         <StyledHeader>
           Buy, Sell, Make payments <br />
           and Pay bills <br />
@@ -192,10 +140,12 @@ const Hero = () => {
       </StyledLeft>
       <div
         style={{
-          padding: 0,
-          margin: 0,
-          width: "70%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
         }}
+        data-aos="fade-down"
       >
         <StyledImg src={HeroImg} alt="" />
         <StyledChatImg src={ChatImg} alt="" />

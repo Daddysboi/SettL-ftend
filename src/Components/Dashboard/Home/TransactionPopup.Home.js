@@ -78,7 +78,6 @@ const StyledFormDiv = styled.div`
   background-color: transparent;
   padding: 20px;
   border-radius: 10px;
-
   /* position: relative; */
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 `;
@@ -102,8 +101,8 @@ const StyledBackButton = styled.button`
 
 const StyledInput = styled.input`
   /* width: 100%; */
-  padding: 0.2rem;
   /* margin: 10px 0; */
+  padding: 0.2rem;
   border: 1px solid #000000;
   border-radius: 3px;
   display: block;
@@ -111,6 +110,7 @@ const StyledInput = styled.input`
 
 Modal.setAppElement("#root");
 const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
+// const publicKey = "pk_live_9e4dff60d2339d111376de1f86b831b332afad9f";
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,

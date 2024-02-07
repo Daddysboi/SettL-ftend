@@ -9,8 +9,8 @@ import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
-import { googleLogout } from "@react-oauth/google";
 import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
+import { googleLogout } from "@react-oauth/google";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -109,8 +109,6 @@ const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
   const { userId } = useParams();
-  // const { user, setUser, profile, setProfile, userData, setUserData } =
-  //   useContext(userContext);
 
   const { user } = useAppSelector((state) => state.user);
   console.log("my user", user);
@@ -120,8 +118,6 @@ const Dashboard = () => {
     setUser({}); // Clear user state
     setProfile({}); // Clear profile state
     localStorage.removeItem("token");
-    localStorage.removeItem(USER_TOKEN);
-    localStorage.removeItem(USER_ID);
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
   };

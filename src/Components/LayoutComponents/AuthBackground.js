@@ -1,8 +1,7 @@
 import React from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
-import logo from "../../assets/logo/White-removebg-preview.png";
+import logo from "../../assets/logo/favicon.png";
 
 //container
 const StyledContainer = styled.div`
@@ -36,22 +35,26 @@ const StyledLeft = styled.div`
   box-sizing: border-box;
   bottom: 0;
   background-color: #f26600;
-  flex-shrink: 0;
   height: 100%;
+  background-image: linear-gradient(#f8701c 0.6px, transparent 0.6px),
+    linear-gradient(90deg, #f8701c 0.6px, transparent 0.6px);
+  background-size: 130px 130px;
+  background-position: 0 0, 0 0;
   @media only screen and (max-width: 640px) {
     display: none;
   }
 `;
 
 const StyledInnerLeft = styled.div`
-  border-color: black;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #f8701c;
-  padding: 12rem 1.5rem 2rem 1.5rem;
+  padding: 5rem 1.5rem 2rem 1.5rem;
+  width: 15rem;
+  margin: 10rem 3rem;
 `;
 
 const StyledInnerText = styled.h6`
@@ -61,6 +64,7 @@ const StyledInnerText = styled.h6`
   word-wrap: break-word;
   margin: 0;
   padding: 0;
+  font-weight: 400;
 `;
 
 const StyledInnerText2 = styled.p`
@@ -110,12 +114,15 @@ const StyledLogo = styled(NavLink)`
 `;
 const StyledImg = styled.img`
   height: 2rem;
+  padding-right: 0.2rem;
 `;
 
 const StyledHeader = styled.h1`
   padding: 1rem 0 0 0;
   margin: 0;
-  font-size: 2.5rem; // Small screens, laptops
+  font-size: 2.5rem;
+
+  // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     font-size: 2rem;
   }
@@ -152,7 +159,7 @@ const AuthBackground = ({
       <StyledLeft>
         <StyledInnerLeft>
           <StyledInnerText>
-            Where trust meets seamless
+            Where trust meets seamless <br />
             <span
               style={{
                 fontSize: "2rem",
