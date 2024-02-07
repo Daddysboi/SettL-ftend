@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
-import axios from "axios";
-import { userContext } from "../App";
-import { useNavigate } from "react-router-dom";
-import OtpInput from "react-otp-input";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
+import { toast } from "react-toastify";
+import { register } from "../features/registerSlice";
+import { useAppDispatch } from "../redux/hooks";
+import AppOtpInput from "../Components/ReUseableComponent/AppOtpInput";
 
 const Container = styled.div`
   display: flex;
@@ -14,125 +14,70 @@ const Container = styled.div`
   margin-top: 4rem;
 `;
 
-const SubmitButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #f26600;
-  color: #fff;
+const StyledBtn = styled.button`
+  padding: 0.6rem 1rem;
+  box-sizing: border-box;
+  display: block;
+  max-width: 400px;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 8rem;
-
+  border-radius: 0.2rem;
+  background: linear-gradient(to right, #ff4500, #ff8c00, #f26600);
+  color: #ffff;
+  margin: 1rem 0 0 0;
   &:hover {
-    background-color: transparent;
-    border: 2px solid #f26600;
-    color: #f26600;
+    background: #f26600;
   }
 `;
 
 const OtpVerification = () => {
-  const [userData, setUserData] = useContext(userContext); //consuming userData
-
+  const { state } = useLocation();
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const showToast = (message, type) => {
-    toast[type](message, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
+  const handleRegisterUser = async () => {
+    setLoading(true);
+    const request = {
+      otp: otp,
+      email: state.email,
+      firstName: state.firstName,
+      lastName: state.lastName,
+      password: state.password,
+    };
 
-  const handleSubmit = async () => {
-    if (/^[0-9]{4}$/.test(otp)) {
-      try {
-        const response = await axios.post(
-          "https://settl-core-dev.onrender.com/api/v1/register",
-          {
-            email: userData.email,
-            otp: otp,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            password: userData.password,
-          }
-        );
-
-        if (response.data.status === 201) {
-          showToast("Registration successful!", "success");
-          setOtp("");
-          navigate("/login");
-        } else {
-          showToast("Registration failed. Please try again.", "error");
+    dispatch(register(request))
+      .then((resp) => {
+        if (resp?.payload?.status !== 201) {
+          toast.error(resp?.payload?.message || "Something went wrong");
+          setLoading(false);
+          return;
         }
-      } catch (error) {
-        console.error("OTP verification failed:", error);
-
-        if (error.response && error.response.data) {
-          const { data } = error.response;
-
-          if (data.errors) {
-            Object.keys(data.errors).forEach((field) => {
-              showToast(`${field}: ${data.errors[field]}`, "error");
-            });
-          } else {
-            showToast(data.message, "error");
-          }
-        } else {
-          showToast("Registration failed. Please try again.", "error");
-        }
-      }
-    } else {
-      showToast("Invalid OTP. Please enter a four-digit OTP.", "error");
-    }
+        toast.success(resp?.payload?.message || "Successfully Registered");
+        navigate("/login");
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error?.message || "Something went wrong");
+        setLoading(false);
+      });
   };
-
-  const handleChange = (value, index) => {
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp.join(""));
-  };
-
-  const handleInputFocus = (index) => {};
 
   return (
     <Container>
       <h4>
         Please enter the OTP sent to{" "}
-        {userData && userData.email ? `your ${userData.email}` : "your email"}
+        {state && state.email ? `your ${state.email}` : "your email"}
       </h4>
-      <OtpInput
-        value={otp}
-        onChange={setOtp}
-        numInputs={4}
-        separator={<span>-</span>}
-        isInputNum={true}
-        shouldAutoFocus={true}
-        containerStyle={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "0.5rem",
-        }}
-        inputStyle={{
-          width: "4rem",
-          height: "4rem",
-          fontSize: "3rem",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-        }}
-        isInputSecure={true}
-        renderSeparator={(props) => <span {...props}> </span>}
-        renderInput={(props) => <input {...props} />}
-      />
-      <SubmitButton onClick={handleSubmit} disabled={!otp}>
-        Submit
-      </SubmitButton>
-      <ToastContainer />
+      <AppOtpInput value={otp} onChange={setOtp} />
+      <StyledBtn
+        type="button"
+        disabled={otp.length < 4 || loading}
+        onClick={handleRegisterUser}
+      >
+        {loading ? "Submitting..." : "Submit"}
+      </StyledBtn>
     </Container>
   );
 };
