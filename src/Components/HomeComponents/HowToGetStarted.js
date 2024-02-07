@@ -4,112 +4,65 @@ import { NavLink } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem;
-  text-align: center;
-  margin-top: 3rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    margin-top: 1rem;
+  flex: 1;
+  @media (min-width: 710px) {
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 0 4rem 4rem;
   }
 
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    padding: 0;
-    margin-top: 1rem;
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  @media (min-width: 920px) {
+    gap: 3rem;
+    padding: 0 7rem;
   }
 `;
+
+const StyledWrapper = styled.div`
+  width: 100%;
+  margin-top: 3.5rem;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StyledHeader = styled.h1`
   margin-top: 2rem;
-  font-size: 3rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    margin-top: 1rem;
-    font-size: 1.8rem;
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  font-size: 2rem;
+  text-align: center;
+  @media (min-width: 490px) {
+    font-size: 3rem;
   }
 `;
-const StyledCardContainer = styled.div``;
-
-const StyledCardTop = styled.div`
-  gap: 4rem;
-  display: flex;
-  padding-bottom: 4rem;
-  position: relative;
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    gap: 2rem;
-    padding-bottom: 2rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
+const StyledCardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  @media (min-width: 490px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
-const StyledCardBtm = styled.div`
-  display: flex;
-  gap: 4rem;
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    gap: 2rem;
-    padding-bottom: 2rem;
-  }
 
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-  }
-`;
 const StyledCard = styled.div`
-  background-color: #ffffff;
-  width: 28rem;
-  height: 12rem;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  background-color: white;
   display: flex;
+  gap: 1rem;
+  align-items: center;
   box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    width: 20rem;
+  padding: 0.5rem;
+
+  @media (min-width: 720px) {
+    padding: 2rem;
+    max-width: 18rem;
+    height: 8rem;
+  }
+  @media (min-width: 920px) {
+    max-width: 24rem;
     height: 10rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
   }
 `;
 const StyledNums = styled.h4`
@@ -119,26 +72,9 @@ const StyledNums = styled.h4`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    font-size: 4rem;
-    padding-left: 1rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-  }
 `;
 
-const StyledTxt = styled.p`
-  padding: 1rem 2rem;
-  text-align: justify;
-  width: 15rem;
-`;
+const StyledTxt = styled.p``;
 
 const StyledSignUpBtn = styled.button`
   /* margin-left: 1rem; */
@@ -172,62 +108,70 @@ const StyledSigninBtn = styled.button`
   }
 `;
 
+const cardDetails = [
+  {
+    id: 1,
+    isButton: true,
+    details: "Click that button! Sign up or log in to your existing account",
+    animation: "fade-up",
+  },
+  {
+    id: 2,
+    isButton: false,
+    details:
+      "Create Transaction and set the conditions to be fulfilled for that transaction",
+    animation: "fade-up",
+  },
+  {
+    id: 3,
+    isButton: false,
+    details: "Invite counterpart agrees to set conditions",
+    animation: "fade-up",
+  },
+  {
+    id: 4,
+    isButton: false,
+    details:
+      "Make payment/fulfill the conditions and complete your transaction",
+    animation: "fade-up",
+  },
+];
+
 const HowToGetStarted = () => {
   return (
     <StyledContainer id="services">
-      <StyledHeader>
-        How to get started? <br />
-        <span style={{ color: "#f26600" }}>Its Easy!</span>
-      </StyledHeader>
-      <StyledCardContainer>
-        <StyledCardTop>
-          <StyledCard>
-            <StyledNums>1</StyledNums>
+      <StyledWrapper>
+        <StyledHeader>
+          How to get started? <br />
+          <span style={{ color: "#f26600" }}>Its Easy!</span>
+        </StyledHeader>
+        <StyledCardContainer>
+          {cardDetails?.map(({ id, details, isButton, animation }) => (
+            <StyledCard key={id} data-aos={animation}>
+              <StyledNums>{id}</StyledNums>
 
-            <StyledTxt>
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-0.5rem",
-                }}
-              >
-                <NavLink to="/login">
-                  <StyledSigninBtn>Log in</StyledSigninBtn>
-                </NavLink>
-                <NavLink to="/signup">
-                  <StyledSignUpBtn>Sign Up</StyledSignUpBtn>
-                </NavLink>
-              </span>
-              Click that button! Sign up or log in to your existing account
-            </StyledTxt>
-          </StyledCard>
-
-          <StyledCard>
-            <StyledNums>2</StyledNums>
-
-            <StyledTxt>
-              Create Transaction and set the conditions to be fulfilled for that
-              transaction
-            </StyledTxt>
-          </StyledCard>
-        </StyledCardTop>
-        <StyledCardBtm>
-          <StyledCard>
-            <StyledNums>3</StyledNums>
-
-            <StyledTxt>
-              Invite counterparty, counterparty agrees to set conditions
-            </StyledTxt>
-          </StyledCard>
-          <StyledCard>
-            <StyledNums>4</StyledNums>
-
-            <StyledTxt>
-              Make payment/fullfill the conditions and complete your transaction
-            </StyledTxt>
-          </StyledCard>
-        </StyledCardBtm>
-      </StyledCardContainer>
+              <StyledTxt>
+                {isButton && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                    }}
+                  >
+                    <NavLink to="/login">
+                      <StyledSigninBtn>Log in</StyledSigninBtn>
+                    </NavLink>
+                    <NavLink to="/signup">
+                      <StyledSignUpBtn>Sign Up</StyledSignUpBtn>
+                    </NavLink>
+                  </span>
+                )}
+                {details}
+              </StyledTxt>
+            </StyledCard>
+          ))}
+        </StyledCardContainer>
+      </StyledWrapper>
     </StyledContainer>
   );
 };

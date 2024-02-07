@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { PaystackButton } from "react-paystack";
 
 const Payment = () => {
-  const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
-
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -23,7 +21,6 @@ const Payment = () => {
     if (!isNaN(amount)) {
       setFormData({ ...formData, amount: amount.toFixed(2) });
     } else {
-      // Handle invalid amount input (non-numeric)
       setFormData({ ...formData, amount: "" });
     }
   };
@@ -35,7 +32,7 @@ const Payment = () => {
       name: formData.name,
       phone: formData.phone,
     },
-    publicKey,
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
     text: "Buy Now",
     onSuccess: ({ reference }) => {
       alert(

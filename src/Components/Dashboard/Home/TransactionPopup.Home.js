@@ -78,7 +78,6 @@ const StyledFormDiv = styled.div`
   background-color: transparent;
   padding: 20px;
   border-radius: 10px;
-
   /* position: relative; */
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 `;
@@ -102,15 +101,14 @@ const StyledBackButton = styled.button`
 
 const StyledInput = styled.input`
   /* width: 100%; */
-  padding: 0.2rem;
   /* margin: 10px 0; */
+  padding: 0.2rem;
   border: 1px solid #000000;
   border-radius: 3px;
   display: block;
 `;
 
 Modal.setAppElement("#root");
-const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,
@@ -179,7 +177,7 @@ const TransactionFormPopup = ({
       name: formik.values.counterpartyName,
       phone: formik.values.counterpartyPhone,
     },
-    publicKey,
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
     text: "Pay",
     onSuccess: ({ reference }) => {
       alert(
