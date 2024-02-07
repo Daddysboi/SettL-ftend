@@ -6,108 +6,53 @@ import OurImg from "../../assets/images/our.png";
 import WeImg from "../../assets/images/we're.png";
 
 const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem;
-  background-color: #4db6ac;
-  margin-top: 3rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  flex: 1;
+  @media (min-width: 710px) {
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 0 4rem 4rem;
   }
 
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    padding: 0 2rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    padding: 0 5rem 5rem 5rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  @media (min-width: 920px) {
+    gap: 3rem;
+    padding: 0 7rem;
   }
 `;
+
+const StyledWrapper = styled.div`
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  margin-top: 3.5rem;
+  background-color: #4db6ac;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StyledHeader = styled.h1`
   margin-top: 2rem;
-  font-size: 3rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 1.5rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 2rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  font-size: 2rem;
+  text-align: center;
+  @media (min-width: 490px) {
+    font-size: 3rem;
   }
 `;
 const StyledCardContainer = styled.div`
   padding-bottom: 5rem;
-`;
-
-const StyledCardTop = styled.div`
-  gap: 4rem;
-  display: flex;
-  padding-bottom: 4rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    gap: 2rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 4.5rem;
+  @media (min-width: 490px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
-const StyledCardBtm = styled.div`
-  display: flex;
-  gap: 4rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
 
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    gap: 2rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-`;
 const StyledCard = styled.div`
   background-color: #ffffff;
-  width: 28rem;
-  height: 18rem;
+  width: 100%;
+  min-height: 18rem;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -115,125 +60,62 @@ const StyledCard = styled.div`
   box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   font-size: 1rem;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    font-size: 0.7rem;
-    height: 12rem;
-    width: 40%;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    width: 40%;
-    height: 12rem;
-    font-size: 0.8rem;
-    padding: 1rem 0;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-    width: 20rem;
-    height: 17rem;
+  @media (min-width: 920px) {
+    width: 28rem;
+    height: 18rem;
   }
 `;
 const StyledImg = styled.img`
-  width: 90px;
-  height: 88.393px;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    width: 4rem;
-    height: 4rem;
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-  }
+  max-width: 90px;
+  object-fit: contain;
 `;
 
 const StyledTxt = styled.p`
   padding: 0 2rem;
   text-align: justify;
-
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    padding: 0 1rem;
-  }
-
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-  }
 `;
+
+const cardDetails = [
+  {
+    id: 1,
+    logo: WithImg,
+    article:
+      "With SettL you’re assured of speedy transactions and no delays that may result in dailed transactions",
+  },
+  {
+    id: 2,
+    logo: ServiceImg,
+    article:
+      "Our customers are our priority so your data and funds are secure. You can count on us",
+  },
+  {
+    id: 3,
+    logo: OurImg,
+    article:
+      "Our self service channel is unparalleled but we’re still here to help. Our contact channels are open 24/7.",
+  },
+  {
+    id: 4,
+    logo: WeImg,
+    article:
+      "We’re approved by CBN and insured by the National Deposit Insurance Commission. You can trust SettL!",
+  },
+];
 const WhyChooseUs = () => {
   return (
     <StyledContainer id="why-choose-us">
-      <StyledHeader>Why Choose US</StyledHeader>
-      <StyledCardContainer>
-        <StyledCardTop>
-          <StyledCard>
-            <StyledImg src={WithImg} alt="" />
+      <StyledWrapper>
+        <StyledHeader data-aos="fade-down">Why Choose US</StyledHeader>
+        <StyledCardContainer>
+          {cardDetails?.map(({ id, logo, article }) => (
+            <StyledCard key={id} data-aos="fade-up">
+              <StyledImg src={logo} alt="" />
 
-            <StyledTxt>
-              With SettL you’re assured of speedy transactions and no delays
-              that may result in dailed transactions
-            </StyledTxt>
-          </StyledCard>
-
-          <StyledCard>
-            <StyledImg src={ServiceImg} alt="" />
-
-            <StyledTxt>
-              Our customers are our priority so your data and funds are secure.
-              You can count on us
-            </StyledTxt>
-          </StyledCard>
-        </StyledCardTop>
-        <StyledCardBtm>
-          <StyledCard>
-            <StyledImg src={OurImg} alt="" />
-
-            <StyledTxt>
-              Our self service channel is unparalled but we’re still here to
-              help. Our contact channels are open 24/7.
-            </StyledTxt>
-          </StyledCard>
-          <StyledCard>
-            <StyledImg src={WeImg} alt="" />
-
-            <StyledTxt>
-              We’re approved by CBN and insured by the National Deposit
-              Insurance Commission. You can trust SettL!
-            </StyledTxt>
-          </StyledCard>
-        </StyledCardBtm>
-      </StyledCardContainer>
+              <StyledTxt>{article}</StyledTxt>
+            </StyledCard>
+          ))}
+        </StyledCardContainer>
+      </StyledWrapper>
     </StyledContainer>
   );
 };

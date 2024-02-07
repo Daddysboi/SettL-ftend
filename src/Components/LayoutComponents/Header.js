@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import favicon from "../../assets/logo/favicon.png";
 import { Link } from "react-scroll";
-import { FaBars, FaTimes, FaSignInAlt, FaUserPlus } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -14,6 +14,23 @@ const StyledContainer = styled.div`
   top: 0;
   z-index: 1;
   background-color: #fff;
+  position: relative;
+`;
+
+const StyledMenuContainer = styled.div`
+  position: fixed;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(18px);
+  @media (min-width: 840px) {
+    display: none;
+  }
 `;
 
 const StyledLogo = styled(NavLink)`
@@ -38,13 +55,38 @@ const StyledImg = styled.img`
 
 const StyledLinks = styled.div`
   flex: 1;
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
 
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    flex: 1.5;
-    align-items: center;
+  @media (min-width: 840px) {
+    display: flex;
+  }
+`;
+
+const MenuStyledLinks = styled.div`
+  // flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (min-width: 840px) {
+    display: none;
+  }
+`;
+
+const MenuStyledLink = styled(Link)`
+  cursor: pointer;
+  align-items: center;
+  padding-top: 1rem;
+  font-size: 24px;
+  &:hover {
+    color: #f26600;
+  }
+
+  &.active {
+    color: #f26600;
   }
 `;
 
@@ -62,51 +104,22 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const StyledHamburgerMenu = styled.div`
-  display: none;
-  cursor: pointer;
-  /* background-color: #fffbf7; */
-  padding: 0.5rem;
-  border-radius: 4px;
-
-  @media (max-width: 768px) {
-    display: block;
-    z-index: 2;
-    position: absolute;
-    top: 1.5rem;
-    right: 1rem;
-  }
-`;
-
 const HamburgerIcon = styled(FaBars)`
   font-size: 1.5rem;
   color: #333;
   transition: 0.3s;
+  display: flex;
+  cursor: pointer;
+  @media (min-width: 840px) {
+    display: none;
+  }
 `;
 
 const CloseIcon = styled(FaTimes)`
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   color: #333;
   transition: 0.3s;
-`;
-
-const MobileMenu = styled.div`
-  display: none;
-
-  @media (max-width: 768px) {
-    /* display: ${({ isMobileMenuOpen }) =>
-      isMobileMenuOpen ? "flex" : "none"}; */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background-color: #4db6ac;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-  }
+  padding: 20px;
 `;
 
 const StyledSignUpBtn = styled.button`
@@ -161,12 +174,16 @@ const StyledSigninBtn = styled.button`
   }
 `;
 
+const MobileAuthIcons = styled.div`
+  margin-top: 2rem;
+`;
+
 const AuthIcons = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 840px) {
     width: 100%;
     justify-content: space-between;
   }
@@ -175,12 +192,82 @@ const AuthIcons = styled.div`
 const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // const toggleMobileMenu = () => {
-  //   setMobileMenuOpen(!isMobileMenuOpen);
-  // };
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
 
   return (
     <StyledContainer>
+      {isMobileMenuOpen && (
+        <StyledMenuContainer>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              width: "100%",
+              minHeight: "2rem",
+              // padding: "20px",
+            }}
+          >
+            <CloseIcon onClick={toggleMobileMenu} />
+          </div>
+          <MenuStyledLinks>
+            <MenuStyledLink
+              to="home"
+              activeClass="active"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+              onClick={toggleMobileMenu}
+            >
+              Home
+            </MenuStyledLink>
+            <MenuStyledLink
+              activeClass="active"
+              to="services"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+              onClick={toggleMobileMenu}
+            >
+              Services
+            </MenuStyledLink>
+            <MenuStyledLink
+              activeClass="active"
+              to="faq"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+              onClick={toggleMobileMenu}
+            >
+              FAQ
+            </MenuStyledLink>
+            <MenuStyledLink
+              activeClass="active"
+              to="contact"
+              spy={true}
+              smooth={true}
+              offset={-500}
+              duration={500}
+              onClick={toggleMobileMenu}
+            >
+              Support
+            </MenuStyledLink>
+            <MobileAuthIcons>
+              <NavLink to="/login" onClick={toggleMobileMenu}>
+                <StyledSigninBtn>Log in</StyledSigninBtn>
+              </NavLink>
+              <NavLink to="/signup" onClick={toggleMobileMenu}>
+                <StyledSignUpBtn>Sign Up</StyledSignUpBtn>
+              </NavLink>
+            </MobileAuthIcons>
+          </MenuStyledLinks>
+        </StyledMenuContainer>
+      )}
       <StyledLogo to="/">
         <StyledImg src={favicon} alt="logo" />
         <span>
@@ -188,6 +275,7 @@ const Header = () => {
           <span style={{ color: "#4db6ac" }}>L</span>
         </span>
       </StyledLogo>
+      <HamburgerIcon onClick={toggleMobileMenu} />
       <StyledLinks>
         <StyledLink
           to="home"

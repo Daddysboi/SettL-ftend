@@ -3,10 +3,12 @@ import { styled } from "styled-components";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+
 import { useAppDispatch } from "../redux/hooks";
+import { requestResetPassword } from "../features/forgotPasswordSlice";
+
 import AppInput from "../Components/ReUseableComponent/AppInput";
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
-import { requestResetPassword } from "../features/forgotPasswordSlice";
 
 const StyledBtn = styled.button`
   padding: 0.6rem 1rem;
@@ -29,8 +31,9 @@ const forgotPasswordValidationSchema = Yup?.object()?.shape({
 
 const ForgotPassword = () => {
   const dispatch = useAppDispatch();
-
   const [loading, setLoading] = useState(false);
+  const text = `https://${window.location.host}/reset-password`;
+  const encodedLink = encodeURI(text);
 
   const forgotPasswordFormik = useFormik({
     validationSchema: forgotPasswordValidationSchema,
@@ -42,7 +45,7 @@ const ForgotPassword = () => {
       dispatch(
         requestResetPassword({
           email: values?.email,
-          redirectUrl: "http://localhost:3000/reset-password", // change to hosted frontend link
+          redirectUrl: encodedLink,
         })
       )
         .then((resp) => {
