@@ -96,7 +96,7 @@ const Contact = () => {
 
   return (
     <StyledContainer id="contact">
-      <StyledHeader data-aos="zoom-out">Contact Our Support</StyledHeader>
+      <StyledHeader data-aos="fade-up">Contact Our Support</StyledHeader>
       <StyledForm onSubmit={contactUsFormik.handleSubmit}>
         <StyledWrapper>
           <AppInput

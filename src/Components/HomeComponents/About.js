@@ -59,7 +59,7 @@ const StyledRight = styled.div`
 const About = () => {
   return (
     <StyledContainer id="about">
-      <StyledLeft data-aos="fade-right">
+      <StyledLeft data-aos="fade-up">
         <StyledHeader>
           What is <br />
           <span style={{ color: "#f26600" }}>
@@ -69,7 +69,7 @@ const About = () => {
           ?
         </StyledHeader>
       </StyledLeft>
-      <StyledRight data-aos="fade-left">
+      <StyledRight data-aos="fade-up">
         <StyledTxt>
           SettL is a payment platform and an escrow agent, which is a neutral
           third party responsible for holding and regulating the funds involved

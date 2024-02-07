@@ -189,7 +189,7 @@ const Footer = () => {
     <StyledContainer>
       <StyledContainerTop>
         <div>
-          <StyledHeader data-aos="zoom-out">
+          <StyledHeader data-aos="fade-down">
             Join our mailing list to get exclusive updates
           </StyledHeader>
         </div>

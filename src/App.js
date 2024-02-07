@@ -35,9 +35,8 @@ const router = createBrowserRouter(
         element={<ResetPassword />}
       />
       <Route path="/otp" element={<Otp />} />
-
+      <Route path="/dashboard" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
-        <Route path="/dashboard" index element={<Dashboard />}></Route>
         <Route path="/" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

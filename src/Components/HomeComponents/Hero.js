@@ -120,7 +120,7 @@ const StyledChatImg = styled.img`
 const Hero = () => {
   return (
     <StyledContainer id="home">
-      <StyledLeft data-aos="zoom-out">
+      <StyledLeft data-aos="fade-down">
         <StyledHeader>
           Buy, Sell, Make payments <br />
           and Pay bills <br />
@@ -145,7 +145,7 @@ const Hero = () => {
           justifyContent: "center",
           position: "relative",
         }}
-        data-aos="fade-left"
+        data-aos="fade-down"
       >
         <StyledImg src={HeroImg} alt="" />
         <StyledChatImg src={ChatImg} alt="" />

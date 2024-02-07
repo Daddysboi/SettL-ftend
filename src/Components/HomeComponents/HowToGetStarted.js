@@ -113,27 +113,27 @@ const cardDetails = [
     id: 1,
     isButton: true,
     details: "Click that button! Sign up or log in to your existing account",
-    animation: "fade-right",
+    animation: "fade-up",
   },
   {
     id: 2,
     isButton: false,
     details:
       "Create Transaction and set the conditions to be fulfilled for that transaction",
-    animation: "fade-left",
+    animation: "fade-up",
   },
   {
     id: 3,
     isButton: false,
     details: "Invite counterpart agrees to set conditions",
-    animation: "fade-right",
+    animation: "fade-up",
   },
   {
     id: 4,
     isButton: false,
     details:
       "Make payment/fulfill the conditions and complete your transaction",
-    animation: "fade-left",
+    animation: "fade-up",
   },
 ];
 

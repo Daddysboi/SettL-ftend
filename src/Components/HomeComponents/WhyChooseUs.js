@@ -60,7 +60,7 @@ const StyledCard = styled.div`
   box-shadow: -1px 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   font-size: 1rem;
-  @media (min-width: 920px) {
+  @media (min-width: 1280px) {
     width: 28rem;
     height: 18rem;
   }

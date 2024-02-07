@@ -19,7 +19,7 @@ const StyledContainer = styled.div`
 
 const StyledMenuContainer = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 5;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,6 +28,7 @@ const StyledMenuContainer = styled.div`
   top: 0;
   background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   @media (min-width: 840px) {
     display: none;
   }
