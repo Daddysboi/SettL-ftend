@@ -73,7 +73,7 @@ const Contact = () => {
       setLoading(true);
       let request = {
         fullName: values.fullName,
-        email: values.email,
+        email: values.email?.toLowerCase(),
         message: values.message,
       };
       dispatch(contactOurSupport(request))

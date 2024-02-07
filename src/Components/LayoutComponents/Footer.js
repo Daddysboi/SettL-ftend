@@ -159,7 +159,7 @@ const Footer = () => {
       setLoading(true);
       dispatch(
         saveEmailToMailingList({
-          email: values?.email,
+          email: values?.email?.toLowerCase(),
         })
       )
         .then((resp) => {

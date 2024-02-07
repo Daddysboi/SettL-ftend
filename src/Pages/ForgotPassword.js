@@ -44,7 +44,7 @@ const ForgotPassword = () => {
       setLoading(true);
       dispatch(
         requestResetPassword({
-          email: values?.email,
+          email: values?.email?.toLowerCase(),
           redirectUrl: encodedLink,
         })
       )
