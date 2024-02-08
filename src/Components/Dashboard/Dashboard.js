@@ -1,17 +1,6 @@
 import React, { useReducer, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled, { css } from "styled-components";
-import Home from "./Home/Home.Dashboard";
-import Settings from "./Settings.Dashboard";
-import Transactions from "./Transactions.Dashboard";
-import Wallet from "./Wallet.Dashboard";
-import Profile from "./Profile.Dashboard";
-import DashboardHeader from "./Header.Dashboard";
-import Tracker from "./Tracker.Dashboard";
-import Resolution from "./Resolution.Dashboard";
-import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
-import { googleLogout } from "@react-oauth/google";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faUser,
@@ -22,6 +11,19 @@ import {
   faHandshake,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppSelector } from "../../redux/hooks";
+import { googleLogout } from "@react-oauth/google";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { userContext } from "../../App";
+import Home from "./Home/Home.Dashboard";
+import Settings from "./Settings.Dashboard";
+import Transactions from "./Transactions.Dashboard";
+import Wallet from "./Wallet.Dashboard";
+import Profile from "./Profile.Dashboard";
+import DashboardHeader from "./Header.Dashboard";
+import Tracker from "./Tracker.Dashboard";
+import Resolution from "./Resolution.Dashboard";
+import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -109,14 +111,15 @@ const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
   const { userId } = useParams();
+  const { setProfile, setUser } = useContext(userContext);
 
   const { user } = useAppSelector((state) => state.user);
   console.log("my user", user);
 
   const logOut = () => {
     googleLogout();
-    setUser({}); // Clear user state
-    setProfile({}); // Clear profile state
+    setUser({});
+    setProfile({});
     localStorage.removeItem("token");
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);

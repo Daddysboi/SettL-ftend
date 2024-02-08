@@ -25,6 +25,8 @@ const StyledLogo = styled(NavLink)`
   color: #f26600;
   font-size: 2rem;
   text-decoration: none;
+
+  font-weight: 600;
 `;
 
 const StyledImg = styled.img`
@@ -92,7 +94,6 @@ const Header = () => {
         if (res.status === 200) {
           const contentType = res.headers["content-type"];
           if (contentType.includes("image")) {
-            // console.log("Image data:", res.data);
             setUserData((prevUserData) => ({
               ...prevUserData,
               profilePicture: url,
@@ -100,8 +101,6 @@ const Header = () => {
           }
         } else {
           console.error("Failed to fetch user data");
-          const jsonData = JSON.parse(new TextDecoder().decode(res.data));
-          console.log("JSON data:", jsonData);
         }
       } catch (error) {
         console.error("Error loading user data:", error);
