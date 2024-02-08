@@ -16,13 +16,14 @@ export const sendOtp = createAsyncThunk("sendOtp", async ({ email }) => {
 
 export const register = createAsyncThunk(
   "signup",
-  async ({ firstName, lastName, email, password, otp }) => {
+  async ({ firstName, lastName, email, password, role, otp }) => {
     try {
       const resp = await Register({
         firstName,
         lastName,
         email,
         password,
+        role,
         otp,
       });
       return resp;
