@@ -126,6 +126,7 @@ const Signup = () => {
         firstName: values?.firstName,
         lastName: values?.lastName,
         email: values?.email?.toLowerCase(),
+        role: values?.role,
         password: values?.password,
       };
       dispatch(sendOtp({ email: request?.email }))

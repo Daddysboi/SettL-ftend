@@ -44,6 +44,7 @@ const OtpVerification = () => {
       email: state.email,
       firstName: state.firstName,
       lastName: state.lastName,
+      role: state.role,
       password: state.password,
     };
 
