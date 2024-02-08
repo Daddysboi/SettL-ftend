@@ -31,6 +31,7 @@ const StyledLogo = styled(NavLink)`
 
 const StyledImg = styled.img`
   height: 2rem;
+  padding-right: 0.5rem;
 `;
 
 const StyledAccount = styled.div``;
@@ -125,13 +126,13 @@ const Header = () => {
               <StyledLoader />
             ) : (
               <>
-                {profile.picture ? (
-                  <StyledProfilePix src={profile.picture} alt={profile.name} />
+                {profile && profile.picture ? (
+                  <StyledProfilePix src={profile.picture} alt="" />
                 ) : (
                   <StyledAccountIcon icon={faUser} />
                 )}
                 <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
-                  {profile.name || "User"}
+                  {profile && profile.name ? profile.name : "User"}
                 </span>
               </>
             )}

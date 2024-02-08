@@ -49,7 +49,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  // const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState("");
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
@@ -60,7 +60,9 @@ function App() {
   }, []);
 
   return (
-    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
+    <userContext.Provider
+      value={{ user, setUser, userData, setUserData, profile, setProfile }}
+    >
       <div className="App">
         <RouterProvider router={router}>
           <RootLayout />
