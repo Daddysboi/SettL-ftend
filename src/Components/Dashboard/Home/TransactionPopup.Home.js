@@ -12,9 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
-import axios from "axios";
 import { createTransaction } from "../../../features/transactionSlice";
-import FormList from "antd/es/form/FormList";
 import { USER_ID } from "../../../services/CONSTANTS";
 import { useAppDispatch } from "../../../redux/hooks";
 
@@ -86,6 +84,7 @@ const StyledFormDiv = styled.div`
 const Styledlabel = styled.label`
   margin-top: 1rem;
   font-size: 0.7rem;
+  font-weight: bold;
 `;
 
 const StyledBackButton = styled.button`
@@ -460,7 +459,10 @@ const TransactionFormPopup = ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.setConditions}
-              style={{ display: "block" }}
+              style={{
+                display: "block",
+                border: "1px solid rgba(223, 140, 82, 0.3)",
+              }}
             ></textarea>
 
             {formik.errors.setConditions && formik.touched.setConditions && (

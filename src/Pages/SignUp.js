@@ -295,13 +295,22 @@ const Signup = () => {
       </StyledGoogleBtn>
       <div>
         <StyledLineTxt style={{ marginLeft: "0" }}>
-          Already have an account? <NavLink to="/login"> Sign In</NavLink>
+          Already have an account?{" "}
+          <NavLink to="/login" style={{ textDecoration: "none" }}>
+            {" "}
+            Sign In
+          </NavLink>
         </StyledLineTxt>
         <StyleTermsTxt style={{ marginLeft: "0", fontSize: "0.55rem" }}>
           By creating an account you agree with our span{" "}
-          <Link to="/terms-and-conditions">Terms of Service</Link>,
-          <Link to="/privacy-policy">Privacy Policy </Link>, and our default
-          Notification Settings.
+          <Link style={{ textDecoration: "none" }} to="/terms-and-conditions">
+            Terms of Service
+          </Link>
+          ,
+          <Link to="/privacy-policy" style={{ textDecoration: "none" }}>
+            Privacy Policy{" "}
+          </Link>
+          , and our default Notification Settings.
         </StyleTermsTxt>
       </div>
     </AuthBackground>
