@@ -10,8 +10,6 @@ import {
   faTools,
   faMoneyBillWave,
 } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
 import axios from "axios";
@@ -22,13 +20,9 @@ import { useAppDispatch } from "../../../redux/hooks";
 
 const StyledModal = styled(Modal)`
   margin-top: 15rem;
-
   background-color: #ffffff;
-
   align-items: center;
   justify-content: center;
-  /* margin: 5rem; */
-  width: 100%;
 
   .close-button {
     position: absolute;
@@ -39,9 +33,14 @@ const StyledModal = styled(Modal)`
   .bm-burger-bars {
     background: #373a47;
   }
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-left: 10rem;
+  }
 `;
+
 const StyledHeader = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 `;
 
 const StyledBtnRole = styled.button`
@@ -52,13 +51,13 @@ const StyledBtnRole = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-
   &:hover {
     background-color: transparent;
     border: 2px solid #f8701c;
     color: #f8701c;
   }
 `;
+
 const StyledButton = styled.button`
   background-color: #f26600;
   color: #ffffff;
@@ -68,7 +67,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1rem;
   right: 6rem;
 
   &:hover {
@@ -82,8 +81,11 @@ const StyledFormDiv = styled.div`
   background-color: transparent;
   padding: 20px;
   border-radius: 10px;
-  /* position: relative; */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+`;
+
+const Styledlabel = styled.label`
+  margin-top: 1rem;
+  font-size: 0.7rem;
 `;
 
 const StyledBackButton = styled.button`
@@ -95,7 +97,8 @@ const StyledBackButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1rem;
+  padding: 8px;
   right: 2rem;
   &:hover {
     background-color: #f26600;
@@ -104,15 +107,19 @@ const StyledBackButton = styled.button`
 `;
 
 const StyledInput = styled.input`
-  /* width: 100%; */
-  /* margin: 10px 0; */
   padding: 0.2rem;
-  border: 1px solid #000000;
+  border: 1px solid rgba(223, 140, 82, 0.3);
   border-radius: 3px;
   display: block;
 `;
 
+const StyledError = styled.p`
+  color: red;
+  font-size: 0.5rem;
+`;
+
 Modal.setAppElement("#root");
+
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,
@@ -246,7 +253,7 @@ const TransactionFormPopup = ({
         return (
           <StyledFormDiv>
             <StyledHeader>Create Transaction</StyledHeader>
-            <label htmlFor="role">Select your role:</label>
+            <Styledlabel htmlFor="role">Select your role:</Styledlabel>
             <div>
               <StyledBtnRole
                 type="button"
@@ -268,7 +275,7 @@ const TransactionFormPopup = ({
               </StyledBtnRole>
             </div>
             {formik.errors.role && formik.touched.role && (
-              <div>{formik.errors.role}</div>
+              <StyledError>{formik.errors.role}</StyledError>
             )}
           </StyledFormDiv>
         );
@@ -276,7 +283,9 @@ const TransactionFormPopup = ({
         return (
           <StyledFormDiv>
             <StyledHeader>Transaction Type</StyledHeader>
-            <label htmlFor="transactionType">Select transaction type:</label>
+            <Styledlabel htmlFor="transactionType">
+              Select transaction type:
+            </Styledlabel>
             <div>
               <StyledBtnRole
                 type="button"
@@ -299,7 +308,7 @@ const TransactionFormPopup = ({
             </div>
             {formik.errors.transactionType &&
               formik.touched.transactionType && (
-                <div>{formik.errors.transactionType}</div>
+                <StyledError>{formik.errors.transactionType}</StyledError>
               )}
           </StyledFormDiv>
         );
@@ -309,7 +318,7 @@ const TransactionFormPopup = ({
             <StyledHeader>Transaction Details</StyledHeader>
             {formik.values.transactionType && (
               <div>
-                <label htmlFor="amount">Transaction amount:</label>
+                <Styledlabel htmlFor="amount">Transaction amount:</Styledlabel>
                 <StyledInput
                   type="text"
                   id="amount"
@@ -319,13 +328,15 @@ const TransactionFormPopup = ({
                   value={formik.values.amount}
                 />
                 {formik.errors.amount && formik.touched.amount && (
-                  <div>{formik.errors.amount}</div>
+                  <StyledError>{formik.errors.amount}</StyledError>
                 )}
               </div>
             )}
             {formik.values.transactionType && (
               <div>
-                <label htmlFor="deliveryAddress">Delivery address:</label>
+                <Styledlabel htmlFor="deliveryAddress">
+                  Delivery address:
+                </Styledlabel>
                 <StyledInput
                   type="text"
                   id="deliveryAddress"
@@ -336,13 +347,13 @@ const TransactionFormPopup = ({
                 />
                 {formik.errors.deliveryAddress &&
                   formik.touched.deliveryAddress && (
-                    <div>{formik.errors.deliveryAddress}</div>
+                    <StyledError>{formik.errors.deliveryAddress}</StyledError>
                   )}
                 {formik.values.transactionType && (
                   <div>
-                    <label htmlFor="productName">
+                    <Styledlabel htmlFor="productName">
                       What product are you buying:
-                    </label>
+                    </Styledlabel>
                     <StyledInput
                       type="text"
                       id="productName"
@@ -353,7 +364,7 @@ const TransactionFormPopup = ({
                     />
                     {formik.errors.productName &&
                       formik.touched.productName && (
-                        <div>{formik.errors.productName}</div>
+                        <StyledError>{formik.errors.productName}</StyledError>
                       )}
                   </div>
                 )}
@@ -362,7 +373,7 @@ const TransactionFormPopup = ({
 
             {currentStep === "payment" && (
               <div>
-                <label>
+                <Styledlabel>
                   <StyledInput
                     type="checkbox"
                     id="termsAndConditions"
@@ -370,11 +381,14 @@ const TransactionFormPopup = ({
                     checked={formik.values.termsAndConditions}
                     onChange={formik.handleChange}
                   />
-                  Agree with terms and conditions
-                </label>
+                  Agree with terms and conditions{" "}
+                  <Link to="/terms-and-conditions"></Link>
+                </Styledlabel>
                 {formik.errors.termsAndConditions &&
                   formik.touched.termsAndConditions && (
-                    <div>{formik.errors.termsAndConditions}</div>
+                    <StyledError>
+                      {formik.errors.termsAndConditions}
+                    </StyledError>
                   )}
               </div>
             )}
@@ -384,7 +398,9 @@ const TransactionFormPopup = ({
         return (
           <div>
             <StyledHeader>Invite Counterparty</StyledHeader>
-            <label htmlFor="counterpartyName">Counterparty name:</label>
+            <Styledlabel htmlFor="counterpartyName">
+              Counterparty name:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyName"
@@ -395,10 +411,10 @@ const TransactionFormPopup = ({
             />
             {formik.errors.counterpartyName &&
               formik.touched.counterpartyName && (
-                <div>{formik.errors.counterpartyName}</div>
+                <StyledError>{formik.errors.counterpartyName}</StyledError>
               )}
 
-            <label htmlFor="counterpartyEmail">Email:</label>
+            <Styledlabel htmlFor="counterpartyEmail">Email:</Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyEmail"
@@ -412,7 +428,7 @@ const TransactionFormPopup = ({
                 <div>{formik.errors.counterpartyEmail}</div>
               )}
 
-            <label htmlFor="counterpartyPhone">Phone Number:</label>
+            <Styledlabel htmlFor="counterpartyPhone">Phone Number:</Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyPhone"
@@ -423,7 +439,7 @@ const TransactionFormPopup = ({
             />
             {formik.errors.counterpartyPhone &&
               formik.touched.counterpartyPhone && (
-                <div>{formik.errors.counterpartyPhone}</div>
+                <StyledError>{formik.errors.counterpartyPhone}</StyledError>
               )}
           </div>
         );
@@ -431,7 +447,9 @@ const TransactionFormPopup = ({
         return (
           <div>
             <StyledHeader>Set Conditions</StyledHeader>
-            <label htmlFor="counterpartyName">Enter terms for purchase:</label>
+            <Styledlabel htmlFor="counterpartyName">
+              Enter terms for purchase:
+            </Styledlabel>
 
             <textarea
               type="text"
@@ -446,7 +464,7 @@ const TransactionFormPopup = ({
             ></textarea>
 
             {formik.errors.setConditions && formik.touched.setConditions && (
-              <div>{formik.errors.setConditions}</div>
+              <StyledError>{formik.errors.setConditions}</StyledError>
             )}
           </div>
         );
@@ -460,7 +478,7 @@ const TransactionFormPopup = ({
     <StyledModal
       isOpen={isOpen}
       // onRequestClose={onRequestClose}
-      contentLabel="Transaction Form Modal"
+      contentStyledlabel="Transaction Form Modal"
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",

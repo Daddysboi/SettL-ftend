@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/logo/favicon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import Switch from "react-switch";
+
 import { userContext } from "../../App";
+import logo from "../../assets/logo/favicon.png";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -19,19 +20,26 @@ const StyledContainer = styled.div`
   top: 0;
   background: #ffffff;
   z-index: 1;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const StyledLogo = styled(NavLink)`
   color: #f26600;
   font-size: 2rem;
   text-decoration: none;
+
+  font-weight: 600;
 `;
 
 const StyledImg = styled.img`
   height: 2rem;
+  padding-right: 0.5rem;
 `;
 
-const StyledAccount = styled.div``;
+const StyledAccount = styled.div`
+  font-size: 0.9rem;
+`;
 
 const StyledNavLink = styled(NavLink)`
   color: black;
@@ -46,7 +54,7 @@ const StyledProfilePix = styled.img`
 `;
 
 const StyledAccountIcon = styled(FontAwesomeIcon)`
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: gray;
 `;
 
@@ -92,7 +100,6 @@ const Header = () => {
         if (res.status === 200) {
           const contentType = res.headers["content-type"];
           if (contentType.includes("image")) {
-            // console.log("Image data:", res.data);
             setUserData((prevUserData) => ({
               ...prevUserData,
               profilePicture: url,
@@ -100,8 +107,6 @@ const Header = () => {
           }
         } else {
           console.error("Failed to fetch user data");
-          const jsonData = JSON.parse(new TextDecoder().decode(res.data));
-          console.log("JSON data:", jsonData);
         }
       } catch (error) {
         console.error("Error loading user data:", error);
@@ -126,13 +131,13 @@ const Header = () => {
               <StyledLoader />
             ) : (
               <>
-                {profile.picture ? (
-                  <StyledProfilePix src={profile.picture} alt={profile.name} />
+                {profile && profile.picture ? (
+                  <StyledProfilePix src={profile.picture} alt="" />
                 ) : (
                   <StyledAccountIcon icon={faUser} />
                 )}
                 <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
-                  {profile.name || "User"}
+                  {profile && profile.name ? profile.name : "User"}
                 </span>
               </>
             )}
