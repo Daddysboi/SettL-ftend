@@ -21,6 +21,7 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Otp from "./Pages/Otp";
+import ConfirmTransaction from "./Pages/ConfirmTransaction";
 
 export const userContext = createContext();
 
@@ -39,6 +40,10 @@ const router = createBrowserRouter(
       <Route path="/dashboard" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
+        <Route
+          path="/confirm-transaction"
+          element={<ConfirmTransaction />}
+        ></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/payment" element={<Payment />} />

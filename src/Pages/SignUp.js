@@ -100,7 +100,7 @@ const RegisterSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .required("Required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  role: Yup.string(),
+  role: Yup.string().required("Required"),
 });
 
 const Signup = () => {
@@ -121,6 +121,7 @@ const Signup = () => {
     },
     validationSchema: RegisterSchema, //causin problems so i comment it out
     onSubmit: async (values, { resetForm }) => {
+      console.log(values);
       setLoading(true);
       let request = {
         firstName: values?.firstName,

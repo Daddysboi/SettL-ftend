@@ -15,6 +15,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
 import axios from "axios";
+import { createTransaction } from "../../../features/transactionSlice";
+import FormList from "antd/es/form/FormList";
+import { USER_ID } from "../../../services/CONSTANTS";
+import { useAppDispatch } from "../../../redux/hooks";
 
 const StyledModal = styled(Modal)`
   margin-top: 15rem;
@@ -116,6 +120,14 @@ const TransactionFormPopup = ({
   currentStep,
 }) => {
   const [currentModalStep, setCurrentModalStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem(USER_ID);
+  const isSecure = window.location.protocol === "https:";
+  const text = `${isSecure ? "https" : "http"}://${
+    window.location.host
+  }/confirm-transaction`;
+  const encodedLink = encodeURI(text);
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       role: "",
@@ -166,9 +178,44 @@ const TransactionFormPopup = ({
     }),
     onSubmit: (values) => {
       console.log("Form submitted with values:", values);
-      onCreateTransaction(values);
+      // onCreateTransaction(values);
     },
   });
+
+  const handleCreateTransaction = async (reference) => {
+    setLoading(true);
+    let request = {
+      reference: reference,
+      buyerId: userId,
+      formData: {
+        transactionType: formik.values.transactionType,
+        amount: parseFloat(formik.values.amount),
+        deliveryAddress: formik.values.deliveryAddress,
+        productName: formik.values.productName,
+        counterpartyName: formik.values.counterpartyName,
+        counterpartyEmail: formik.values.counterpartyEmail,
+        counterpartyPhone: formik.values.counterpartyPhone,
+        setConditions: formik.values.setConditions,
+        termsAndConditions: formik.values.termsAndConditions,
+      },
+      redirectUrl: encodedLink,
+    };
+    dispatch(createTransaction(request))
+      .then((resp) => {
+        if (resp?.payload?.status !== 201) {
+          toast.error(resp?.payload?.message || "Something went wrong");
+          setLoading(false);
+          return;
+        }
+        onRequestClose();
+        toast.success(resp?.payload?.message || "Please check your inbox");
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error?.message || "Something went wrong");
+        setLoading(false);
+      });
+  };
 
   const componentProps = {
     email: formik.values.counterpartyEmail,
@@ -180,9 +227,7 @@ const TransactionFormPopup = ({
     publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
     text: "Pay",
     onSuccess: ({ reference }) => {
-      alert(
-        `Your transaction was successful! Transaction reference: ${reference}`
-      );
+      handleCreateTransaction(reference);
     },
     onClose: () => alert("Transaction Cancelled"),
   };
@@ -437,40 +482,48 @@ const TransactionFormPopup = ({
         },
       }}
     >
-      {renderStepContent()}
-      <div>
-        {currentModalStep !== 1 && (
-          <StyledBackButton type="button" onClick={handleBack}>
-            Back
-          </StyledBackButton>
+      <>
+        {loading ? (
+          "Confirming transaction..."
+        ) : (
+          <>
+            {renderStepContent()}
+            <div>
+              {currentModalStep !== 1 && (
+                <StyledBackButton type="button" onClick={handleBack}>
+                  Back
+                </StyledBackButton>
+              )}
+              {currentModalStep !== 5 &&
+                currentModalStep !== 1 &&
+                currentModalStep !== 2 && (
+                  <StyledButton
+                    type="button"
+                    onClick={() => {
+                      handleNext();
+                    }}
+                  >
+                    Save & Next
+                  </StyledButton>
+                )}
+              {currentModalStep === 5 && (
+                <PaystackButton
+                  type="button"
+                  onClick={() => {
+                    // formik.handleSubmit();
+                    handlePayment();
+                  }}
+                  className="paystack-button"
+                  {...componentProps}
+                />
+              )}
+            </div>
+            <div className="close-button" onClick={onRequestClose}>
+              <FontAwesomeIcon icon={faTimes} />
+            </div>
+          </>
         )}
-        {currentModalStep !== 5 &&
-          currentModalStep !== 1 &&
-          currentModalStep !== 2 && (
-            <StyledButton
-              type="button"
-              onClick={() => {
-                handleNext();
-              }}
-            >
-              Save & Next
-            </StyledButton>
-          )}
-        {currentModalStep === 5 && (
-          <PaystackButton
-            type="button"
-            onClick={() => {
-              // formik.handleSubmit();
-              handlePayment();
-            }}
-            className="paystack-button"
-            {...componentProps}
-          />
-        )}
-      </div>
-      <div className="close-button" onClick={onRequestClose}>
-        <FontAwesomeIcon icon={faTimes} />
-      </div>
+      </>
     </StyledModal>
   );
 };
