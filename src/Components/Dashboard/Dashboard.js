@@ -94,14 +94,20 @@ const StyledBtn = styled.button`
   color: #ffffff;
   font-weight: 200;
   padding: 0.5rem;
+  ${({ active }) =>
+    active &&
+    css`
+      color: #4db6ac;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    `}
   &:hover {
-    background: #02041d;
+    color: #4db6ac;
     border-radius: 0.5rem;
     padding: 0.5rem;
   }
   @media only screen and (min-width: 320px) and (max-width: 480px) {
   }
-
   // iPads, Tablets
   @media only screen and (min-width: 481px) and (max-width: 768px) {
   }
@@ -120,6 +126,7 @@ const StyledBtnName = styled.span`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding-right: 0.5rem;
 `;
+
 const SignoutLink = styled(Link)`
   border: none;
   background: none;
@@ -128,6 +135,16 @@ const SignoutLink = styled(Link)`
   color: #ffffff;
   font-size: 0.6rem;
   text-decoration: none;
+  ${({ active }) =>
+    active &&
+    css`
+      color: #4db6ac;
+      border-radius: 0.5rem;
+    `}
+  &:hover {
+    color: #4db6ac;
+    border-radius: 0.5rem;
+  }
 `;
 
 const StyledRight = styled.div`
@@ -146,6 +163,10 @@ const StyledRight = styled.div`
   @media only screen and (min-width: 481px) and (max-width: 768px) {
     margin-left: 8rem;
   }
+`;
+
+const StyledFontAwesomeIconSignOut = styled(FontAwesomeIcon)`
+  padding-right: 0.5rem;
 `;
 
 const StyledSignOutTxt = styled.span`
@@ -249,7 +270,7 @@ const Dashboard = () => {
               onClick={() => navigateTo("tracker")}
             >
               <StyledFontAwesomeIcon icon={faTruck} />
-              <StyledBtnName> Order</StyledBtnName>
+              <StyledBtnName> Tracking</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "resolution"}
@@ -261,7 +282,7 @@ const Dashboard = () => {
           </StyledBtnContainer>
 
           <SignoutLink to="/" onClick={logOut}>
-            <StyledFontAwesomeIcon icon={faSignOut} />
+            <StyledFontAwesomeIconSignOut icon={faSignOut} />
             <StyledSignOutTxt>Sign Out</StyledSignOutTxt>
           </SignoutLink>
         </StyledSideBar>

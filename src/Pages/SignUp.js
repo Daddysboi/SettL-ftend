@@ -154,32 +154,32 @@ const Signup = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      console.log("Google login success:", codeResponse);
-      setUser(codeResponse);
-      localStorage.setItem("googleUser", JSON.stringify(codeResponse));
+      // console.log("Google login success:", codeResponse);
+      // setUser(codeResponse);
+      // localStorage.setItem("googleUser", JSON.stringify(codeResponse));
     },
     onError: (error) => console.log("Login Failed:", error),
   });
 
   useEffect(() => {
-    if (user && user.access_token) {
-      axios
-        .get("https://www.googleapis.com/oauth2/v1/userinfo", {
-          params: { access_token: user.access_token },
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: "application/json",
-          },
-        })
-        .then((res) => {
-          setProfile(res.data);
-          localStorage.setItem("googleUser", JSON.stringify(res.data));
-          navigate(`/dashboard`);
-        })
-        .catch((err) => {
-          console.error("Google API Error:", err);
-        });
-    }
+    // if (user && user.access_token) {
+    //   axios
+    //     .get("https://www.googleapis.com/oauth2/v1/userinfo", {
+    //       params: { access_token: user.access_token },
+    //       headers: {
+    //         Authorization: `Bearer ${user.access_token}`,
+    //         Accept: "application/json",
+    //       },
+    //     })
+    //     .then((res) => {
+    //       setProfile(res.data);
+    //       localStorage.setItem("googleUser", JSON.stringify(res.data));
+    //       navigate(`/dashboard`);
+    //     })
+    //     .catch((err) => {
+    //       console.error("Google API Error:", err);
+    //     });
+    // }
   }, [user]);
 
   const roleOptions = [

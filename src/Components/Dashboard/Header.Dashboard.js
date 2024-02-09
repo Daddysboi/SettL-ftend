@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/logo/favicon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import Switch from "react-switch";
+
 import { userContext } from "../../App";
+import logo from "../../assets/logo/favicon.png";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -36,7 +37,9 @@ const StyledImg = styled.img`
   padding-right: 0.5rem;
 `;
 
-const StyledAccount = styled.div``;
+const StyledAccount = styled.div`
+  font-size: 0.9rem;
+`;
 
 const StyledNavLink = styled(NavLink)`
   color: black;
@@ -51,7 +54,7 @@ const StyledProfilePix = styled.img`
 `;
 
 const StyledAccountIcon = styled(FontAwesomeIcon)`
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: gray;
 `;
 
