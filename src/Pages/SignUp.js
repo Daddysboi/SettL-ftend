@@ -9,7 +9,6 @@ import * as Yup from "yup";
 import { sendOtp } from "../features/registerSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { TailSpin as Loader } from "react-loader-spinner";
-import axios from "axios";
 
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import AppSelectInput from "../Components/ReUseableComponent/AppSelectInput";

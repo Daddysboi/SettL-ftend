@@ -251,37 +251,37 @@ const TransactionFormPopup = ({
 
   const renderStepContent = () => {
     switch (currentModalStep) {
+      // case 1:
+      //   return (
+      //     <StyledFormDiv>
+      //       <StyledHeader>Create Transaction</StyledHeader>
+      //       <Styledlabel htmlFor="role">Select your role:</Styledlabel>
+      //       <div>
+      //         <StyledBtnRole
+      //           type="button"
+      //           onClick={() => {
+      //             formik.setFieldValue("role", "seller");
+      //             handleNext();
+      //           }}
+      //         >
+      //           <FontAwesomeIcon icon={faUser} /> Seller
+      //         </StyledBtnRole>{" "}
+      //         <StyledBtnRole
+      //           type="button"
+      //           onClick={() => {
+      //             formik.setFieldValue("role", "buyer");
+      //             handleNext();
+      //           }}
+      //         >
+      //           <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
+      //         </StyledBtnRole>
+      //       </div>
+      //       {formik.errors.role && formik.touched.role && (
+      //         <StyledError>{formik.errors.role}</StyledError>
+      //       )}
+      //     </StyledFormDiv>
+      //   );
       case 1:
-        return (
-          <StyledFormDiv>
-            <StyledHeader>Create Transaction</StyledHeader>
-            <Styledlabel htmlFor="role">Select your role:</Styledlabel>
-            <div>
-              <StyledBtnRole
-                type="button"
-                onClick={() => {
-                  formik.setFieldValue("role", "seller");
-                  handleNext();
-                }}
-              >
-                <FontAwesomeIcon icon={faUser} /> Seller
-              </StyledBtnRole>{" "}
-              <StyledBtnRole
-                type="button"
-                onClick={() => {
-                  formik.setFieldValue("role", "buyer");
-                  handleNext();
-                }}
-              >
-                <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
-              </StyledBtnRole>
-            </div>
-            {formik.errors.role && formik.touched.role && (
-              <StyledError>{formik.errors.role}</StyledError>
-            )}
-          </StyledFormDiv>
-        );
-      case 2:
         return (
           <StyledFormDiv>
             <StyledHeader>Transaction Type</StyledHeader>
@@ -314,7 +314,7 @@ const TransactionFormPopup = ({
               )}
           </StyledFormDiv>
         );
-      case 3:
+      case 2:
         return (
           <div>
             <StyledHeader>Transaction Details</StyledHeader>
@@ -396,7 +396,7 @@ const TransactionFormPopup = ({
             )}
           </div>
         );
-      case 4:
+      case 3:
         return (
           <div>
             <StyledHeader>Invite Counterparty</StyledHeader>
@@ -445,7 +445,7 @@ const TransactionFormPopup = ({
               )}
           </div>
         );
-      case 5:
+      case 4:
         return (
           <div>
             <StyledHeader>Set Conditions</StyledHeader>
@@ -514,7 +514,7 @@ const TransactionFormPopup = ({
                   Back
                 </StyledBackButton>
               )}
-              {currentModalStep !== 5 &&
+              {currentModalStep !== 4 &&
                 currentModalStep !== 1 &&
                 currentModalStep !== 2 && (
                   <StyledButton
@@ -526,7 +526,7 @@ const TransactionFormPopup = ({
                     Save & Next
                   </StyledButton>
                 )}
-              {currentModalStep === 5 && (
+              {currentModalStep === 4 && (
                 <PaystackButton
                   type="button"
                   onClick={() => {
