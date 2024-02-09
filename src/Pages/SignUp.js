@@ -259,14 +259,14 @@ const Signup = () => {
             registerFormik.errors.confirmPassword
           }
         />
-        {/* <AppSelectInput
+        <AppSelectInput
           label="Role"
           name="role"
           value={registerFormik.values.role}
           onChange={registerFormik.handleChange}
           options={roleOptions}
           error={registerFormik.submitCount > 0 && registerFormik.errors.role}
-        /> */}
+        />
         {loading && (
           <Loader
             type="TailSpin"

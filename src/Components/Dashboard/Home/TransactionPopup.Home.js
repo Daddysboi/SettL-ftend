@@ -12,7 +12,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
-import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { createTransaction } from "../../../features/transactionSlice";
 import FormList from "antd/es/form/FormList";
 import { USER_ID } from "../../../services/CONSTANTS";
