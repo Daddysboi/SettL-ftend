@@ -154,7 +154,9 @@ const Signup = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: (codeResponse) => {
+      console.log("Google login success:", codeResponse);
       setUser(codeResponse);
+      localStorage.setItem("googleUser", JSON.stringify(codeResponse));
     },
     onError: (error) => console.log("Login Failed:", error),
   });
@@ -171,6 +173,7 @@ const Signup = () => {
         })
         .then((res) => {
           setProfile(res.data);
+          localStorage.setItem("googleUser", JSON.stringify(res.data));
           navigate(`/dashboard`);
         })
         .catch((err) => {
@@ -254,14 +257,14 @@ const Signup = () => {
             registerFormik.errors.confirmPassword
           }
         />
-        <AppSelectInput
+        {/* <AppSelectInput
           label="Role"
           name="role"
           value={registerFormik.values.role}
           onChange={registerFormik.handleChange}
           options={roleOptions}
           error={registerFormik.submitCount > 0 && registerFormik.errors.role}
-        />
+        /> */}
         {loading && (
           <Loader
             type="TailSpin"

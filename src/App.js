@@ -32,15 +32,7 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
-      <Route
-        path="/dashboard"
-        index
-        element={
-          <AuthGuard>
-            <Dashboard />
-          </AuthGuard>
-        }
-      />
+      <Route path="/dashboard" index element={<Dashboard />} />
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
