@@ -21,6 +21,7 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Otp from "./Pages/Otp";
+import AuthGuard from "./AuthGuard";
 
 export const userContext = createContext();
 
@@ -32,11 +33,26 @@ const router = createBrowserRouter(
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route
+        path="/dashboard"
+        index
+        element={
+          <AuthGuard>
+            <Dashboard />
+          </AuthGuard>
+        }
+      />
+      <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
-      <Route path="/otp" element={<Otp />} />
-      <Route path="/dashboard" index element={<Dashboard />}></Route>
+      <Route
+        path="/otp"
+        element={
+          <AuthGuard>
+            <Otp />
+          </AuthGuard>
+        }
+      />
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -49,7 +65,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const [userData, setUserData] = useState("");
+  // const [userData, setUserData] = useState("");
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
@@ -60,9 +76,7 @@ function App() {
   }, []);
 
   return (
-    <userContext.Provider
-      value={{ user, setUser, userData, setUserData, profile, setProfile }}
-    >
+    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
       <div className="App">
         <RouterProvider router={router}>
           <RootLayout />

@@ -19,6 +19,8 @@ const StyledContainer = styled.div`
   top: 0;
   background: #ffffff;
   z-index: 1;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const StyledLogo = styled(NavLink)`

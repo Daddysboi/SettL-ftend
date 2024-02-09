@@ -10,21 +10,15 @@ import {
   faTools,
   faMoneyBillWave,
 } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
 import axios from "axios";
 
 const StyledModal = styled(Modal)`
   margin-top: 15rem;
-
   background-color: #ffffff;
-
   align-items: center;
   justify-content: center;
-  /* margin: 5rem; */
-  width: 100%;
 
   .close-button {
     position: absolute;
@@ -35,7 +29,12 @@ const StyledModal = styled(Modal)`
   .bm-burger-bars {
     background: #373a47;
   }
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-left: 10rem;
+  }
 `;
+
 const StyledHeader = styled.h2`
   font-size: 1.5rem;
 `;
@@ -48,13 +47,13 @@ const StyledBtnRole = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-
   &:hover {
     background-color: transparent;
     border: 2px solid #f8701c;
     color: #f8701c;
   }
 `;
+
 const StyledButton = styled.button`
   background-color: #f26600;
   color: #ffffff;
@@ -78,8 +77,10 @@ const StyledFormDiv = styled.div`
   background-color: transparent;
   padding: 20px;
   border-radius: 10px;
-  /* position: relative; */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 10rem;
+  }
 `;
 
 const StyledBackButton = styled.button`
@@ -100,8 +101,6 @@ const StyledBackButton = styled.button`
 `;
 
 const StyledInput = styled.input`
-  /* width: 100%; */
-  /* margin: 10px 0; */
   padding: 0.2rem;
   border: 1px solid #000000;
   border-radius: 3px;
@@ -109,6 +108,7 @@ const StyledInput = styled.input`
 `;
 
 Modal.setAppElement("#root");
+
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,
@@ -183,6 +183,23 @@ const TransactionFormPopup = ({
       alert(
         `Your transaction was successful! Transaction reference: ${reference}`
       );
+
+      const transactionData = {
+        ...formik.values,
+        reference: reference,
+      };
+      const url = "";
+      axios
+        .post(url, transactionData)
+        .then((response) => {
+          console.log(
+            "Transaction details posted successfully:",
+            response.data
+          );
+        })
+        .catch((error) => {
+          console.error("Error posting transaction details:", error);
+        });
     },
     onClose: () => alert("Transaction Cancelled"),
   };

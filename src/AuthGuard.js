@@ -10,22 +10,19 @@ const AuthGuard = ({ children }) => {
   const dispatch = useAppDispatch();
   const userId = localStorage.getItem(USER_ID);
 
-  const handleError = () => {
-    navigate("/login");
-
-    // To clear the current profile and its associated Redux store.
-    window.location.reload();
+  const handleGetUser = async (userId) => {
+    try {
+      const resp = await dispatch(getUserById(userId));
+      const { data } = resp?.payload;
+      dispatch(setUser(data));
+    } catch (error) {
+      console.log(error.message);
+      handleError();
+    }
   };
 
-  const handleGetUser = async (userId) => {
-    dispatch(getUserById(userId))
-      .then((resp) => {
-        const { data } = resp?.payload;
-        dispatch(setUser(data));
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+  const handleError = () => {
+    navigate("/login");
   };
 
   const shouldGetProfile = ![
@@ -37,16 +34,16 @@ const AuthGuard = ({ children }) => {
   ].includes(pathname);
 
   useEffect(() => {
-    if (shouldGetProfile && localStorage?.USER_ID) {
+    if (shouldGetProfile && userId) {
       handleGetUser(userId);
     }
-  }, [shouldGetProfile, localStorage?.USER_TOKEN]);
+  }, [shouldGetProfile, userId]);
 
   useEffect(() => {
-    if (!localStorage?.USER_ID && shouldGetProfile) {
+    if (!userId && shouldGetProfile) {
       handleError();
     }
-  }, [localStorage?.USER_ID, pathname]);
+  }, [userId, shouldGetProfile]);
 
   return children;
 };

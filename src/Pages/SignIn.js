@@ -104,8 +104,7 @@ const loginValidationSchema = Yup?.object()?.shape({
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const { user, setUser, userData, setUserData, profile, setProfile } =
-    useContext(userContext);
+  const { user, setUser, setProfile } = useContext(userContext);
   const inputRef = useRef();
   const navigate = useNavigate();
 
@@ -127,10 +126,7 @@ const SignIn = () => {
           },
         })
         .then((res) => {
-          // console.log("Google API Response:", res.data);
           setProfile(res.data);
-
-          // console.log("Profile state:", profile);
           navigate(`/dashboard`);
         })
         .catch((err) => {
