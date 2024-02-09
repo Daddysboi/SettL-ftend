@@ -1,3 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800;900&display=swap");
 
 
+
+.paystack-button {
+  cursor: pointer;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  background-color: #0fef31;
+  font-weight: bold;
+  color: #e0eafc;
+  border: none;
+  border-radius: 5px;
+  width: 30%;
+  height: 30px;
+  margin-top: 10px;
+  &:hover{
+    background-color: #026712;
+  }
+}
