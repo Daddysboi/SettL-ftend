@@ -1,20 +1,22 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useGoogleLogin } from "@react-oauth/google";
 import * as Yup from "yup";
 import { sendOtp } from "../features/registerSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { TailSpin as Loader } from "react-loader-spinner";
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import AppSelectInput from "../Components/ReUseableComponent/AppSelectInput";
 import AppInput from "../Components/ReUseableComponent/AppInput";
+
 import googleImg from "../assets/images/flat-color-icons_google.svg";
-import { userContext } from "../App";
+import "react-toastify/dist/ReactToastify.css";
 
 //Form
 const StyledForm = styled.form`
@@ -109,7 +111,6 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const inputRef = useRef();
-  const { user, setUser, setProfile } = useContext(userContext);
 
   const navigate = useNavigate();
 
@@ -123,7 +124,6 @@ const Signup = () => {
       role: "",
     },
     validationSchema: RegisterSchema, //causin problems so i comment it out
-
     onSubmit: async (values, { resetForm }) => {
       console.log(values);
       setLoading(true);
@@ -152,36 +152,6 @@ const Signup = () => {
         });
     },
   });
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      // console.log("Google login success:", codeResponse);
-      // setUser(codeResponse);
-      // localStorage.setItem("googleUser", JSON.stringify(codeResponse));
-    },
-    onError: (error) => console.log("Login Failed:", error),
-  });
-
-  useEffect(() => {
-    // if (user && user.access_token) {
-    //   axios
-    //     .get("https://www.googleapis.com/oauth2/v1/userinfo", {
-    //       params: { access_token: user.access_token },
-    //       headers: {
-    //         Authorization: `Bearer ${user.access_token}`,
-    //         Accept: "application/json",
-    //       },
-    //     })
-    //     .then((res) => {
-    //       setProfile(res.data);
-    //       localStorage.setItem("googleUser", JSON.stringify(res.data));
-    //       navigate(`/dashboard`);
-    //     })
-    //     .catch((err) => {
-    //       console.error("Google API Error:", err);
-    //     });
-    // }
-  }, [user]);
 
   const roleOptions = [
     { label: "Buyer", value: "buyer" },
@@ -284,7 +254,7 @@ const Signup = () => {
         <StyledLineTxt>or</StyledLineTxt>
         <StyledLine></StyledLine>
       </StyledLineCont>
-      <StyledGoogleBtn type="button" onClick={() => googleLogin()}>
+      <StyledGoogleBtn type="button" onClick={() => {}}>
         <img
           src={googleImg}
           alt="googleImg"
@@ -294,13 +264,22 @@ const Signup = () => {
       </StyledGoogleBtn>
       <div>
         <StyledLineTxt style={{ marginLeft: "0" }}>
-          Already have an account? <NavLink to="/login"> Sign In</NavLink>
+          Already have an account?{" "}
+          <NavLink to="/login" style={{ textDecoration: "none" }}>
+            {" "}
+            Sign In
+          </NavLink>
         </StyledLineTxt>
         <StyleTermsTxt style={{ marginLeft: "0", fontSize: "0.55rem" }}>
           By creating an account you agree with our span{" "}
-          <Link to="/terms-and-conditions">Terms of Service</Link>,
-          <Link to="/privacy-policy">Privacy Policy </Link>, and our default
-          Notification Settings.
+          <Link style={{ textDecoration: "none" }} to="/terms-and-conditions">
+            Terms of Service
+          </Link>
+          ,
+          <Link to="/privacy-policy" style={{ textDecoration: "none" }}>
+            Privacy Policy{" "}
+          </Link>
+          , and our default Notification Settings.
         </StyleTermsTxt>
       </div>
     </AuthBackground>

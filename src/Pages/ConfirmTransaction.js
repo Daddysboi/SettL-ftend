@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { TailSpin as Loader } from "react-loader-spinner";
 import styled from "styled-components";
 import { toast } from "react-toastify";
@@ -35,8 +35,8 @@ const ConfirmTransaction = () => {
   const action = params.get("action");
   const transactionId = params.get("transactionId");
   const dispatch = useAppDispatch();
-  const [processingTransaction, setProcessingTransaction] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const handleAcceptOrDeclineTransaction = async () => {
     // Perform decision based on the action parameter

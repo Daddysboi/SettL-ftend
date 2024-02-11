@@ -8,21 +8,24 @@ import {
   faShoppingCart,
   faTools,
 } from "@fortawesome/free-solid-svg-icons";
-import { PaystackButton } from "react-paystack";
-import styled from "styled-components";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { PaystackButton } from "react-paystack";
+import styled from "styled-components";
+import "react-toastify/dist/ReactToastify.css";
 import { createTransaction } from "../../../features/transactionSlice";
-import FormList from "antd/es/form/FormList";
 import { USER_ID } from "../../../services/CONSTANTS";
 import { useAppDispatch } from "../../../redux/hooks";
 
 const StyledModal = styled(Modal)`
   margin-top: 15rem;
+
   background-color: #ffffff;
+
   align-items: center;
   justify-content: center;
+  /* margin: 5rem; */
+  width: 100%;
 
   .close-button {
     position: absolute;
@@ -33,14 +36,9 @@ const StyledModal = styled(Modal)`
   .bm-burger-bars {
     background: #373a47;
   }
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    margin-left: 10rem;
-  }
 `;
-
 const StyledHeader = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 `;
 
 const StyledBtnRole = styled.button`
@@ -51,13 +49,13 @@ const StyledBtnRole = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: transparent;
     border: 2px solid #f8701c;
     color: #f8701c;
   }
 `;
-
 const StyledButton = styled.button`
   background-color: #f26600;
   color: #ffffff;
@@ -67,7 +65,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s;
   position: absolute;
-  bottom: 1rem;
+  bottom: 0.5rem;
   right: 6rem;
 
   &:hover {
@@ -86,6 +84,7 @@ const StyledFormDiv = styled.div`
 const Styledlabel = styled.label`
   margin-top: 1rem;
   font-size: 0.7rem;
+  font-weight: bold;
 `;
 
 const StyledBackButton = styled.button`
@@ -97,8 +96,7 @@ const StyledBackButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   position: absolute;
-  bottom: 1rem;
-  padding: 8px;
+  bottom: 0.5rem;
   right: 2rem;
   &:hover {
     background-color: #f26600;
@@ -107,19 +105,15 @@ const StyledBackButton = styled.button`
 `;
 
 const StyledInput = styled.input`
+  /* width: 100%; */
+  /* margin: 10px 0; */
   padding: 0.2rem;
-  border: 1px solid rgba(223, 140, 82, 0.3);
+  border: 1px solid #000000;
   border-radius: 3px;
   display: block;
 `;
 
-const StyledError = styled.p`
-  color: red;
-  font-size: 0.5rem;
-`;
-
 Modal.setAppElement("#root");
-
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,
@@ -284,6 +278,36 @@ const TransactionFormPopup = ({
       case 1:
         return (
           <StyledFormDiv>
+            <StyledHeader>Create Transaction</StyledHeader>
+            <Styledlabel htmlFor="role">Select your role:</Styledlabel>
+            <div>
+              <StyledBtnRole
+                type="button"
+                onClick={() => {
+                  formik.setFieldValue("role", "seller");
+                  handleNext();
+                }}
+              >
+                <FontAwesomeIcon icon={faUser} /> Seller
+              </StyledBtnRole>{" "}
+              <StyledBtnRole
+                type="button"
+                onClick={() => {
+                  formik.setFieldValue("role", "buyer");
+                  handleNext();
+                }}
+              >
+                <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
+              </StyledBtnRole>
+            </div>
+            {formik.errors.role && formik.touched.role && (
+              <StyledError>{formik.errors.role}</StyledError>
+            )}
+          </StyledFormDiv>
+        );
+      case 2:
+        return (
+          <StyledFormDiv>
             <StyledHeader>Transaction Type</StyledHeader>
             <Styledlabel htmlFor="transactionType">
               Select transaction type:
@@ -310,7 +334,7 @@ const TransactionFormPopup = ({
             </div>
             {formik.errors.transactionType &&
               formik.touched.transactionType && (
-                <StyledError>{formik.errors.transactionType}</StyledError>
+                <div>{formik.errors.transactionType}</div>
               )}
           </StyledFormDiv>
         );
@@ -335,7 +359,7 @@ const TransactionFormPopup = ({
                   value={formik.values.amount}
                 />
                 {formik.errors.amount && formik.touched.amount && (
-                  <StyledError>{formik.errors.amount}</StyledError>
+                  <div>{formik.errors.amount}</div>
                 )}
               </div>
             )}
@@ -354,7 +378,7 @@ const TransactionFormPopup = ({
                 />
                 {formik.errors.deliveryAddress &&
                   formik.touched.deliveryAddress && (
-                    <StyledError>{formik.errors.deliveryAddress}</StyledError>
+                    <div>{formik.errors.deliveryAddress}</div>
                   )}
                 {formik.values.transactionType && (
                   <div>
@@ -371,7 +395,7 @@ const TransactionFormPopup = ({
                     />
                     {formik.errors.productName &&
                       formik.touched.productName && (
-                        <StyledError>{formik.errors.productName}</StyledError>
+                        <div>{formik.errors.productName}</div>
                       )}
                   </div>
                 )}
@@ -388,14 +412,11 @@ const TransactionFormPopup = ({
                     checked={formik.values.termsAndConditions}
                     onChange={formik.handleChange}
                   />
-                  Agree with terms and conditions{" "}
-                  <Link to="/terms-and-conditions"></Link>
+                  Agree with terms and conditions
                 </Styledlabel>
                 {formik.errors.termsAndConditions &&
                   formik.touched.termsAndConditions && (
-                    <StyledError>
-                      {formik.errors.termsAndConditions}
-                    </StyledError>
+                    <div>{formik.errors.termsAndConditions}</div>
                   )}
               </div>
             )}
@@ -418,7 +439,7 @@ const TransactionFormPopup = ({
             />
             {formik.errors.counterpartyName &&
               formik.touched.counterpartyName && (
-                <StyledError>{formik.errors.counterpartyName}</StyledError>
+                <div>{formik.errors.counterpartyName}</div>
               )}
 
             <Styledlabel htmlFor="counterpartyEmail">
@@ -450,7 +471,7 @@ const TransactionFormPopup = ({
             />
             {formik.errors.counterpartyPhone &&
               formik.touched.counterpartyPhone && (
-                <StyledError>{formik.errors.counterpartyPhone}</StyledError>
+                <div>{formik.errors.counterpartyPhone}</div>
               )}
           </div>
         );
@@ -471,11 +492,14 @@ const TransactionFormPopup = ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.setConditions}
-              style={{ display: "block" }}
+              style={{
+                display: "block",
+                border: "1px solid rgba(223, 140, 82, 0.3)",
+              }}
             ></textarea>
 
             {formik.errors.setConditions && formik.touched.setConditions && (
-              <StyledError>{formik.errors.setConditions}</StyledError>
+              <div>{formik.errors.setConditions}</div>
             )}
           </div>
         );
@@ -489,7 +513,7 @@ const TransactionFormPopup = ({
     <StyledModal
       isOpen={isOpen}
       // onRequestClose={onRequestClose}
-      contentStyledlabel="Transaction Form Modal"
+      contentLabel="Transaction Form Modal"
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
