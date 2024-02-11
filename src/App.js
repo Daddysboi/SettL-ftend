@@ -8,7 +8,6 @@ import { createContext, useEffect, useState } from "react";
 import Aos from "aos";
 import "aos/dist/aos.css";
 
-
 import "./App.css";
 import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   ContactOurSupport,
   SaveEmailToMailingList,
+  DisputeTransaction,
 } from "../services/utility.services";
 
 const initialState = {};
@@ -25,6 +26,22 @@ export const contactOurSupport = createAsyncThunk(
   async ({ fullName, email, message }) => {
     try {
       const resp = await ContactOurSupport({
+        fullName,
+        email,
+        message,
+      });
+      return resp;
+    } catch (error) {
+      throw error; // Throw the error to let Redux Toolkit handle the rejection
+    }
+  }
+);
+
+export const disputeTransaction = createAsyncThunk(
+  "disputeTransaction",
+  async ({ fullName, email, message }) => {
+    try {
+      const resp = await DisputeTransaction({
         fullName,
         email,
         message,

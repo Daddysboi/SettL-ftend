@@ -4,11 +4,9 @@ import * as Yup from "yup";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faTimes,
   faShoppingCart,
   faTools,
-  faMoneyBillWave,
 } from "@fortawesome/free-solid-svg-icons";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
@@ -153,9 +151,8 @@ const TransactionFormPopup = ({
     validationSchema: Yup.object({
       role: Yup.string().required("Please select your role"),
       transactionType: Yup.string().required("Please select transaction type"),
-      amount: Yup.number()
-        .required("Please enter transaction amount")
-        .positive("Amount must be positive"),
+      deliveryAddress: Yup.string().required("Please enter delivery address"),
+
       deliveryAddress: Yup.string().required("Please enter delivery address"),
       productName: Yup.string().required("Please enter the product name"),
       counterpartyName: Yup.string().when("role", {
@@ -191,14 +188,17 @@ const TransactionFormPopup = ({
     },
   });
 
+  const parsedAmount = parseFloat(formik.values.amount.replace(/,/g, ""));
+
   const handleCreateTransaction = async (reference) => {
     setLoading(true);
+
     let request = {
       reference: reference,
       buyerId: userId,
       formData: {
         transactionType: formik.values.transactionType,
-        amount: parseFloat(formik.values.amount),
+        amount: parsedAmount,
         deliveryAddress: formik.values.deliveryAddress,
         productName: formik.values.productName,
         counterpartyName: formik.values.counterpartyName,
@@ -228,7 +228,7 @@ const TransactionFormPopup = ({
 
   const componentProps = {
     email: formik.values.counterpartyEmail,
-    amount: parseFloat(formik.values.amount) * 100,
+    amount: parsedAmount * 100,
     metadata: {
       name: formik.values.counterpartyName,
       phone: formik.values.counterpartyPhone,
@@ -325,7 +325,12 @@ const TransactionFormPopup = ({
                   type="text"
                   id="amount"
                   name="amount"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const formattedAmount = e.target.value
+                      .replace(/\D/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    formik.setFieldValue("amount", formattedAmount);
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.amount}
                 />
@@ -416,7 +421,9 @@ const TransactionFormPopup = ({
                 <StyledError>{formik.errors.counterpartyName}</StyledError>
               )}
 
-            <Styledlabel htmlFor="counterpartyEmail">Email:</Styledlabel>
+            <Styledlabel htmlFor="counterpartyEmail">
+              Counterparty email:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyEmail"
@@ -430,7 +437,9 @@ const TransactionFormPopup = ({
                 <div>{formik.errors.counterpartyEmail}</div>
               )}
 
-            <Styledlabel htmlFor="counterpartyPhone">Phone Number:</Styledlabel>
+            <Styledlabel htmlFor="counterpartyPhone">
+              Counterparty phone number:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyPhone"
@@ -514,18 +523,16 @@ const TransactionFormPopup = ({
                   Back
                 </StyledBackButton>
               )}
-              {currentModalStep !== 4 &&
-                currentModalStep !== 1 &&
-                currentModalStep !== 2 && (
-                  <StyledButton
-                    type="button"
-                    onClick={() => {
-                      handleNext();
-                    }}
-                  >
-                    Save & Next
-                  </StyledButton>
-                )}
+              {currentModalStep !== 4 && currentModalStep !== 1 && (
+                <StyledButton
+                  type="button"
+                  onClick={() => {
+                    handleNext();
+                  }}
+                >
+                  Save & Next
+                </StyledButton>
+              )}
               {currentModalStep === 4 && (
                 <PaystackButton
                   type="button"

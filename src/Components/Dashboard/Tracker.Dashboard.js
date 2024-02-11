@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCodeCommit } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCodeCommit,
+  faEdit,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 const TrackerContainer = styled.div`
   margin: 0 auto;
@@ -35,6 +39,22 @@ const StyledInput = styled.input`
   }
 `;
 
+const SubmitButton = styled.button`
+  background-color: #4db6ac;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 3rem;
+  min-height: 42px;
+
+  &:hover {
+    background-color: #45a99e;
+  }
+`;
+
 const MilestoneItem = styled.li`
   display: flex;
   align-items: center;
@@ -58,12 +78,26 @@ const Line = styled.div`
 
 const MilestoneText = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const LocationText = styled.div`
   font-size: 1rem;
   margin-right: 10px;
+`;
+
+const DeleteButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4db6ac;
+  margin-left: 5px;
 `;
 
 const DateTimeWrapper = styled.div`
@@ -76,39 +110,48 @@ const DateTimeWrapper = styled.div`
 const DateText = styled.div`
   color: #4db6ac;
   font-size: 0.55rem;
+  margin-bottom: 0.25rem;
 `;
-
 const TimeText = styled.div`
   font-size: 0.55rem;
   color: #4db6ac;
+  margin-top: 0.25rem;
 `;
 
-const SubmitButton = styled.button`
-  background-color: #4db6ac;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-left: 3rem;
-  min-height: 42px;
-
-  &:hover {
-    background-color: #45a99e;
-  }
-`;
+const Timestamp = ({ timestamp }) => {
+  const formattedDate = new Date(timestamp).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const formattedTime = new Date(timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return (
+    <DateTimeWrapper>
+      <DateText>{formattedDate}</DateText>
+      <TimeText>{formattedTime}</TimeText>
+    </DateTimeWrapper>
+  );
+};
 
 const Tracker = () => {
   const [currentLocation, setCurrentLocation] = useState("");
   const [milestones, setMilestones] = useState([]);
 
-  const handleSubmit = () => {
+  const handleAddMilestone = () => {
     if (currentLocation.trim() !== "") {
-      const timestamp = new Date().toLocaleString().replace(/\//g, "-"); // Replace / with -
+      const timestamp = new Date().toISOString(); // Get current timestamp
       setMilestones([...milestones, { location: currentLocation, timestamp }]);
       setCurrentLocation("");
     }
+  };
+
+  const handleEditMilestone = (index, newLocation) => {
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index].location = newLocation;
+    setMilestones(updatedMilestones);
   };
 
   return (
@@ -121,7 +164,9 @@ const Tracker = () => {
           placeholder="Enter current location"
           onChange={(e) => setCurrentLocation(e.target.value)}
         />
-        <SubmitButton onClick={handleSubmit}>Submit Location</SubmitButton>
+        <SubmitButton onClick={handleAddMilestone}>
+          Submit Location
+        </SubmitButton>
       </div>
       <MilestoneList>
         <h2>Current Stop</h2>
@@ -132,11 +177,11 @@ const Tracker = () => {
               <FontAwesomeIcon icon={faCodeCommit} size="lg" color="#4db6ac" />
             </IconWrapper>
             <MilestoneText>
-              <LocationText>{milestone.location}</LocationText>
-              <DateTimeWrapper>
-                <DateText>{milestone.timestamp.split(" ")[0]}</DateText>
-                <TimeText>{milestone.timestamp.split(" ")[1]}</TimeText>
-              </DateTimeWrapper>
+              <div>
+                <LocationText>{milestone.location}</LocationText>
+                <DateText>{milestone.timestamp.split("T")[0]}</DateText>
+                <TimeText>{milestone.timestamp.split("T")[1]}</TimeText>
+              </div>
             </MilestoneText>
           </MilestoneItem>
         ))}

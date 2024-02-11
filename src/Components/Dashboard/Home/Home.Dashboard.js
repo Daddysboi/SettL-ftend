@@ -96,7 +96,14 @@ const StyledBtnCreate = styled.button`
   width: 5rem;
   color: #4db6ac;
   margin: 0.5rem;
+  border: 1px solid #4db6ac;
   padding: 0.2rem;
+  &:hover {
+    background-color: #4db6ac;
+    border: 1px solid #fff;
+    color: #fff;
+    box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
+  }
 `;
 
 const StyledCardOngoing = styled.div`

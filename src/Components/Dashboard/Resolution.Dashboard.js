@@ -5,7 +5,10 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import AppInput from "../ReUseableComponent/AppInput";
+import { USER_ID } from "../../services/CONSTANTS";
 import { useAppDispatch } from "../../redux/hooks";
+
+import { disputeTransaction } from "../../features/utilitySlice";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -52,6 +55,7 @@ const disputeValidationSchema = Yup.object().shape({
 const Resolution = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const userId = localStorage.getItem(USER_ID);
   const disputeFormik = useFormik({
     initialValues: {
       transactionId: "",
@@ -65,6 +69,7 @@ const Resolution = () => {
         transactionId: values.transactionId,
         reason: values.reason,
         description: values.description,
+        userId: userId,
       };
       dispatch(disputeTransaction(request))
         .then((resp) => {

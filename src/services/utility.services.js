@@ -29,3 +29,21 @@ export const ContactOurSupport = async ({ fullName, email, message }) => {
   );
   return response.data;
 };
+
+export const DisputeTransaction = async ({
+  transactionId,
+  reason,
+  description,
+}) => {
+  const data = { transactionId, reason, description };
+  const response = await axios.post(
+    `${process.env.REACT_APP_API_BASE_URL}/${DISPUTE_TRANSACTION}`,
+    data,
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
+  return response.data;
+};
