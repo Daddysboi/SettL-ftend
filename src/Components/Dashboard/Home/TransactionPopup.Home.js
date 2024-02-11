@@ -12,6 +12,7 @@ import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { TailSpin as Loader } from "react-loader-spinner";
 
 import { createTransaction } from "../../../features/transactionSlice";
 import FormList from "antd/es/form/FormList";
@@ -61,7 +62,7 @@ const StyledBtnRole = styled.button`
 const StyledButton = styled.button`
   background-color: #f26600;
   color: #ffffff;
-  padding: 8px;
+  padding: 7px 8px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -72,8 +73,9 @@ const StyledButton = styled.button`
 
   &:hover {
     background-color: transparent;
-    border: 2px solid #f8701c;
+    border: 1px solid #f8701c;
     color: #f8701c;
+    padding: 6px;
   }
 `;
 
@@ -98,7 +100,7 @@ const StyledBackButton = styled.button`
   transition: background-color 0.3s, color 0.3s;
   position: absolute;
   bottom: 1rem;
-  padding: 8px;
+  padding: 6px 10px;
   right: 2rem;
   &:hover {
     background-color: #f26600;
@@ -107,6 +109,13 @@ const StyledBackButton = styled.button`
 `;
 
 const StyledInput = styled.input`
+  padding: 0.2rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  border-radius: 3px;
+  display: block;
+`;
+
+const StyledTextArea = styled.textarea`
   padding: 0.2rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
   border-radius: 3px;
@@ -462,7 +471,7 @@ const TransactionFormPopup = ({
               Enter terms for purchase:
             </Styledlabel>
 
-            <textarea
+            <StyledTextArea
               type="text"
               name="setConditions"
               id="setConditions"
@@ -472,7 +481,7 @@ const TransactionFormPopup = ({
               onBlur={formik.handleBlur}
               value={formik.values.setConditions}
               style={{ display: "block" }}
-            ></textarea>
+            ></StyledTextArea>
 
             {formik.errors.setConditions && formik.touched.setConditions && (
               <StyledError>{formik.errors.setConditions}</StyledError>
@@ -512,6 +521,15 @@ const TransactionFormPopup = ({
       }}
     >
       <>
+        {loading && (
+          <Loader
+            type="TailSpin"
+            color="#ff4500"
+            height={20}
+            width={20}
+            style={{ margin: "auto" }}
+          />
+        )}
         {loading ? (
           "Confirming transaction..."
         ) : (
