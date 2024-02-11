@@ -7,10 +7,6 @@ import * as Yup from "yup";
 import { sendOtp } from "../features/registerSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { TailSpin as Loader } from "react-loader-spinner";
-<<<<<<< HEAD
-
-=======
->>>>>>> staging
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import AppSelectInput from "../Components/ReUseableComponent/AppSelectInput";
 import AppInput from "../Components/ReUseableComponent/AppInput";
