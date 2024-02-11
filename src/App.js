@@ -36,14 +36,7 @@ const router = createBrowserRouter(
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
-      <Route
-        path="/otp"
-        element={
-          <AuthGuard>
-            <Otp />
-          </AuthGuard>
-        }
-      />
+      <Route path="/otp" element={<Otp />} />
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
         <Route
