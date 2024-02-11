@@ -160,10 +160,10 @@ const StyledLine = styled.div`
 `;
 
 const StyledDetailsBtn = styled.button`
-  background-color: #4db6ac;
+  background-color: #f26600;
   color: #ffffff;
   border-radius: 0.4rem;
-  padding: 0.3rem 1rem;
+  padding: 0.5rem 1rem;
   border: none;
 `;
 
@@ -332,8 +332,14 @@ const Home = () => {
               <StyledCardOngoingTop>
                 <StyledCardOngoingTopTxt>
                   Ongoing Transactions:{" "}
-                  <span style={{ color: "#4db6ac", fontSize: "0.8rem" }}>
-                    3
+                  <span
+                    style={{
+                      color: "#f26600",
+                      fontSize: "1rem",
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    1
                   </span>
                 </StyledCardOngoingTopTxt>
                 <div>
@@ -371,7 +377,9 @@ const Home = () => {
                 <StyledCardTxt>New pair of shoes</StyledCardTxt>
                 <StyledCardTxt>Counterparty: Footwarefairy</StyledCardTxt>
                 <StyledLine></StyledLine>
-                <StyledDetailsBtn>View Details</StyledDetailsBtn>
+                <StyledDetailsBtn>
+                  Mark Transaction as Complete
+                </StyledDetailsBtn>
               </StyledCardOngoingBtm>
             </StyledCardOngoing>
           </StyledCardContainerMid>
