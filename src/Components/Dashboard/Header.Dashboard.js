@@ -90,34 +90,6 @@ const Header = () => {
   //   setIsSellerMode(checked);
   // };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const url =
-          "https://res.cloudinary.com/daj31htoa/image/upload/v1706072203/WhatsApp_Image_2022-12-22_at_4.29.04_AM_-_Copy_b0ui8d.jpg";
-        const res = await axios.get(url, userData, {});
-
-        if (res.status === 200) {
-          const contentType = res.headers["content-type"];
-          if (contentType.includes("image")) {
-            setUserData((prevUserData) => ({
-              ...prevUserData,
-              profilePicture: url,
-            }));
-          }
-        } else {
-          console.error("Failed to fetch user data");
-        }
-      } catch (error) {
-        console.error("Error loading user data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImage();
-  }, []);
-
   return (
     <StyledContainer>
       <StyledLogo to="/">

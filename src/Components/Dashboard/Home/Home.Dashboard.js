@@ -6,6 +6,9 @@ import {
   faArrowCircleRight,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+
+import Table_transaction_data from "../../../Data/Table_transaction_data.json";
 import TransactionFormPopup from "./TransactionPopup.Home";
 
 const StyledCardContainerTop = styled.div`
@@ -263,7 +266,7 @@ const Home = () => {
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
-  const [depositCount, setDepositCount] = useState(0);
+  const [revenue, setRevenue] = useState(0);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
 
   const handleCreateTransaction = () => {
@@ -271,23 +274,21 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        url = "";
-        const { data } = await axios.get(url);
-
-        setTotalTransactions(data.totalTransactions || 0);
-        setWalletBalance(data.walletBalance || 0);
-        setWithdrawalCount(data.withdrawalCount || 0);
-        setDepositCount(data.depositCount || 0);
-        setOngoingTransactions(data.ongoingTransactions || []);
-        setRecentTransactions(data.recentTransactions || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const url = "";
+    //     const { data } = await axios.get(url);
+    //     setTotalTransactions(data.totalTransactions || 0);
+    //     setWalletBalance(data.walletBalance || 0);
+    //     setWithdrawalCount(data.withdrawalCount || 0);
+    //     setRevenue(data.revenue || 0);
+    //     setOngoingTransactions(data.ongoingTransactions || []);
+    //     setRecentTransactions(data.recentTransactions || []);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
+    // fetchData();
   }, []);
 
   return (
@@ -307,12 +308,12 @@ const Home = () => {
             </StyledCardPair>
             <StyledCardPair>
               <StyledCard>
-                <StyledCardTxt>Withdrawal</StyledCardTxt>
+                <StyledCardTxt>No of Withdrawals</StyledCardTxt>
                 <p>{withdrawalCount}</p>
               </StyledCard>
               <StyledCard>
-                <StyledCardTxt>Deposit</StyledCardTxt>
-                <p>NGN {depositCount.toFixed(2)}</p>
+                <StyledCardTxt>Revenue</StyledCardTxt>
+                <p>NGN {revenue.toFixed(2)}</p>
               </StyledCard>
             </StyledCardPair>
           </StyledCardContainerTop>
@@ -390,38 +391,24 @@ const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2341</StyledTd>
-                  <StyledTd>New pair of shoes</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>23/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>8/2/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N40,000</StyledTd>
-                  <StyledTd>pending</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2342</StyledTd>
-                  <StyledTd>LV Shirt</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>20/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>6/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N16,000</StyledTd>
-                  <StyledTd>pending</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2343</StyledTd>
-                  <StyledTd>Man. Utd track suit</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>10/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>23/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N25,000</StyledTd>
-                  <StyledTd>complete</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2344</StyledTd>
-                  <StyledTd>Torbo P cap</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>10/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>8/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N2,500</StyledTd>
-                  <StyledTd>complete</StyledTd>
-                </tr>
+                {Table_transaction_data.map((transaction) => (
+                  <tr key={transaction.id}>
+                    <StyledTd style={{ textAlign: "center" }}>
+                      {transaction.id}
+                    </StyledTd>
+                    <StyledTd>{transaction.title}</StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.dateCreated}
+                    </StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.dateDue}
+                    </StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.amount}
+                    </StyledTd>
+                    <StyledTd>{transaction.status}</StyledTd>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </StyledCardContainerBtm>{" "}
