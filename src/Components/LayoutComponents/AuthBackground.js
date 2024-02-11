@@ -153,6 +153,7 @@ const AuthBackground = ({
   children,
   headText = "Hey, hello",
   subText = "Enter the information you entered while registering",
+  fontSize
 }) => {
   return (
     <StyledContainer>

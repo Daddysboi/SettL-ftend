@@ -38,9 +38,7 @@ const AppSelectInput = ({ label, value, onChange, error, options }) => {
     <StyledSelectContainer>
       <StyledLabel htmlFor="role">{label}</StyledLabel>
       <StyledSelect name="role" value={value} onChange={onChange}>
-        <option value="select" disabled>
-          Select...
-        </option>
+        <option value="">Select...</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

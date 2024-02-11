@@ -4,27 +4,26 @@ import * as Yup from "yup";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faTimes,
   faShoppingCart,
   faTools,
-  faMoneyBillWave,
 } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
-import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { TailSpin as Loader } from "react-loader-spinner";
+
+import { createTransaction } from "../../../features/transactionSlice";
+import FormList from "antd/es/form/FormList";
+import { USER_ID } from "../../../services/CONSTANTS";
+import { useAppDispatch } from "../../../redux/hooks";
 
 const StyledModal = styled(Modal)`
   margin-top: 15rem;
-
   background-color: #ffffff;
-
   align-items: center;
   justify-content: center;
-  /* margin: 5rem; */
-  width: 100%;
 
   .close-button {
     position: absolute;
@@ -35,9 +34,14 @@ const StyledModal = styled(Modal)`
   .bm-burger-bars {
     background: #373a47;
   }
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-left: 10rem;
+  }
 `;
+
 const StyledHeader = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 `;
 
 const StyledBtnRole = styled.button`
@@ -48,29 +52,30 @@ const StyledBtnRole = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-
   &:hover {
     background-color: transparent;
     border: 2px solid #f8701c;
     color: #f8701c;
   }
 `;
+
 const StyledButton = styled.button`
   background-color: #f26600;
   color: #ffffff;
-  padding: 8px;
+  padding: 7px 8px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1rem;
   right: 6rem;
 
   &:hover {
     background-color: transparent;
-    border: 2px solid #f8701c;
+    border: 1px solid #f8701c;
     color: #f8701c;
+    padding: 6px;
   }
 `;
 
@@ -78,8 +83,11 @@ const StyledFormDiv = styled.div`
   background-color: transparent;
   padding: 20px;
   border-radius: 10px;
-  /* position: relative; */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+`;
+
+const Styledlabel = styled.label`
+  margin-top: 1rem;
+  font-size: 0.7rem;
 `;
 
 const StyledBackButton = styled.button`
@@ -91,7 +99,8 @@ const StyledBackButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1rem;
+  padding: 6px 10px;
   right: 2rem;
   &:hover {
     background-color: #f26600;
@@ -100,15 +109,26 @@ const StyledBackButton = styled.button`
 `;
 
 const StyledInput = styled.input`
-  /* width: 100%; */
-  /* margin: 10px 0; */
   padding: 0.2rem;
-  border: 1px solid #000000;
+  border: 1px solid rgba(223, 140, 82, 0.3);
   border-radius: 3px;
   display: block;
 `;
 
+const StyledTextArea = styled.textarea`
+  padding: 0.2rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  border-radius: 3px;
+  display: block;
+`;
+
+const StyledError = styled.p`
+  color: red;
+  font-size: 0.5rem;
+`;
+
 Modal.setAppElement("#root");
+
 const TransactionFormPopup = ({
   isOpen,
   onRequestClose,
@@ -116,6 +136,14 @@ const TransactionFormPopup = ({
   currentStep,
 }) => {
   const [currentModalStep, setCurrentModalStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem(USER_ID);
+  const isSecure = window.location.protocol === "https:";
+  const text = `${isSecure ? "https" : "http"}://${
+    window.location.host
+  }/confirm-transaction`;
+  const encodedLink = encodeURI(text);
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       role: "",
@@ -132,9 +160,8 @@ const TransactionFormPopup = ({
     validationSchema: Yup.object({
       role: Yup.string().required("Please select your role"),
       transactionType: Yup.string().required("Please select transaction type"),
-      amount: Yup.number()
-        .required("Please enter transaction amount")
-        .positive("Amount must be positive"),
+      deliveryAddress: Yup.string().required("Please enter delivery address"),
+
       deliveryAddress: Yup.string().required("Please enter delivery address"),
       productName: Yup.string().required("Please enter the product name"),
       counterpartyName: Yup.string().when("role", {
@@ -166,13 +193,51 @@ const TransactionFormPopup = ({
     }),
     onSubmit: (values) => {
       console.log("Form submitted with values:", values);
-      onCreateTransaction(values);
+      // onCreateTransaction(values);
     },
   });
 
+  const parsedAmount = parseFloat(formik.values.amount.replace(/,/g, ""));
+
+  const handleCreateTransaction = async (reference) => {
+    setLoading(true);
+
+    let request = {
+      reference: reference,
+      buyerId: userId,
+      formData: {
+        transactionType: formik.values.transactionType,
+        amount: parsedAmount,
+        deliveryAddress: formik.values.deliveryAddress,
+        productName: formik.values.productName,
+        counterpartyName: formik.values.counterpartyName,
+        counterpartyEmail: formik.values.counterpartyEmail,
+        counterpartyPhone: formik.values.counterpartyPhone,
+        setConditions: formik.values.setConditions,
+        termsAndConditions: formik.values.termsAndConditions,
+      },
+      redirectUrl: encodedLink,
+    };
+    dispatch(createTransaction(request))
+      .then((resp) => {
+        if (resp?.payload?.status !== 201) {
+          toast.error(resp?.payload?.message || "Something went wrong");
+          setLoading(false);
+          return;
+        }
+        onRequestClose();
+        toast.success(resp?.payload?.message || "Please check your inbox");
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error?.message || "Something went wrong");
+        setLoading(false);
+      });
+  };
+
   const componentProps = {
     email: formik.values.counterpartyEmail,
-    amount: parseFloat(formik.values.amount) * 100,
+    amount: parsedAmount * 100,
     metadata: {
       name: formik.values.counterpartyName,
       phone: formik.values.counterpartyPhone,
@@ -180,9 +245,7 @@ const TransactionFormPopup = ({
     publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
     text: "Pay",
     onSuccess: ({ reference }) => {
-      alert(
-        `Your transaction was successful! Transaction reference: ${reference}`
-      );
+      handleCreateTransaction(reference);
     },
     onClose: () => alert("Transaction Cancelled"),
   };
@@ -197,41 +260,43 @@ const TransactionFormPopup = ({
 
   const renderStepContent = () => {
     switch (currentModalStep) {
+      // case 1:
+      //   return (
+      //     <StyledFormDiv>
+      //       <StyledHeader>Create Transaction</StyledHeader>
+      //       <Styledlabel htmlFor="role">Select your role:</Styledlabel>
+      //       <div>
+      //         <StyledBtnRole
+      //           type="button"
+      //           onClick={() => {
+      //             formik.setFieldValue("role", "seller");
+      //             handleNext();
+      //           }}
+      //         >
+      //           <FontAwesomeIcon icon={faUser} /> Seller
+      //         </StyledBtnRole>{" "}
+      //         <StyledBtnRole
+      //           type="button"
+      //           onClick={() => {
+      //             formik.setFieldValue("role", "buyer");
+      //             handleNext();
+      //           }}
+      //         >
+      //           <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
+      //         </StyledBtnRole>
+      //       </div>
+      //       {formik.errors.role && formik.touched.role && (
+      //         <StyledError>{formik.errors.role}</StyledError>
+      //       )}
+      //     </StyledFormDiv>
+      //   );
       case 1:
         return (
           <StyledFormDiv>
-            <StyledHeader>Create Transaction</StyledHeader>
-            <label htmlFor="role">Select your role:</label>
-            <div>
-              <StyledBtnRole
-                type="button"
-                onClick={() => {
-                  formik.setFieldValue("role", "seller");
-                  handleNext();
-                }}
-              >
-                <FontAwesomeIcon icon={faUser} /> Seller
-              </StyledBtnRole>{" "}
-              <StyledBtnRole
-                type="button"
-                onClick={() => {
-                  formik.setFieldValue("role", "buyer");
-                  handleNext();
-                }}
-              >
-                <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
-              </StyledBtnRole>
-            </div>
-            {formik.errors.role && formik.touched.role && (
-              <div>{formik.errors.role}</div>
-            )}
-          </StyledFormDiv>
-        );
-      case 2:
-        return (
-          <StyledFormDiv>
             <StyledHeader>Transaction Type</StyledHeader>
-            <label htmlFor="transactionType">Select transaction type:</label>
+            <Styledlabel htmlFor="transactionType">
+              Select transaction type:
+            </Styledlabel>
             <div>
               <StyledBtnRole
                 type="button"
@@ -254,33 +319,40 @@ const TransactionFormPopup = ({
             </div>
             {formik.errors.transactionType &&
               formik.touched.transactionType && (
-                <div>{formik.errors.transactionType}</div>
+                <StyledError>{formik.errors.transactionType}</StyledError>
               )}
           </StyledFormDiv>
         );
-      case 3:
+      case 2:
         return (
           <div>
             <StyledHeader>Transaction Details</StyledHeader>
             {formik.values.transactionType && (
               <div>
-                <label htmlFor="amount">Transaction amount:</label>
+                <Styledlabel htmlFor="amount">Transaction amount:</Styledlabel>
                 <StyledInput
                   type="text"
                   id="amount"
                   name="amount"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const formattedAmount = e.target.value
+                      .replace(/\D/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    formik.setFieldValue("amount", formattedAmount);
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.amount}
                 />
                 {formik.errors.amount && formik.touched.amount && (
-                  <div>{formik.errors.amount}</div>
+                  <StyledError>{formik.errors.amount}</StyledError>
                 )}
               </div>
             )}
             {formik.values.transactionType && (
               <div>
-                <label htmlFor="deliveryAddress">Delivery address:</label>
+                <Styledlabel htmlFor="deliveryAddress">
+                  Delivery address:
+                </Styledlabel>
                 <StyledInput
                   type="text"
                   id="deliveryAddress"
@@ -291,13 +363,13 @@ const TransactionFormPopup = ({
                 />
                 {formik.errors.deliveryAddress &&
                   formik.touched.deliveryAddress && (
-                    <div>{formik.errors.deliveryAddress}</div>
+                    <StyledError>{formik.errors.deliveryAddress}</StyledError>
                   )}
                 {formik.values.transactionType && (
                   <div>
-                    <label htmlFor="productName">
+                    <Styledlabel htmlFor="productName">
                       What product are you buying:
-                    </label>
+                    </Styledlabel>
                     <StyledInput
                       type="text"
                       id="productName"
@@ -308,7 +380,7 @@ const TransactionFormPopup = ({
                     />
                     {formik.errors.productName &&
                       formik.touched.productName && (
-                        <div>{formik.errors.productName}</div>
+                        <StyledError>{formik.errors.productName}</StyledError>
                       )}
                   </div>
                 )}
@@ -317,7 +389,7 @@ const TransactionFormPopup = ({
 
             {currentStep === "payment" && (
               <div>
-                <label>
+                <Styledlabel>
                   <StyledInput
                     type="checkbox"
                     id="termsAndConditions"
@@ -325,21 +397,26 @@ const TransactionFormPopup = ({
                     checked={formik.values.termsAndConditions}
                     onChange={formik.handleChange}
                   />
-                  Agree with terms and conditions
-                </label>
+                  Agree with terms and conditions{" "}
+                  <Link to="/terms-and-conditions"></Link>
+                </Styledlabel>
                 {formik.errors.termsAndConditions &&
                   formik.touched.termsAndConditions && (
-                    <div>{formik.errors.termsAndConditions}</div>
+                    <StyledError>
+                      {formik.errors.termsAndConditions}
+                    </StyledError>
                   )}
               </div>
             )}
           </div>
         );
-      case 4:
+      case 3:
         return (
           <div>
             <StyledHeader>Invite Counterparty</StyledHeader>
-            <label htmlFor="counterpartyName">Counterparty name:</label>
+            <Styledlabel htmlFor="counterpartyName">
+              Counterparty name:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyName"
@@ -350,10 +427,12 @@ const TransactionFormPopup = ({
             />
             {formik.errors.counterpartyName &&
               formik.touched.counterpartyName && (
-                <div>{formik.errors.counterpartyName}</div>
+                <StyledError>{formik.errors.counterpartyName}</StyledError>
               )}
 
-            <label htmlFor="counterpartyEmail">Email:</label>
+            <Styledlabel htmlFor="counterpartyEmail">
+              Counterparty email:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyEmail"
@@ -367,7 +446,9 @@ const TransactionFormPopup = ({
                 <div>{formik.errors.counterpartyEmail}</div>
               )}
 
-            <label htmlFor="counterpartyPhone">Phone Number:</label>
+            <Styledlabel htmlFor="counterpartyPhone">
+              Counterparty phone number:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyPhone"
@@ -378,17 +459,19 @@ const TransactionFormPopup = ({
             />
             {formik.errors.counterpartyPhone &&
               formik.touched.counterpartyPhone && (
-                <div>{formik.errors.counterpartyPhone}</div>
+                <StyledError>{formik.errors.counterpartyPhone}</StyledError>
               )}
           </div>
         );
-      case 5:
+      case 4:
         return (
           <div>
             <StyledHeader>Set Conditions</StyledHeader>
-            <label htmlFor="counterpartyName">Enter terms for purchase:</label>
+            <Styledlabel htmlFor="counterpartyName">
+              Enter terms for purchase:
+            </Styledlabel>
 
-            <textarea
+            <StyledTextArea
               type="text"
               name="setConditions"
               id="setConditions"
@@ -398,10 +481,10 @@ const TransactionFormPopup = ({
               onBlur={formik.handleBlur}
               value={formik.values.setConditions}
               style={{ display: "block" }}
-            ></textarea>
+            ></StyledTextArea>
 
             {formik.errors.setConditions && formik.touched.setConditions && (
-              <div>{formik.errors.setConditions}</div>
+              <StyledError>{formik.errors.setConditions}</StyledError>
             )}
           </div>
         );
@@ -415,7 +498,7 @@ const TransactionFormPopup = ({
     <StyledModal
       isOpen={isOpen}
       // onRequestClose={onRequestClose}
-      contentLabel="Transaction Form Modal"
+      contentStyledlabel="Transaction Form Modal"
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -437,40 +520,55 @@ const TransactionFormPopup = ({
         },
       }}
     >
-      {renderStepContent()}
-      <div>
-        {currentModalStep !== 1 && (
-          <StyledBackButton type="button" onClick={handleBack}>
-            Back
-          </StyledBackButton>
-        )}
-        {currentModalStep !== 5 &&
-          currentModalStep !== 1 &&
-          currentModalStep !== 2 && (
-            <StyledButton
-              type="button"
-              onClick={() => {
-                handleNext();
-              }}
-            >
-              Save & Next
-            </StyledButton>
-          )}
-        {currentModalStep === 5 && (
-          <PaystackButton
-            type="button"
-            onClick={() => {
-              // formik.handleSubmit();
-              handlePayment();
-            }}
-            className="paystack-button"
-            {...componentProps}
+      <>
+        {loading && (
+          <Loader
+            type="TailSpin"
+            color="#ff4500"
+            height={20}
+            width={20}
+            style={{ margin: "auto" }}
           />
         )}
-      </div>
-      <div className="close-button" onClick={onRequestClose}>
-        <FontAwesomeIcon icon={faTimes} />
-      </div>
+        {loading ? (
+          "Confirming transaction..."
+        ) : (
+          <>
+            {renderStepContent()}
+            <div>
+              {currentModalStep !== 1 && (
+                <StyledBackButton type="button" onClick={handleBack}>
+                  Back
+                </StyledBackButton>
+              )}
+              {currentModalStep !== 4 && currentModalStep !== 1 && (
+                <StyledButton
+                  type="button"
+                  onClick={() => {
+                    handleNext();
+                  }}
+                >
+                  Save & Next
+                </StyledButton>
+              )}
+              {currentModalStep === 4 && (
+                <PaystackButton
+                  type="button"
+                  onClick={() => {
+                    // formik.handleSubmit();
+                    handlePayment();
+                  }}
+                  className="paystack-button"
+                  {...componentProps}
+                />
+              )}
+            </div>
+            <div className="close-button" onClick={onRequestClose}>
+              <FontAwesomeIcon icon={faTimes} />
+            </div>
+          </>
+        )}
+      </>
     </StyledModal>
   );
 };

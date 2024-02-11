@@ -16,11 +16,12 @@ import RootLayout from "./RootLayout/RootLayout";
 import SignIn from "./Pages/SignIn";
 import Error404 from "./Pages/Error404";
 import TermsAndConditions from "./Pages/TermsofService";
-import Payment from "./Components/Payment";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Otp from "./Pages/Otp";
+import ConfirmTransaction from "./Pages/ConfirmTransaction";
+import AuthGuard from "./AuthGuard";
 
 export const userContext = createContext();
 
@@ -31,17 +32,28 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
+      <Route path="/dashboard" index element={<Dashboard />} />
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
-      <Route path="/otp" element={<Otp />} />
-      <Route path="/dashboard" index element={<Dashboard />}></Route>
+      <Route
+        path="/otp"
+        element={
+          <AuthGuard>
+            <Otp />
+          </AuthGuard>
+        }
+      />
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
+        <Route
+          path="/confirm-transaction"
+          element={<ConfirmTransaction />}
+        ></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-        <Route path="/payment" element={<Payment />} />
+
         <Route path="*" element={<Error404 />} />
       </Route>
     </Route>

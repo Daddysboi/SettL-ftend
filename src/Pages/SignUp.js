@@ -1,18 +1,20 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useGoogleLogin } from "@react-oauth/google";
 import * as Yup from "yup";
 import { sendOtp } from "../features/registerSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { TailSpin as Loader } from "react-loader-spinner";
+
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import AppSelectInput from "../Components/ReUseableComponent/AppSelectInput";
 import AppInput from "../Components/ReUseableComponent/AppInput";
-
 import googleImg from "../assets/images/flat-color-icons_google.svg";
-import "react-toastify/dist/ReactToastify.css";
+import { userContext } from "../App";
 
 //Form
 const StyledForm = styled.form`
@@ -100,13 +102,14 @@ const RegisterSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .required("Required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  role: Yup.string(),
+  role: Yup.string().required("Required"),
 });
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const inputRef = useRef();
+  const { user, setUser, setProfile } = useContext(userContext);
 
   const navigate = useNavigate();
 
@@ -120,12 +123,15 @@ const Signup = () => {
       role: "",
     },
     validationSchema: RegisterSchema, //causin problems so i comment it out
+
     onSubmit: async (values, { resetForm }) => {
+      console.log(values);
       setLoading(true);
       let request = {
         firstName: values?.firstName,
         lastName: values?.lastName,
         email: values?.email?.toLowerCase(),
+        role: values?.role,
         password: values?.password,
       };
       dispatch(sendOtp({ email: request?.email }))
@@ -146,6 +152,36 @@ const Signup = () => {
         });
     },
   });
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      // console.log("Google login success:", codeResponse);
+      // setUser(codeResponse);
+      // localStorage.setItem("googleUser", JSON.stringify(codeResponse));
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
+
+  useEffect(() => {
+    // if (user && user.access_token) {
+    //   axios
+    //     .get("https://www.googleapis.com/oauth2/v1/userinfo", {
+    //       params: { access_token: user.access_token },
+    //       headers: {
+    //         Authorization: `Bearer ${user.access_token}`,
+    //         Accept: "application/json",
+    //       },
+    //     })
+    //     .then((res) => {
+    //       setProfile(res.data);
+    //       localStorage.setItem("googleUser", JSON.stringify(res.data));
+    //       navigate(`/dashboard`);
+    //     })
+    //     .catch((err) => {
+    //       console.error("Google API Error:", err);
+    //     });
+    // }
+  }, [user]);
 
   const roleOptions = [
     { label: "Buyer", value: "buyer" },
@@ -248,7 +284,7 @@ const Signup = () => {
         <StyledLineTxt>or</StyledLineTxt>
         <StyledLine></StyledLine>
       </StyledLineCont>
-      <StyledGoogleBtn type="button" onClick={() => {}}>
+      <StyledGoogleBtn type="button" onClick={() => googleLogin()}>
         <img
           src={googleImg}
           alt="googleImg"

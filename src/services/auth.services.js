@@ -44,6 +44,7 @@ export const Register = async ({
   lastName,
   email,
   password,
+  role,
   otp,
 }) => {
   const registerData = {
@@ -51,6 +52,7 @@ export const Register = async ({
     lastName,
     email,
     password,
+    role,
     otp,
   };
   const response = await axios.post(

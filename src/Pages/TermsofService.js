@@ -1,15 +1,23 @@
-import React from "react";
+import styled from "styled-components";
 
+const StyledContainer = styled.div`
+  padding: 3rem;
+`;
+
+const StyledSubHead = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+`;
 const TermsAndConditions = () => {
   return (
-    <div>
+    <StyledContainer>
       <article>
         <header>
           <h1>Terms and Conditions</h1>
         </header>
 
         <section>
-          <h2>1. Acceptance of Terms</h2>
+          <StyledSubHead>1. Acceptance of Terms</StyledSubHead>
           <p>
             By using Settl's services, you agree to comply with and be bound by
             these Terms and Conditions.
@@ -17,7 +25,7 @@ const TermsAndConditions = () => {
         </section>
 
         <section>
-          <h2>2. User Responsibilities</h2>
+          <StyledSubHead>2. User Responsibilities</StyledSubHead>
           <p>
             You are responsible for maintaining the confidentiality of your
             account and password and for restricting access to your account.
@@ -25,7 +33,7 @@ const TermsAndConditions = () => {
         </section>
 
         <section>
-          <h2>3. Prohibited Conduct</h2>
+          <StyledSubHead>3. Prohibited Conduct</StyledSubHead>
           <p>
             You shall not engage in any conduct that, in our sole discretion,
             restricts or inhibits any other user from using or enjoying the
@@ -34,7 +42,7 @@ const TermsAndConditions = () => {
         </section>
 
         <section>
-          <h2>4. Limitation of Liability</h2>
+          <StyledSubHead>4. Limitation of Liability</StyledSubHead>
           <p>
             We shall not be liable for any indirect, incidental, special,
             consequential, or punitive damages, or any loss of profits or
@@ -43,15 +51,15 @@ const TermsAndConditions = () => {
         </section>
 
         <section>
-          <h2>5. Governing Law</h2>
+          <StyledSubHead>5. Governing Law</StyledSubHead>
           <p>
             These Terms and Conditions are governed by and construed in
-            accordance with the laws of [Your Jurisdiction].
+            accordance with the laws of Nigeria.
           </p>
         </section>
 
         <section>
-          <h2>6. Changes to Terms</h2>
+          <StyledSubHead>6. Changes to Terms</StyledSubHead>
           <p>
             We reserve the right to change these Terms and Conditions at any
             time. Updated terms will be effective upon posting.
@@ -59,14 +67,14 @@ const TermsAndConditions = () => {
         </section>
 
         <section>
-          <h2>Contact Information</h2>
+          <StyledSubHead>Contact Information</StyledSubHead>
           <p>
             If you have any questions about these Terms and Conditions, please
-            contact us at:
+            contact us at support@settl.com
           </p>
         </section>
       </article>
-    </div>
+    </StyledContainer>
   );
 };
 

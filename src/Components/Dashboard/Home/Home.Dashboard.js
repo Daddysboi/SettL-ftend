@@ -13,6 +13,26 @@ const StyledCardContainerTop = styled.div`
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 5rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+`;
+
+const StyledCardPair = styled.div`
+  display: flex;
+  gap: 1rem;
+
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
 `;
 
 const StyledCard = styled.div`
@@ -21,6 +41,14 @@ const StyledCard = styled.div`
   width: 8.7rem;
   height: 5rem;
   padding: 0.2rem 1.2rem;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 5rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
 `;
 
 const StyledCardTxt = styled.p`
@@ -31,6 +59,14 @@ const StyledCardContainerMid = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-bottom: 2rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
 `;
 
 const StyledWalletCard = styled.div`
@@ -60,15 +96,30 @@ const StyledBtnCreate = styled.button`
   width: 5rem;
   color: #4db6ac;
   margin: 0.5rem;
+  border: 1px solid #4db6ac;
   padding: 0.2rem;
+  &:hover {
+    background-color: #4db6ac;
+    border: 1px solid #fff;
+    color: #fff;
+    box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
+  }
 `;
 
 const StyledCardOngoing = styled.div`
   height: 14rem;
-
   font-size: 1rem;
   font-weight: 400;
   width: 30rem;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 15rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 17rem;
+  }
 `;
 
 const StyledCardOngoingTop = styled.div`
@@ -94,13 +145,51 @@ const StyledLine = styled.div`
   background: #000000;
   opacity: 0.2;
   margin-bottom: 1rem;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 12rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 14rem;
+  }
 `;
+
 const StyledDetailsBtn = styled.button`
   background-color: #4db6ac;
   color: #ffffff;
   border-radius: 0.4rem;
   padding: 0.3rem 1rem;
   border: none;
+`;
+
+const StyledHeaderBtm = styled.h4`
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  margin-right: 0.5rem;
+  color: #4db6ac;
+
+  &:hover {
+    color: #02041d;
+  }
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
 `;
 
 const StyledCardContainerBtm = styled.div`
@@ -111,6 +200,15 @@ const StyledCardContainerBtm = styled.div`
   margin-top: 1rem;
   /* width: 50vw; */
 
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    height: 13rem;
+  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     height: 13rem;
@@ -132,6 +230,26 @@ const StyledTh = styled.th`
   font-weight: 400;
   padding-right: 2.2rem;
   padding-bottom: 0.5rem;
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    padding-right: 2.2rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    padding-right: 1rem;
+  }
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 const StyledTd = styled.td`
   font-size: 0.7rem;
@@ -177,22 +295,26 @@ const Home = () => {
       <div style={{ display: "flex" }}>
         <div>
           <StyledCardContainerTop>
-            <StyledCard>
-              <StyledCardTxt>Total Transactions</StyledCardTxt>
-              <p>{totalTransactions}</p>
-            </StyledCard>
-            <StyledCard>
-              <StyledCardTxt>Wallet Balance</StyledCardTxt>
-              <p>NGN {walletBalance.toFixed(2)}</p>
-            </StyledCard>
-            <StyledCard>
-              <StyledCardTxt>Withdrawal</StyledCardTxt>
-              <p>{withdrawalCount}</p>
-            </StyledCard>
-            <StyledCard>
-              <StyledCardTxt>Deposit</StyledCardTxt>
-              <p>NGN {depositCount.toFixed(2)}</p>
-            </StyledCard>
+            <StyledCardPair>
+              <StyledCard>
+                <StyledCardTxt>Total Transactions</StyledCardTxt>
+                <p>{totalTransactions}</p>
+              </StyledCard>
+              <StyledCard>
+                <StyledCardTxt>Wallet Balance</StyledCardTxt>
+                <p>NGN {walletBalance.toFixed(2)}</p>
+              </StyledCard>
+            </StyledCardPair>
+            <StyledCardPair>
+              <StyledCard>
+                <StyledCardTxt>Withdrawal</StyledCardTxt>
+                <p>{withdrawalCount}</p>
+              </StyledCard>
+              <StyledCard>
+                <StyledCardTxt>Deposit</StyledCardTxt>
+                <p>NGN {depositCount.toFixed(2)}</p>
+              </StyledCard>
+            </StyledCardPair>
           </StyledCardContainerTop>
           <StyledCardContainerMid>
             <StyledWalletCard>
@@ -214,13 +336,13 @@ const Home = () => {
                   </span>
                 </StyledCardOngoingTopTxt>
                 <div>
-                  <FontAwesomeIcon
+                  <StyledFontAwesomeIcon
                     icon={faArrowCircleLeft}
-                    style={{ marginRight: "0.5rem", color: "#4db6ac" }}
+                    onClick={() => {}}
                   />
-                  <FontAwesomeIcon
+                  <StyledFontAwesomeIcon
                     icon={faArrowCircleRight}
-                    style={{ color: "#4db6ac" }}
+                    onClick={() => {}}
                   />
                 </div>
               </StyledCardOngoingTop>
@@ -252,7 +374,7 @@ const Home = () => {
               </StyledCardOngoingBtm>
             </StyledCardOngoing>
           </StyledCardContainerMid>
-          <h4>Recent Transactions</h4>
+          <StyledHeaderBtm>Recent Transactions</StyledHeaderBtm>
           <StyledCardContainerBtm>
             <table style={{ borderCollapse: "collapse" }}>
               <thead>
