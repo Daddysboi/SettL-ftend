@@ -26,6 +26,7 @@ import { useAppSelector } from "../../redux/hooks";
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
+  background-color: #f8f7f7;
   overflow: hidden;
 `;
 
@@ -218,10 +219,10 @@ const Dashboard = () => {
         <StyledRight>
           {page === "home" && <Home />}
           {page === "profile" && <Profile />}
-          {page === "transactions" && <Transactions />}
+          {page === "transactions" && <Transactions navigateTo={navigateTo} />}
           {page === "wallet" && <Wallet />}
           {page === "settings" && <Settings />}
-          {page === "tracker" && <Tracker />}
+          {page === "tracker" && <Tracker navigateTo={navigateTo} />}
           {page === "resolution" && <Resolution />}
         </StyledRight>
       </StyledContainer>

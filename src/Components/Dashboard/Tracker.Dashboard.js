@@ -68,12 +68,12 @@ const IconWrapper = styled.div`
 `;
 
 const Line = styled.div`
-  width: 1px;
+  /* width: 1px;
   background-color: #4db6ac;
   position: absolute;
   top: ${({ top }) => top}px;
   bottom: ${({ bottom }) => bottom}px;
-  left: 5px;
+  left: 5px; */
 `;
 
 const MilestoneText = styled.div`

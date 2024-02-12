@@ -6,7 +6,6 @@ import {
   faArrowCircleRight,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 
 import Table_transaction_data from "../../../Data/Table_transaction_data.json";
 import TransactionFormPopup from "./TransactionPopup.Home";
@@ -35,6 +34,7 @@ const StyledCard = styled.div`
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   width: 8.7rem;
   height: 5rem;
+  background-color: #fff;
   padding: 0.2rem 1.2rem;
 `;
 
@@ -107,6 +107,7 @@ const StyledCardOngoingBtm = styled.div`
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   padding: 1rem 2rem 0 2rem;
+  background-color: #fff;
   margin-top: 1rem;
 `;
 
@@ -123,6 +124,11 @@ const StyledDetailsBtn = styled.button`
   border-radius: 0.4rem;
   padding: 0.5rem 1rem;
   border: none;
+  &:hover {
+    border: 1px solid #f26600;
+    color: #f26600;
+    background-color: #fff;
+  }
 `;
 
 const StyledCardContainerBtm = styled.div`
@@ -130,6 +136,7 @@ const StyledCardContainerBtm = styled.div`
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   padding: 1rem 2rem 0 2rem;
+  background-color: #fff;
   margin-top: 1rem;
   /* width: 50vw; */
 
