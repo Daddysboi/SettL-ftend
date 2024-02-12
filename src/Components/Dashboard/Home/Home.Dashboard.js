@@ -6,6 +6,8 @@ import {
   faArrowCircleRight,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
+
+import Table_transaction_data from "../../../Data/Table_transaction_data.json";
 import TransactionFormPopup from "./TransactionPopup.Home";
 
 const StyledCardContainerTop = styled.div`
@@ -13,14 +15,6 @@ const StyledCardContainerTop = styled.div`
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    width: 5rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-  }
 `;
 
 const StyledCardPair = styled.div`
@@ -40,15 +34,8 @@ const StyledCard = styled.div`
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   width: 8.7rem;
   height: 5rem;
+  background-color: #fff;
   padding: 0.2rem 1.2rem;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    width: 5rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-  }
 `;
 
 const StyledCardTxt = styled.p`
@@ -59,14 +46,6 @@ const StyledCardContainerMid = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    margin-bottom: 2rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-  }
 `;
 
 const StyledWalletCard = styled.div`
@@ -108,18 +87,10 @@ const StyledBtnCreate = styled.button`
 
 const StyledCardOngoing = styled.div`
   height: 14rem;
+
   font-size: 1rem;
   font-weight: 400;
   width: 30rem;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    width: 15rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    width: 17rem;
-  }
 `;
 
 const StyledCardOngoingTop = styled.div`
@@ -136,6 +107,7 @@ const StyledCardOngoingBtm = styled.div`
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   padding: 1rem 2rem 0 2rem;
+  background-color: #fff;
   margin-top: 1rem;
 `;
 
@@ -145,50 +117,17 @@ const StyledLine = styled.div`
   background: #000000;
   opacity: 0.2;
   margin-bottom: 1rem;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    width: 12rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    width: 14rem;
-  }
 `;
-
 const StyledDetailsBtn = styled.button`
-  background-color: #4db6ac;
+  background-color: #f26600;
   color: #ffffff;
   border-radius: 0.4rem;
-  padding: 0.3rem 1rem;
+  padding: 0.5rem 1rem;
   border: none;
-`;
-
-const StyledHeaderBtm = styled.h4`
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    display: none;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-  }
-`;
-
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  margin-right: 0.5rem;
-  color: #4db6ac;
-
   &:hover {
-    color: #02041d;
-  }
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    display: none;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    border: 1px solid #f26600;
+    color: #f26600;
+    background-color: #fff;
   }
 `;
 
@@ -197,18 +136,10 @@ const StyledCardContainerBtm = styled.div`
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
   padding: 1rem 2rem 0 2rem;
+  background-color: #fff;
   margin-top: 1rem;
   /* width: 50vw; */
 
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    display: none;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    height: 13rem;
-  }
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
     height: 13rem;
@@ -230,26 +161,6 @@ const StyledTh = styled.th`
   font-weight: 400;
   padding-right: 2.2rem;
   padding-bottom: 0.5rem;
-  // Mobile devices
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    padding-right: 2.2rem;
-  }
-
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    padding-right: 1rem;
-  }
-  // Small screens, laptops
-  @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-  }
 `;
 const StyledTd = styled.td`
   font-size: 0.7rem;
@@ -263,7 +174,7 @@ const Home = () => {
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
-  const [depositCount, setDepositCount] = useState(0);
+  const [revenue, setRevenue] = useState(0);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
 
   const handleCreateTransaction = () => {
@@ -271,23 +182,21 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        url = "";
-        const { data } = await axios.get(url);
-
-        setTotalTransactions(data.totalTransactions || 0);
-        setWalletBalance(data.walletBalance || 0);
-        setWithdrawalCount(data.withdrawalCount || 0);
-        setDepositCount(data.depositCount || 0);
-        setOngoingTransactions(data.ongoingTransactions || []);
-        setRecentTransactions(data.recentTransactions || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const url = "";
+    //     const { data } = await axios.get(url);
+    //     setTotalTransactions(data.totalTransactions || 0);
+    //     setWalletBalance(data.walletBalance || 0);
+    //     setWithdrawalCount(data.withdrawalCount || 0);
+    //     setRevenue(data.revenue || 0);
+    //     setOngoingTransactions(data.ongoingTransactions || []);
+    //     setRecentTransactions(data.recentTransactions || []);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
+    // fetchData();
   }, []);
 
   return (
@@ -307,12 +216,12 @@ const Home = () => {
             </StyledCardPair>
             <StyledCardPair>
               <StyledCard>
-                <StyledCardTxt>Withdrawal</StyledCardTxt>
+                <StyledCardTxt>No of Withdrawals</StyledCardTxt>
                 <p>{withdrawalCount}</p>
               </StyledCard>
               <StyledCard>
-                <StyledCardTxt>Deposit</StyledCardTxt>
-                <p>NGN {depositCount.toFixed(2)}</p>
+                <StyledCardTxt>Revenue</StyledCardTxt>
+                <p>NGN {revenue.toFixed(2)}</p>
               </StyledCard>
             </StyledCardPair>
           </StyledCardContainerTop>
@@ -331,18 +240,24 @@ const Home = () => {
               <StyledCardOngoingTop>
                 <StyledCardOngoingTopTxt>
                   Ongoing Transactions:{" "}
-                  <span style={{ color: "#4db6ac", fontSize: "0.8rem" }}>
-                    3
+                  <span
+                    style={{
+                      color: "#f26600",
+                      fontSize: "1rem",
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    1
                   </span>
                 </StyledCardOngoingTopTxt>
                 <div>
-                  <StyledFontAwesomeIcon
+                  <FontAwesomeIcon
                     icon={faArrowCircleLeft}
-                    onClick={() => {}}
+                    style={{ marginRight: "0.5rem", color: "#4db6ac" }}
                   />
-                  <StyledFontAwesomeIcon
+                  <FontAwesomeIcon
                     icon={faArrowCircleRight}
-                    onClick={() => {}}
+                    style={{ color: "#4db6ac" }}
                   />
                 </div>
               </StyledCardOngoingTop>
@@ -370,11 +285,13 @@ const Home = () => {
                 <StyledCardTxt>New pair of shoes</StyledCardTxt>
                 <StyledCardTxt>Counterparty: Footwarefairy</StyledCardTxt>
                 <StyledLine></StyledLine>
-                <StyledDetailsBtn>View Details</StyledDetailsBtn>
+                <StyledDetailsBtn>
+                  Mark Transaction as Complete
+                </StyledDetailsBtn>
               </StyledCardOngoingBtm>
             </StyledCardOngoing>
           </StyledCardContainerMid>
-          <StyledHeaderBtm>Recent Transactions</StyledHeaderBtm>
+          <h4>Recent Transactions</h4>
           <StyledCardContainerBtm>
             <table style={{ borderCollapse: "collapse" }}>
               <thead>
@@ -390,38 +307,24 @@ const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2341</StyledTd>
-                  <StyledTd>New pair of shoes</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>23/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>8/2/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N40,000</StyledTd>
-                  <StyledTd>pending</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2342</StyledTd>
-                  <StyledTd>LV Shirt</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>20/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>6/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N16,000</StyledTd>
-                  <StyledTd>pending</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2343</StyledTd>
-                  <StyledTd>Man. Utd track suit</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>10/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>23/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N25,000</StyledTd>
-                  <StyledTd>complete</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2344</StyledTd>
-                  <StyledTd>Torbo P cap</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>10/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>8/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N2,500</StyledTd>
-                  <StyledTd>complete</StyledTd>
-                </tr>
+                {Table_transaction_data.map((transaction) => (
+                  <tr key={transaction.id}>
+                    <StyledTd style={{ textAlign: "center" }}>
+                      {transaction.id}
+                    </StyledTd>
+                    <StyledTd>{transaction.title}</StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.dateCreated}
+                    </StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.dateDue}
+                    </StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.amount}
+                    </StyledTd>
+                    <StyledTd>{transaction.status}</StyledTd>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </StyledCardContainerBtm>{" "}

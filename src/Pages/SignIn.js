@@ -104,13 +104,14 @@ const loginValidationSchema = Yup?.object()?.shape({
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const { user, setUser, setProfile } = useContext(userContext);
+  const { user, setUser, profile, setProfile } = useContext(userContext);
   const inputRef = useRef();
   const navigate = useNavigate();
 
   const googleLogin = useGoogleLogin({
     onSuccess: (codeResponse) => {
       setUser(codeResponse);
+      navigate(`/dashboard`);
     },
     onError: (error) => console.log("Login Failed:", error),
   });
@@ -127,7 +128,6 @@ const SignIn = () => {
         })
         .then((res) => {
           setProfile(res.data);
-          navigate(`/dashboard`);
         })
         .catch((err) => {
           console.error("Google API Error:", err);
@@ -210,7 +210,9 @@ const SignIn = () => {
             </StyledLabel>
           </div>
           <span style={{ color: "#f26600", cursor: "pointer" }}>
-            <Link to="/forgot-password">Forgot Password</Link>
+            <Link style={{ textDecoration: "none" }} to="/forgot-password">
+              Forgot Password
+            </Link>
           </span>
         </StyledCheckboxCont>
       </StyledForm>
@@ -234,7 +236,11 @@ const SignIn = () => {
       </StyledGoogleBtn>
       <div>
         <StyledLineTxt style={{ marginLeft: "0" }}>
-          Haven't registered? <NavLink to="/signup"> Sign up</NavLink>
+          Haven't registered?{" "}
+          <NavLink style={{ textDecoration: "none" }} to="/signup">
+            {" "}
+            Sign up
+          </NavLink>
         </StyledLineTxt>
       </div>
     </AuthBackground>

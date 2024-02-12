@@ -29,6 +29,7 @@ import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
+  background-color: #f8f7f7;
   overflow: hidden;
 `;
 
@@ -207,8 +208,8 @@ const Dashboard = () => {
 
   const logOut = () => {
     googleLogout();
-    setUser({});
-    setProfile({});
+    // setUser({}); // Clear user state
+    setProfile({}); // Clear profile state
     localStorage.removeItem("token");
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
@@ -290,10 +291,10 @@ const Dashboard = () => {
         <StyledRight>
           {page === "home" && <Home />}
           {page === "profile" && <Profile />}
-          {page === "transactions" && <Transactions />}
+          {page === "transactions" && <Transactions navigateTo={navigateTo} />}
           {page === "wallet" && <Wallet />}
           {page === "settings" && <Settings />}
-          {page === "tracker" && <Tracker />}
+          {page === "tracker" && <Tracker navigateTo={navigateTo} />}
           {page === "resolution" && <Resolution />}
         </StyledRight>
       </StyledContainer>

@@ -31,20 +31,12 @@ const router = createBrowserRouter(
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-
-      <Route path="/dashboard" index element={<Dashboard />} />
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
-      <Route
-        path="/otp"
-        element={
-          <AuthGuard>
-            <Otp />
-          </AuthGuard>
-        }
-      />
+      <Route path="/otp" element={<Otp />} />
+      <Route path="/dashboard" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
         <Route
@@ -53,7 +45,6 @@ const router = createBrowserRouter(
         ></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-
         <Route path="*" element={<Error404 />} />
       </Route>
     </Route>
