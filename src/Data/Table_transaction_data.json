@@ -1,0 +1,34 @@
+[
+  {
+    "id": "2341",
+    "title": "New pair of shoes",
+    "dateCreated": "23/1/2024",
+    "dateDue": "8/2/2024",
+    "amount": "N40,000",
+    "status": "pending"
+  },
+  {
+    "id": "2342",
+    "title": "LV Shirt",
+    "dateCreated": "20/1/2024",
+    "dateDue": "6/1/2024",
+    "amount": "N16,000",
+    "status": "pending"
+  },
+  {
+    "id": "2343",
+    "title": "Man. Utd track suit",
+    "dateCreated": "10/1/2024",
+    "dateDue": "23/1/2024",
+    "amount": "N25,000",
+    "status": "complete"
+  },
+  {
+    "id": "2344",
+    "title": "Torbo P cap",
+    "dateCreated": "10/1/2024",
+    "dateDue": "8/1/2024",
+    "amount": "N2,500",
+    "status": "complete"
+  }
+]
