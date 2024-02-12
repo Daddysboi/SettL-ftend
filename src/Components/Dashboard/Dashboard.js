@@ -1,6 +1,21 @@
 import React, { useReducer, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled, { css } from "styled-components";
+import {
+  faHome,
+  faUser,
+  faWallet,
+  faGear,
+  faReceipt,
+  faTruck,
+  faHandshake,
+  faSignOut,
+} from "@fortawesome/free-solid-svg-icons";
+import { useAppSelector } from "../../redux/hooks";
+import { googleLogout } from "@react-oauth/google";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { userContext } from "../../App";
 import Home from "./Home/Home.Dashboard";
 import Settings from "./Settings.Dashboard";
 import Transactions from "./Transactions.Dashboard";
@@ -10,18 +25,6 @@ import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
 import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
-import { googleLogout } from "@react-oauth/google";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faUser,
-  faWallet,
-  faGear,
-  faReceipt,
-  faTruck,
-  faHandshake,
-} from "@fortawesome/free-solid-svg-icons";
-import { useAppSelector } from "../../redux/hooks";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -53,6 +56,30 @@ const StyledSideBar = styled.div`
   left: 0;
   top: 5rem;
   color: #ffffff;
+  width: 12rem;
+
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 5rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 9rem;
+    padding-left: 0.1rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  }
+
+  // Desktops, large screens
+  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  }
+
+  // Extra large screens, TV
+  @media only screen and (min-width: 1201px) {
+  }
 `;
 
 const StyledBtnContainer = styled.div`
@@ -67,6 +94,38 @@ const StyledBtn = styled.button`
   text-align: left;
   color: #ffffff;
   font-weight: 200;
+  padding: 0.5rem;
+  ${({ active }) =>
+    active &&
+    css`
+      color: #4db6ac;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    `}
+  &:hover {
+    color: #4db6ac;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+  }
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+`;
+
+const StyledBtnName = styled.span`
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  padding-right: 0.5rem;
 `;
 
 const SignoutLink = styled(Link)`
@@ -77,6 +136,16 @@ const SignoutLink = styled(Link)`
   color: #ffffff;
   font-size: 0.6rem;
   text-decoration: none;
+  ${({ active }) =>
+    active &&
+    css`
+      color: #4db6ac;
+      border-radius: 0.5rem;
+    `}
+  &:hover {
+    color: #4db6ac;
+    border-radius: 0.5rem;
+  }
 `;
 
 const StyledRight = styled.div`
@@ -87,8 +156,30 @@ const StyledRight = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-left: 5rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    margin-left: 8rem;
+  }
 `;
 
+const StyledFontAwesomeIconSignOut = styled(FontAwesomeIcon)`
+  padding-right: 0.5rem;
+`;
+
+const StyledSignOutTxt = styled.span`
+  // Mobile devices
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+`;
 const initialState = {
   page: "home",
   initialLoad: true,
@@ -110,14 +201,15 @@ const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
   const { userId } = useParams();
+  const { setProfile, setUser } = useContext(userContext);
 
   const { user } = useAppSelector((state) => state.user);
   console.log("my user", user);
 
   const logOut = () => {
     googleLogout();
-    setUser({}); // Clear user state
-    setProfile({}); // Clear profile state
+    setUser({});
+    setProfile({});
     localStorage.removeItem("token");
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
@@ -143,76 +235,56 @@ const Dashboard = () => {
               active={page === "home"}
               onClick={() => navigateTo("home")}
             >
-              <FontAwesomeIcon
-                icon={faHome}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Home
+              <StyledFontAwesomeIcon icon={faHome} />
+              <StyledBtnName>Home</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "profile"}
               onClick={() => navigateTo("profile")}
             >
-              <FontAwesomeIcon
-                icon={faUser}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Profile
+              <StyledFontAwesomeIcon icon={faUser} />
+              <StyledBtnName>Profile</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "transactions"}
               onClick={() => navigateTo("transactions")}
             >
-              <FontAwesomeIcon
-                icon={faReceipt}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Transactions
+              <StyledFontAwesomeIcon icon={faReceipt} />
+              <StyledBtnName>Transactions</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "wallet"}
               onClick={() => navigateTo("wallet")}
             >
-              <FontAwesomeIcon
-                icon={faWallet}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Wallet
+              <StyledFontAwesomeIcon icon={faWallet} />
+              <StyledBtnName>Wallet</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "settings"}
               onClick={() => navigateTo("settings")}
             >
-              <FontAwesomeIcon
-                icon={faGear}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Settings
+              <StyledFontAwesomeIcon icon={faGear} />
+              <StyledBtnName>Settings</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "tracker"}
               onClick={() => navigateTo("tracker")}
             >
-              <FontAwesomeIcon
-                icon={faTruck}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Order Tracker
+              <StyledFontAwesomeIcon icon={faTruck} />
+              <StyledBtnName> Tracking</StyledBtnName>
             </StyledBtn>
             <StyledBtn
               active={page === "resolution"}
               onClick={() => navigateTo("resolution")}
             >
-              <FontAwesomeIcon
-                icon={faHandshake}
-                style={{ paddingRight: "0.5rem" }}
-              />
-              Resolution
+              <StyledFontAwesomeIcon icon={faHandshake} />
+              <StyledBtnName> Resolution</StyledBtnName>
             </StyledBtn>
           </StyledBtnContainer>
 
           <SignoutLink to="/" onClick={logOut}>
-            Sign Out
+            <StyledFontAwesomeIconSignOut icon={faSignOut} />
+            <StyledSignOutTxt>Sign Out</StyledSignOutTxt>
           </SignoutLink>
         </StyledSideBar>
 
