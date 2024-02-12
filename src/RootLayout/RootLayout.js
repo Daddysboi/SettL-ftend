@@ -6,11 +6,9 @@ import AuthGuard from "../AuthGuard";
 const RootLayout = () => {
   return (
     <div>
-      <AuthGuard>
-        <Header />
-        <Outlet />
-        <Footer />
-      </AuthGuard>
+      <Header />
+      <Outlet />
+      <Footer />
     </div>
   );
 };

@@ -117,7 +117,7 @@ const Dashboard = () => {
   const logOut = () => {
     googleLogout();
     // setUser({}); // Clear user state
-    setProfile({}); // Clear profile state
+    // setProfile({}); // Clear profile state
     localStorage.removeItem("token");
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
