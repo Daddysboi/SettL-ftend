@@ -9,6 +9,7 @@ export const CONTACT_OUR_SUPPORT = "contact-our-support";
 export const DISPUTE_TRANSACTION = "dispute-transaction";
 export const CREATE_TRANSACTION = "create-transaction";
 export const VERIFY_TRANSACTION = "verify-transaction";
+export const VERIFY_TRANSACTION_DETAILS = "verify-transaction-details";
 
 export const GET_USER_BY_ID = "getUserById";
 

@@ -21,7 +21,6 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Otp from "./Pages/Otp";
 import ConfirmTransaction from "./Pages/ConfirmTransaction";
-import AuthGuard from "./AuthGuard";
 
 export const userContext = createContext();
 
@@ -31,12 +30,12 @@ const router = createBrowserRouter(
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/dashboard" index element={<Dashboard />} />
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
       />
       <Route path="/otp" element={<Otp />} />
+      <Route path="/dashboard" index element={<Dashboard />}></Route>
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
         <Route

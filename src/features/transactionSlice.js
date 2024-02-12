@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   CreateTransaction,
   VerifyTransaction,
+  VerifyTransactionDetails,
 } from "../services/transactions.services";
 
 const initialState = {
@@ -17,6 +18,20 @@ export const createTransaction = createAsyncThunk(
         buyerId,
         formData,
         redirectUrl,
+      });
+      return resp;
+    } catch (error) {
+      throw error; // Throw the error to let Redux Toolkit handle the rejection
+    }
+  }
+);
+
+export const verifyTransactionDetails = createAsyncThunk(
+  "verifyTransactionDetails",
+  async ({ formData }) => {
+    try {
+      const resp = await VerifyTransactionDetails({
+        formData,
       });
       return resp;
     } catch (error) {
@@ -70,6 +85,18 @@ export const transactionSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(verifyTransaction.rejected, (state) => {
+      state.isLoggedIn = false;
+      // state.user = null;
+      state.isLoading = false;
+    });
+    // verify transactions details actions
+    builder.addCase(verifyTransactionDetails.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(verifyTransactionDetails.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(verifyTransactionDetails.rejected, (state) => {
       state.isLoggedIn = false;
       // state.user = null;
       state.isLoading = false;

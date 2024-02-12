@@ -8,16 +8,21 @@ import {
   faShoppingCart,
   faTools,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TailSpin as Loader } from "react-loader-spinner";
 
-import { createTransaction } from "../../../features/transactionSlice";
-import FormList from "antd/es/form/FormList";
+import {
+  createTransaction,
+  verifyTransactionDetails,
+} from "../../../features/transactionSlice";
 import { USER_ID } from "../../../services/CONSTANTS";
 import { useAppDispatch } from "../../../redux/hooks";
+
+import "./styles.css";
 
 const StyledModal = styled(Modal)`
   margin-top: 15rem;
@@ -39,36 +44,37 @@ const StyledModal = styled(Modal)`
     margin-left: 10rem;
   }
 `;
-
 const StyledHeader = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 `;
 
 const StyledBtnRole = styled.button`
   background-color: #f26600;
+  border: 2px solid #f8701c;
   color: #ffffff;
   padding: 8px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: transparent;
     border: 2px solid #f8701c;
     color: #f8701c;
   }
 `;
-
 const StyledButton = styled.button`
   background-color: #f26600;
+  border: 2px solid #f8701c;
   color: #ffffff;
   padding: 7px 8px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  position: absolute;
-  bottom: 1rem;
+  // position: absolute;
+  bottom: 0.5rem;
   right: 6rem;
 
   &:hover {
@@ -93,15 +99,15 @@ const Styledlabel = styled.label`
 const StyledBackButton = styled.button`
   background-color: #ffffff;
   color: #f26600;
-  padding: 0.3rem 0.5rem;
+  // padding: 0.3rem 0.5rem;
   border: 1px solid #f26600;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  position: absolute;
+  // position: absolute;
   bottom: 1rem;
   padding: 6px 10px;
-  right: 2rem;
+  // right: 2rem;
   &:hover {
     background-color: #f26600;
     color: #ffffff;
@@ -136,6 +142,7 @@ const TransactionFormPopup = ({
   currentStep,
 }) => {
   const [currentModalStep, setCurrentModalStep] = useState(1);
+  const [showPaystackButton, setShowPaystackButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const userId = localStorage.getItem(USER_ID);
   const isSecure = window.location.protocol === "https:";
@@ -144,6 +151,7 @@ const TransactionFormPopup = ({
   }/confirm-transaction`;
   const encodedLink = encodeURI(text);
   const dispatch = useAppDispatch();
+
   const formik = useFormik({
     initialValues: {
       role: "",
@@ -193,7 +201,6 @@ const TransactionFormPopup = ({
     }),
     onSubmit: (values) => {
       console.log("Form submitted with values:", values);
-      // onCreateTransaction(values);
     },
   });
 
@@ -258,6 +265,38 @@ const TransactionFormPopup = ({
     setCurrentModalStep(currentModalStep - 1);
   };
 
+  const handleVerifyDetails = async () => {
+    setLoading(true);
+    let request = {
+      formData: {
+        transactionType: formik.values.transactionType,
+        amount: parsedAmount,
+        deliveryAddress: formik.values.deliveryAddress,
+        productName: formik.values.productName,
+        counterpartyName: formik.values.counterpartyName,
+        counterpartyEmail: formik.values.counterpartyEmail,
+        counterpartyPhone: formik.values.counterpartyPhone,
+        setConditions: formik.values.setConditions,
+        termsAndConditions: formik.values.termsAndConditions,
+      },
+    };
+    dispatch(verifyTransactionDetails(request))
+      .then((resp) => {
+        if (resp?.payload?.status !== 200) {
+          toast.error(resp?.payload?.message || "Something went wrong");
+          setLoading(false);
+          return;
+        }
+        setShowPaystackButton(true);
+        toast.success(resp?.payload?.message || "Please check your inbox");
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error?.message || "Something went wrong");
+        setLoading(false);
+      });
+  };
+
   const renderStepContent = () => {
     switch (currentModalStep) {
       // case 1:
@@ -319,7 +358,7 @@ const TransactionFormPopup = ({
             </div>
             {formik.errors.transactionType &&
               formik.touched.transactionType && (
-                <StyledError>{formik.errors.transactionType}</StyledError>
+                <div>{formik.errors.transactionType}</div>
               )}
           </StyledFormDiv>
         );
@@ -351,7 +390,7 @@ const TransactionFormPopup = ({
             {formik.values.transactionType && (
               <div>
                 <Styledlabel htmlFor="deliveryAddress">
-                  Delivery address:
+                  Delivery Address:
                 </Styledlabel>
                 <StyledInput
                   type="text"
@@ -368,7 +407,7 @@ const TransactionFormPopup = ({
                 {formik.values.transactionType && (
                   <div>
                     <Styledlabel htmlFor="productName">
-                      What product are you buying:
+                      Product name:
                     </Styledlabel>
                     <StyledInput
                       type="text"
@@ -497,8 +536,7 @@ const TransactionFormPopup = ({
   return (
     <StyledModal
       isOpen={isOpen}
-      // onRequestClose={onRequestClose}
-      contentStyledlabel="Transaction Form Modal"
+      contentLabel="Transaction Form Modal"
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -520,8 +558,8 @@ const TransactionFormPopup = ({
         },
       }}
     >
-      <>
-        {loading && (
+      {loading ? (
+        <div>
           <Loader
             type="TailSpin"
             color="#ff4500"
@@ -529,46 +567,56 @@ const TransactionFormPopup = ({
             width={20}
             style={{ margin: "auto" }}
           />
-        )}
-        {loading ? (
-          "Confirming transaction..."
-        ) : (
-          <>
-            {renderStepContent()}
-            <div>
-              {currentModalStep !== 1 && (
-                <StyledBackButton type="button" onClick={handleBack}>
-                  Back
-                </StyledBackButton>
-              )}
-              {currentModalStep !== 4 && currentModalStep !== 1 && (
-                <StyledButton
-                  type="button"
-                  onClick={() => {
-                    handleNext();
-                  }}
-                >
-                  Save & Next
-                </StyledButton>
-              )}
-              {currentModalStep === 4 && (
-                <PaystackButton
-                  type="button"
-                  onClick={() => {
-                    // formik.handleSubmit();
-                    handlePayment();
-                  }}
-                  className="paystack-button"
-                  {...componentProps}
-                />
-              )}
-            </div>
-            <div className="close-button" onClick={onRequestClose}>
-              <FontAwesomeIcon icon={faTimes} />
-            </div>
-          </>
-        )}
-      </>
+          Confirming transaction...
+        </div>
+      ) : (
+        <>
+          {showPaystackButton ? (
+            <PaystackButton
+              type="button"
+              className="paystack-button"
+              {...componentProps}
+            />
+          ) : (
+            <>
+              {renderStepContent()}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  justifyContent: "flex-end",
+                  marginTop: "2rem",
+                }}
+              >
+                {currentModalStep !== 1 && (
+                  <StyledBackButton type="button" onClick={handleBack}>
+                    Back
+                  </StyledBackButton>
+                )}
+
+                {currentModalStep !== 1 && (
+                  <StyledButton
+                    type="button"
+                    onClick={() => {
+                      {
+                        currentModalStep === 4
+                          ? handleVerifyDetails()
+                          : handleNext();
+                      }
+                    }}
+                  >
+                    {currentModalStep === 4 ? "Proceed" : "Save & Next"}
+                  </StyledButton>
+                )}
+              </div>
+              <div className="close-button" onClick={onRequestClose}>
+                <FontAwesomeIcon icon={faTimes} />
+              </div>
+            </>
+          )}
+        </>
+      )}
     </StyledModal>
   );
 };
