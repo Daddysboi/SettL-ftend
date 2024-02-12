@@ -18,6 +18,18 @@ const StyledCardContainerTop = styled.div`
   flex-wrap: wrap;
 `;
 
+const StyledCardPair = styled.div`
+  display: flex;
+  gap: 1rem;
+
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+  }
+`;
+
 const StyledCard = styled.div`
   border-radius: 5px;
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
