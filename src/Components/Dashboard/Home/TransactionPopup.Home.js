@@ -243,7 +243,7 @@ const TransactionFormPopup = ({
   };
 
   const componentProps = {
-    email: formik.values.counterpartyEmail,
+    email: formik.values.counterpartyEmail?.toLowerCase(),
     amount: parsedAmount * 100,
     metadata: {
       name: formik.values.counterpartyName,
@@ -274,7 +274,7 @@ const TransactionFormPopup = ({
         deliveryAddress: formik.values.deliveryAddress,
         productName: formik.values.productName,
         counterpartyName: formik.values.counterpartyName,
-        counterpartyEmail: formik.values.counterpartyEmail,
+        counterpartyEmail: formik.values.counterpartyEmail?.toLowerCase(),
         counterpartyPhone: formik.values.counterpartyPhone,
         setConditions: formik.values.setConditions,
         termsAndConditions: formik.values.termsAndConditions,
@@ -610,11 +610,11 @@ const TransactionFormPopup = ({
                   </StyledButton>
                 )}
               </div>
-              <div className="close-button" onClick={onRequestClose}>
-                <FontAwesomeIcon icon={faTimes} />
-              </div>
             </>
           )}
+          <div className="close-button" onClick={onRequestClose}>
+            <FontAwesomeIcon icon={faTimes} />
+          </div>
         </>
       )}
     </StyledModal>

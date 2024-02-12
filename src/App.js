@@ -21,6 +21,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Otp from "./Pages/Otp";
 import ConfirmTransaction from "./Pages/ConfirmTransaction";
+import AuthGuard from "./AuthGuard";
 
 export const userContext = createContext();
 
