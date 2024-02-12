@@ -16,7 +16,6 @@ import RootLayout from "./RootLayout/RootLayout";
 import SignIn from "./Pages/SignIn";
 import Error404 from "./Pages/Error404";
 import TermsAndConditions from "./Pages/TermsofService";
-import Payment from "./Components/Payment";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
@@ -31,7 +30,6 @@ const router = createBrowserRouter(
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-
       <Route
         path="/reset-password/:userId/:resetString"
         element={<ResetPassword />}
@@ -46,7 +44,6 @@ const router = createBrowserRouter(
         ></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-        <Route path="/payment" element={<Payment />} />
         <Route path="*" element={<Error404 />} />
       </Route>
     </Route>

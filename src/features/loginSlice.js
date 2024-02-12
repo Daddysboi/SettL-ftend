@@ -31,7 +31,7 @@ export const loginSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(login.fulfilled, (state) => {
-      state.isLoading = false;
+      state.isLoading = false; state.isLoggedIn = true;
     });
     builder.addCase(login.rejected, (state) => {
       state.isLoggedIn = false;
