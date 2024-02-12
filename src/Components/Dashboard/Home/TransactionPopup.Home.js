@@ -4,17 +4,18 @@ import * as Yup from "yup";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faTimes,
   faShoppingCart,
   faTools,
-  faMoneyBillWave,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
-import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { TailSpin as Loader } from "react-loader-spinner";
+
 import { createTransaction } from "../../../features/transactionSlice";
 import FormList from "antd/es/form/FormList";
 import { USER_ID } from "../../../services/CONSTANTS";
@@ -62,7 +63,7 @@ const StyledBtnRole = styled.button`
 const StyledButton = styled.button`
   background-color: #f26600;
   color: #ffffff;
-  padding: 8px;
+  padding: 7px 8px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -73,8 +74,9 @@ const StyledButton = styled.button`
 
   &:hover {
     background-color: transparent;
-    border: 2px solid #f8701c;
+    border: 1px solid #f8701c;
     color: #f8701c;
+    padding: 6px;
   }
 `;
 
@@ -95,7 +97,8 @@ const StyledBackButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1rem;
+  padding: 6px 10px;
   right: 2rem;
   &:hover {
     background-color: #f26600;
@@ -110,6 +113,18 @@ const StyledInput = styled.input`
   border: 1px solid #000000;
   border-radius: 3px;
   display: block;
+`;
+
+const StyledTextArea = styled.textarea`
+  padding: 0.2rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  border-radius: 3px;
+  display: block;
+`;
+
+const StyledError = styled.p`
+  color: red;
+  font-size: 0.5rem;
 `;
 
 Modal.setAppElement("#root");
@@ -144,9 +159,8 @@ const TransactionFormPopup = ({
     validationSchema: Yup.object({
       role: Yup.string().required("Please select your role"),
       transactionType: Yup.string().required("Please select transaction type"),
-      amount: Yup.number()
-        .required("Please enter transaction amount")
-        .positive("Amount must be positive"),
+      deliveryAddress: Yup.string().required("Please enter delivery address"),
+
       deliveryAddress: Yup.string().required("Please enter delivery address"),
       productName: Yup.string().required("Please enter the product name"),
       counterpartyName: Yup.string().when("role", {
@@ -182,14 +196,17 @@ const TransactionFormPopup = ({
     },
   });
 
+  const parsedAmount = parseFloat(formik.values.amount.replace(/,/g, ""));
+
   const handleCreateTransaction = async (reference) => {
     setLoading(true);
+
     let request = {
       reference: reference,
       buyerId: userId,
       formData: {
         transactionType: formik.values.transactionType,
-        amount: parseFloat(formik.values.amount),
+        amount: parsedAmount,
         deliveryAddress: formik.values.deliveryAddress,
         productName: formik.values.productName,
         counterpartyName: formik.values.counterpartyName,
@@ -219,7 +236,7 @@ const TransactionFormPopup = ({
 
   const componentProps = {
     email: formik.values.counterpartyEmail,
-    amount: parseFloat(formik.values.amount) * 100,
+    amount: parsedAmount * 100,
     metadata: {
       name: formik.values.counterpartyName,
       phone: formik.values.counterpartyPhone,
@@ -242,37 +259,37 @@ const TransactionFormPopup = ({
 
   const renderStepContent = () => {
     switch (currentModalStep) {
+      // case 1:
+      //   return (
+      //     <StyledFormDiv>
+      //       <StyledHeader>Create Transaction</StyledHeader>
+      //       <Styledlabel htmlFor="role">Select your role:</Styledlabel>
+      //       <div>
+      //         <StyledBtnRole
+      //           type="button"
+      //           onClick={() => {
+      //             formik.setFieldValue("role", "seller");
+      //             handleNext();
+      //           }}
+      //         >
+      //           <FontAwesomeIcon icon={faUser} /> Seller
+      //         </StyledBtnRole>{" "}
+      //         <StyledBtnRole
+      //           type="button"
+      //           onClick={() => {
+      //             formik.setFieldValue("role", "buyer");
+      //             handleNext();
+      //           }}
+      //         >
+      //           <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
+      //         </StyledBtnRole>
+      //       </div>
+      //       {formik.errors.role && formik.touched.role && (
+      //         <StyledError>{formik.errors.role}</StyledError>
+      //       )}
+      //     </StyledFormDiv>
+      //   );
       case 1:
-        return (
-          <StyledFormDiv>
-            <StyledHeader>Create Transaction</StyledHeader>
-            <label htmlFor="role">Select your role:</label>
-            <div>
-              <StyledBtnRole
-                type="button"
-                onClick={() => {
-                  formik.setFieldValue("role", "seller");
-                  handleNext();
-                }}
-              >
-                <FontAwesomeIcon icon={faUser} /> Seller
-              </StyledBtnRole>{" "}
-              <StyledBtnRole
-                type="button"
-                onClick={() => {
-                  formik.setFieldValue("role", "buyer");
-                  handleNext();
-                }}
-              >
-                <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
-              </StyledBtnRole>
-            </div>
-            {formik.errors.role && formik.touched.role && (
-              <div>{formik.errors.role}</div>
-            )}
-          </StyledFormDiv>
-        );
-      case 2:
         return (
           <StyledFormDiv>
             <StyledHeader>Transaction Type</StyledHeader>
@@ -303,7 +320,7 @@ const TransactionFormPopup = ({
               )}
           </StyledFormDiv>
         );
-      case 3:
+      case 2:
         return (
           <div>
             <StyledHeader>Transaction Details</StyledHeader>
@@ -314,7 +331,12 @@ const TransactionFormPopup = ({
                   type="text"
                   id="amount"
                   name="amount"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const formattedAmount = e.target.value
+                      .replace(/\D/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    formik.setFieldValue("amount", formattedAmount);
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.amount}
                 />
@@ -380,7 +402,7 @@ const TransactionFormPopup = ({
             )}
           </div>
         );
-      case 4:
+      case 3:
         return (
           <div>
             <StyledHeader>Invite Counterparty</StyledHeader>
@@ -398,7 +420,9 @@ const TransactionFormPopup = ({
                 <div>{formik.errors.counterpartyName}</div>
               )}
 
-            <label htmlFor="counterpartyEmail">Email:</label>
+            <Styledlabel htmlFor="counterpartyEmail">
+              Counterparty email:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyEmail"
@@ -412,7 +436,9 @@ const TransactionFormPopup = ({
                 <div>{formik.errors.counterpartyEmail}</div>
               )}
 
-            <label htmlFor="counterpartyPhone">Phone Number:</label>
+            <Styledlabel htmlFor="counterpartyPhone">
+              Counterparty phone number:
+            </Styledlabel>
             <StyledInput
               type="text"
               id="counterpartyPhone"
@@ -427,13 +453,13 @@ const TransactionFormPopup = ({
               )}
           </div>
         );
-      case 5:
+      case 4:
         return (
           <div>
             <StyledHeader>Set Conditions</StyledHeader>
             <label htmlFor="counterpartyName">Enter terms for purchase:</label>
 
-            <textarea
+            <StyledTextArea
               type="text"
               name="setConditions"
               id="setConditions"
@@ -443,7 +469,7 @@ const TransactionFormPopup = ({
               onBlur={formik.handleBlur}
               value={formik.values.setConditions}
               style={{ display: "block" }}
-            ></textarea>
+            ></StyledTextArea>
 
             {formik.errors.setConditions && formik.touched.setConditions && (
               <div>{formik.errors.setConditions}</div>
@@ -483,6 +509,15 @@ const TransactionFormPopup = ({
       }}
     >
       <>
+        {loading && (
+          <Loader
+            type="TailSpin"
+            color="#ff4500"
+            height={20}
+            width={20}
+            style={{ margin: "auto" }}
+          />
+        )}
         {loading ? (
           "Confirming transaction..."
         ) : (
@@ -494,19 +529,17 @@ const TransactionFormPopup = ({
                   Back
                 </StyledBackButton>
               )}
-              {currentModalStep !== 5 &&
-                currentModalStep !== 1 &&
-                currentModalStep !== 2 && (
-                  <StyledButton
-                    type="button"
-                    onClick={() => {
-                      handleNext();
-                    }}
-                  >
-                    Save & Next
-                  </StyledButton>
-                )}
-              {currentModalStep === 5 && (
+              {currentModalStep !== 4 && currentModalStep !== 1 && (
+                <StyledButton
+                  type="button"
+                  onClick={() => {
+                    handleNext();
+                  }}
+                >
+                  Save & Next
+                </StyledButton>
+              )}
+              {currentModalStep === 4 && (
                 <PaystackButton
                   type="button"
                   onClick={() => {

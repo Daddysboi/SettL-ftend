@@ -6,6 +6,7 @@ export const REQUEST_PASSWORD_RESET = "request-password-reset";
 export const RESET_PASSWORD = "password-reset";
 export const MAILING_LIST = "mailing-list";
 export const CONTACT_OUR_SUPPORT = "contact-our-support";
+export const DISPUTE_TRANSACTION = "dispute-transaction";
 export const CREATE_TRANSACTION = "create-transaction";
 export const VERIFY_TRANSACTION = "verify-transaction";
 

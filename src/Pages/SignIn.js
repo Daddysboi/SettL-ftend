@@ -210,7 +210,9 @@ const SignIn = () => {
             </StyledLabel>
           </div>
           <span style={{ color: "#f26600", cursor: "pointer" }}>
-            <Link to="/forgot-password">Forgot Password</Link>
+            <Link style={{ textDecoration: "none" }} to="/forgot-password">
+              Forgot Password
+            </Link>
           </span>
         </StyledCheckboxCont>
       </StyledForm>
@@ -234,7 +236,11 @@ const SignIn = () => {
       </StyledGoogleBtn>
       <div>
         <StyledLineTxt style={{ marginLeft: "0" }}>
-          Haven't registered? <NavLink to="/signup"> Sign up</NavLink>
+          Haven't registered?{" "}
+          <NavLink style={{ textDecoration: "none" }} to="/signup">
+            {" "}
+            Sign up
+          </NavLink>
         </StyledLineTxt>
       </div>
     </AuthBackground>

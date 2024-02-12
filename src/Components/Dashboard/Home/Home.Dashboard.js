@@ -6,6 +6,9 @@ import {
   faArrowCircleRight,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+
+import Table_transaction_data from "../../../Data/Table_transaction_data.json";
 import TransactionFormPopup from "./TransactionPopup.Home";
 
 const StyledCardContainerTop = styled.div`
@@ -60,7 +63,14 @@ const StyledBtnCreate = styled.button`
   width: 5rem;
   color: #4db6ac;
   margin: 0.5rem;
+  border: 1px solid #4db6ac;
   padding: 0.2rem;
+  &:hover {
+    background-color: #4db6ac;
+    border: 1px solid #fff;
+    color: #fff;
+    box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
+  }
 `;
 
 const StyledCardOngoing = styled.div`
@@ -96,10 +106,10 @@ const StyledLine = styled.div`
   margin-bottom: 1rem;
 `;
 const StyledDetailsBtn = styled.button`
-  background-color: #4db6ac;
+  background-color: #f26600;
   color: #ffffff;
   border-radius: 0.4rem;
-  padding: 0.3rem 1rem;
+  padding: 0.5rem 1rem;
   border: none;
 `;
 
@@ -145,7 +155,7 @@ const Home = () => {
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
-  const [depositCount, setDepositCount] = useState(0);
+  const [revenue, setRevenue] = useState(0);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
 
   const handleCreateTransaction = () => {
@@ -153,23 +163,21 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        url = "";
-        const { data } = await axios.get(url);
-
-        setTotalTransactions(data.totalTransactions || 0);
-        setWalletBalance(data.walletBalance || 0);
-        setWithdrawalCount(data.withdrawalCount || 0);
-        setDepositCount(data.depositCount || 0);
-        setOngoingTransactions(data.ongoingTransactions || []);
-        setRecentTransactions(data.recentTransactions || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const url = "";
+    //     const { data } = await axios.get(url);
+    //     setTotalTransactions(data.totalTransactions || 0);
+    //     setWalletBalance(data.walletBalance || 0);
+    //     setWithdrawalCount(data.withdrawalCount || 0);
+    //     setRevenue(data.revenue || 0);
+    //     setOngoingTransactions(data.ongoingTransactions || []);
+    //     setRecentTransactions(data.recentTransactions || []);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
+    // fetchData();
   }, []);
 
   return (
@@ -177,22 +185,26 @@ const Home = () => {
       <div style={{ display: "flex" }}>
         <div>
           <StyledCardContainerTop>
-            <StyledCard>
-              <StyledCardTxt>Total Transactions</StyledCardTxt>
-              <p>{totalTransactions}</p>
-            </StyledCard>
-            <StyledCard>
-              <StyledCardTxt>Wallet Balance</StyledCardTxt>
-              <p>NGN {walletBalance.toFixed(2)}</p>
-            </StyledCard>
-            <StyledCard>
-              <StyledCardTxt>Withdrawal</StyledCardTxt>
-              <p>{withdrawalCount}</p>
-            </StyledCard>
-            <StyledCard>
-              <StyledCardTxt>Deposit</StyledCardTxt>
-              <p>NGN {depositCount.toFixed(2)}</p>
-            </StyledCard>
+            <StyledCardPair>
+              <StyledCard>
+                <StyledCardTxt>Total Transactions</StyledCardTxt>
+                <p>{totalTransactions}</p>
+              </StyledCard>
+              <StyledCard>
+                <StyledCardTxt>Wallet Balance</StyledCardTxt>
+                <p>NGN {walletBalance.toFixed(2)}</p>
+              </StyledCard>
+            </StyledCardPair>
+            <StyledCardPair>
+              <StyledCard>
+                <StyledCardTxt>No of Withdrawals</StyledCardTxt>
+                <p>{withdrawalCount}</p>
+              </StyledCard>
+              <StyledCard>
+                <StyledCardTxt>Revenue</StyledCardTxt>
+                <p>NGN {revenue.toFixed(2)}</p>
+              </StyledCard>
+            </StyledCardPair>
           </StyledCardContainerTop>
           <StyledCardContainerMid>
             <StyledWalletCard>
@@ -209,8 +221,14 @@ const Home = () => {
               <StyledCardOngoingTop>
                 <StyledCardOngoingTopTxt>
                   Ongoing Transactions:{" "}
-                  <span style={{ color: "#4db6ac", fontSize: "0.8rem" }}>
-                    3
+                  <span
+                    style={{
+                      color: "#f26600",
+                      fontSize: "1rem",
+                      marginLeft: "1rem",
+                    }}
+                  >
+                    1
                   </span>
                 </StyledCardOngoingTopTxt>
                 <div>
@@ -248,7 +266,9 @@ const Home = () => {
                 <StyledCardTxt>New pair of shoes</StyledCardTxt>
                 <StyledCardTxt>Counterparty: Footwarefairy</StyledCardTxt>
                 <StyledLine></StyledLine>
-                <StyledDetailsBtn>View Details</StyledDetailsBtn>
+                <StyledDetailsBtn>
+                  Mark Transaction as Complete
+                </StyledDetailsBtn>
               </StyledCardOngoingBtm>
             </StyledCardOngoing>
           </StyledCardContainerMid>
@@ -268,38 +288,24 @@ const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2341</StyledTd>
-                  <StyledTd>New pair of shoes</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>23/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>8/2/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N40,000</StyledTd>
-                  <StyledTd>pending</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2342</StyledTd>
-                  <StyledTd>LV Shirt</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>20/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>6/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N16,000</StyledTd>
-                  <StyledTd>pending</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2343</StyledTd>
-                  <StyledTd>Man. Utd track suit</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>10/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>23/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N25,000</StyledTd>
-                  <StyledTd>complete</StyledTd>
-                </tr>
-                <tr>
-                  <StyledTd style={{ textAlign: "center" }}>2344</StyledTd>
-                  <StyledTd>Torbo P cap</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>10/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>8/1/2024</StyledTd>
-                  <StyledTd style={{ textAlign: "right" }}>N2,500</StyledTd>
-                  <StyledTd>complete</StyledTd>
-                </tr>
+                {Table_transaction_data.map((transaction) => (
+                  <tr key={transaction.id}>
+                    <StyledTd style={{ textAlign: "center" }}>
+                      {transaction.id}
+                    </StyledTd>
+                    <StyledTd>{transaction.title}</StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.dateCreated}
+                    </StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.dateDue}
+                    </StyledTd>
+                    <StyledTd style={{ textAlign: "right" }}>
+                      {transaction.amount}
+                    </StyledTd>
+                    <StyledTd>{transaction.status}</StyledTd>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </StyledCardContainerBtm>{" "}
