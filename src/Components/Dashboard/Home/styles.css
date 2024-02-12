@@ -1,0 +1,19 @@
+.paystack-button {
+  background-color: #f26600;
+  border: 2px solid #f8701c;
+  color: #ffffff;
+  padding: 7px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  bottom: 0.5rem;
+  right: 6rem;
+
+  &:hover {
+    background-color: transparent;
+    border: 1px solid #f8701c;
+    color: #f8701c;
+    padding: 6px;
+  }
+}
