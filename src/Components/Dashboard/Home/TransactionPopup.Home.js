@@ -163,7 +163,7 @@ const TransactionFormPopup = ({
       counterpartyEmail: "",
       counterpartyPhone: "",
       setConditions: "",
-      termsAndConditions: false,
+      termsAndConditions: "",
     },
     validationSchema: Yup.object({
       role: Yup.string().required("Please select your role"),
@@ -193,10 +193,9 @@ const TransactionFormPopup = ({
         then: () =>
           Yup.string().required("Please enter terms for seller to review"),
       }),
-      termsAndConditions: Yup.boolean().when("currentStep", {
+      termsAndConditions: Yup.string().when("currentStep", {
         is: "payment",
-        then: () =>
-          Yup.boolean().oneOf([true], "Please accept terms and conditions"),
+        then: () => Yup.string().required("Please accept terms and conditions"),
       }),
     }),
     onSubmit: (values) => {
@@ -211,7 +210,7 @@ const TransactionFormPopup = ({
 
     let request = {
       reference: reference,
-      buyerId: userId,
+      buyerId: JSON.parse(userId),
       formData: {
         transactionType: formik.values.transactionType,
         amount: parsedAmount,
@@ -220,7 +219,7 @@ const TransactionFormPopup = ({
         counterpartyName: formik.values.counterpartyName,
         counterpartyEmail: formik.values.counterpartyEmail,
         counterpartyPhone: formik.values.counterpartyPhone,
-        setConditions: formik.values.setConditions,
+        setConditions: formik.values.termsAndConditions,
         termsAndConditions: formik.values.termsAndConditions,
       },
       redirectUrl: encodedLink,
@@ -276,7 +275,7 @@ const TransactionFormPopup = ({
         counterpartyName: formik.values.counterpartyName,
         counterpartyEmail: formik.values.counterpartyEmail?.toLowerCase(),
         counterpartyPhone: formik.values.counterpartyPhone,
-        setConditions: formik.values.setConditions,
+        setConditions: formik.values.termsAndConditions,
         termsAndConditions: formik.values.termsAndConditions,
       },
     };
@@ -426,7 +425,7 @@ const TransactionFormPopup = ({
               </div>
             )}
 
-            {currentStep === "payment" && (
+            {/* {currentStep === "payment" && (
               <div>
                 <Styledlabel>
                   <StyledInput
@@ -446,7 +445,7 @@ const TransactionFormPopup = ({
                     </StyledError>
                   )}
               </div>
-            )}
+            )} */}
           </div>
         );
       case 3:
@@ -506,25 +505,26 @@ const TransactionFormPopup = ({
         return (
           <div>
             <StyledHeader>Set Conditions</StyledHeader>
-            <Styledlabel htmlFor="counterpartyName">
+            <Styledlabel htmlFor="termsAndConditions">
               Enter terms for purchase:
             </Styledlabel>
 
             <StyledTextArea
               type="text"
-              name="setConditions"
-              id="setConditions"
+              name="termsAndConditions"
+              id="termsAndConditions"
               cols="30"
               rows="10"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.setConditions}
+              value={formik.values.termsAndConditions}
               style={{ display: "block" }}
             ></StyledTextArea>
 
-            {formik.errors.setConditions && formik.touched.setConditions && (
-              <StyledError>{formik.errors.setConditions}</StyledError>
-            )}
+            {formik.errors.termsAndConditions &&
+              formik.touched.termsAndConditions && (
+                <StyledError>{formik.errors.termsAndConditions}</StyledError>
+              )}
           </div>
         );
 
