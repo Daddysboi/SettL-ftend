@@ -30,6 +30,7 @@ const AuthGuard = ({ children }) => {
 
   const shouldGetProfile = ![
     "/login",
+    "/signup",
     "/",
     "/register",
     "/reset-password/*",
