@@ -167,6 +167,11 @@ const StyledCardContainerBtm = styled.div`
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
     height: 8rem;
   }
+
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    height: 11rem;
+  }
 `;
 
 const StyledTable = styled.table``;
@@ -183,6 +188,7 @@ const StyledTh = styled.th`
 
   // Small screens, laptops
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    padding-right: 0.5rem;
   }
 `;
 const StyledTd = styled.td`
