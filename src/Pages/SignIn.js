@@ -198,7 +198,7 @@ const SignIn = () => {
             style={{ margin: "auto" }}
           />
         )}
-        <StyledBtn type="submit">
+        <StyledBtn type="submit" disabled={loading}>
           {" "}
           {loading ? "Signing in..." : "Sign in"}
         </StyledBtn>
