@@ -176,6 +176,22 @@ const StyledSigninBtn = styled.button`
   }
 `;
 
+const StyledDashboardBtn = styled.button`
+  border: none;
+  border: solid 1px #f26600;
+  color: #f26600;
+  border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffff;
+  cursor: pointer;
+  &:hover {
+    background: #f26600;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    border: solid 1px #ffff;
+    color: #ffff;
+  }
+`;
+
 const MobileAuthIcons = styled.div`
   margin-top: 2rem;
 `;
@@ -333,7 +349,7 @@ const Header = () => {
             to="/dashboard"
             onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <StyledSignUpBtn>Explore Dashboard</StyledSignUpBtn>
+            <StyledDashboardBtn>Explore Dashboard</StyledDashboardBtn>
           </NavLink>
         ) : (
           <AuthIcons>
