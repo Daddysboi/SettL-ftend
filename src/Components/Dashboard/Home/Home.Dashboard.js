@@ -36,6 +36,10 @@ const StyledCard = styled.div`
   height: 5rem;
   background-color: #fff;
   padding: 0.2rem 1.2rem;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 5rem;
+    padding-bottom: 0.5rem;
+  }
 `;
 
 const StyledCardTxt = styled.p`
@@ -87,10 +91,13 @@ const StyledBtnCreate = styled.button`
 
 const StyledCardOngoing = styled.div`
   height: 14rem;
-
   font-size: 1rem;
   font-weight: 400;
   width: 30rem;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 15rem;
+    padding-bottom: 1rem;
+  }
 `;
 
 const StyledCardOngoingTop = styled.div`
@@ -109,6 +116,9 @@ const StyledCardOngoingBtm = styled.div`
   padding: 1rem 2rem 0 2rem;
   background-color: #fff;
   margin-top: 1rem;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    padding-bottom: 1rem;
+  }
 `;
 
 const StyledLine = styled.div`
@@ -117,6 +127,9 @@ const StyledLine = styled.div`
   background: #000000;
   opacity: 0.2;
   margin-bottom: 1rem;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    width: 10rem;
+  }
 `;
 const StyledDetailsBtn = styled.button`
   background-color: #f26600;
@@ -131,6 +144,12 @@ const StyledDetailsBtn = styled.button`
   }
 `;
 
+const StyledCardHeaderBtm = styled.h4`
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+`;
+
 const StyledCardContainerBtm = styled.div`
   height: 8rem;
   border-radius: 0.5rem;
@@ -140,27 +159,37 @@ const StyledCardContainerBtm = styled.div`
   margin-top: 1rem;
   /* width: 50vw; */
 
-  // Small screens, laptops
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: none;
+  }
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    height: 8rem;
+  }
+
   @media only screen and (min-width: 769px) and (max-width: 1024px) {
-    height: 13rem;
-  }
-
-  // Desktops, large screens
-  @media only screen and (min-width: 1025px) and (max-width: 1200px) {
-  }
-
-  // Extra large screens, TV
-  @media only screen and (min-width: 1201px) {
-    width: 43rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    height: 11rem;
   }
 `;
 
+const StyledTable = styled.table``;
 const StyledTh = styled.th`
   font-size: 0.7rem;
   text-align: left;
   font-weight: 400;
   padding-right: 2.2rem;
   padding-bottom: 0.5rem;
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    padding-right: 0.5rem;
+  }
+
+  // Small screens, laptops
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    padding-right: 0.5rem;
+  }
 `;
 const StyledTd = styled.td`
   font-size: 0.7rem;
@@ -291,9 +320,9 @@ const Home = ({ user, transactions }) => {
               </StyledCardOngoingBtm>
             </StyledCardOngoing>
           </StyledCardContainerMid>
-          <h4>Recent Transactions</h4>
+          <StyledCardHeaderBtm>Recent Transactions</StyledCardHeaderBtm>
           <StyledCardContainerBtm>
-            <table style={{ borderCollapse: "collapse" }}>
+            <StyledTable style={{ borderCollapse: "collapse" }}>
               <thead>
                 <tr
                   style={{ backgroundColor: "#4db6ac", borderRadius: "0.5rem" }}
@@ -326,7 +355,7 @@ const Home = ({ user, transactions }) => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </StyledTable>
           </StyledCardContainerBtm>{" "}
         </div>
         <div>

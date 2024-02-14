@@ -16,6 +16,19 @@ const StyledContainer = styled.div`
   height: 30rem;
   width: 50rem;
   font-size: 0.7rem;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    display: block;
+    width: 15rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 30rem;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 50vw;
+  }
 `;
 
 const StyledLeft = styled.div`
@@ -34,6 +47,17 @@ const StyledLeftTop = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 15rem;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 18rem;
+  }
 `;
 const StyledSpanCtn = styled.span`
   display: flex;
@@ -65,6 +89,17 @@ const StyledLeftBtm = styled.div`
   box-shadow: 0 0 2px 2px rgba(0.1, 0.1, 0.1, 0.05);
   padding: 1rem;
   flex: 1;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 15rem;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 18rem;
+  }
 `;
 
 const StyledRight = styled.div`
@@ -73,6 +108,18 @@ const StyledRight = styled.div`
   box-shadow: 0 0 2px 2px rgba(0.1, 0.1, 0.1, 0.05);
   padding: 1rem;
   background-color: #fff;
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    margin-top: 2rem;
+  }
+
+  // iPads, Tablets
+  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    width: 15rem;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1024px) {
+    width: 15rem;
+  }
 `;
 
 const ChatBox = styled.div`
@@ -120,9 +167,15 @@ const StyledBtnTop = styled.button`
     color: #f26600;
     background-color: #fff;
   }
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 0.8rem;
+    width: 11rem;
+
+    padding: 0.5rem 0.3rem;
+  }
 `;
 
-const StyledBtnBtn = styled.button`
+const StyledBtn = styled.button`
   border: 1px solid #f26600;
   background-color: #fff;
   color: #f26600;
@@ -134,6 +187,11 @@ const StyledBtnBtn = styled.button`
     background-color: #f26600;
     border: 1px solid #f26600;
     color: #ffffff;
+  }
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 0.8rem;
+    width: 5rem;
+    padding: 0.5rem 0.3rem;
   }
 `;
 const Transactions = ({ navigateTo }) => {
@@ -249,12 +307,15 @@ const Transactions = ({ navigateTo }) => {
           </StyledTranStatusCtn>
           <StyledSpanCtn style={{ display: "block" }}>
             <div>
-              <StyledBtnBtn onClick={() => handleClick("resolution")}>
+              <StyledBtn
+                onClick={() => handleClick("resolution")}
+                style={{ marginRight: "1rem" }}
+              >
                 Dispute
-              </StyledBtnBtn>{" "}
-              <StyledBtnBtn onClick={() => handleClick("tracker")}>
+              </StyledBtn>{" "}
+              <StyledBtn onClick={() => handleClick("tracker")}>
                 Track Order
-              </StyledBtnBtn>
+              </StyledBtn>
             </div>
             <StyledBtnTop>Mark Transaction as Complete</StyledBtnTop>
           </StyledSpanCtn>
