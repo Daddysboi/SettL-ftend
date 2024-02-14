@@ -170,8 +170,8 @@ const StyledTd = styled.td`
   padding-bottom: 0.5rem;
 `;
 
-const Home = () => {
-  const [totalTransactions, setTotalTransactions] = useState(0);
+const Home = ({ user, transactions }) => {
+  // const [totalTransactions, setTotalTransactions] = useState(0);
   const [walletBalance, setWalletBalance] = useState(0);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
   const [revenue, setRevenue] = useState(0);
@@ -207,11 +207,11 @@ const Home = () => {
             <StyledCardPair>
               <StyledCard>
                 <StyledCardTxt>Total Transactions</StyledCardTxt>
-                <p>{totalTransactions}</p>
+                <p>{transactions?.length || 0}</p>
               </StyledCard>
               <StyledCard>
                 <StyledCardTxt>Wallet Balance</StyledCardTxt>
-                <p>NGN {walletBalance.toFixed(2)}</p>
+                <p>NGN {user?.walletDetails?.toFixed(2) || 0}</p>
               </StyledCard>
             </StyledCardPair>
             <StyledCardPair>

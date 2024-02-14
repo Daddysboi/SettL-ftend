@@ -6,7 +6,7 @@ import {
 } from "../services/transactions.services";
 
 const initialState = {
-  transaction: {},
+  transactions: [],
 };
 
 export const createTransaction = createAsyncThunk(
@@ -56,12 +56,12 @@ export const verifyTransaction = createAsyncThunk(
 );
 
 export const transactionSlice = createSlice({
-  name: "transaction",
+  name: "transactions",
   initialState,
   reducers: {
-    setTransaction: (state, action) => {
+    setTransactions: (state, action) => {
       const { payload } = action;
-      state.transaction = payload;
+      state.transactions = payload;
     },
   },
   extraReducers: (builder) => {
@@ -105,6 +105,6 @@ export const transactionSlice = createSlice({
 });
 
 const { actions, reducer } = transactionSlice;
-export const { setTransaction } = actions;
+export const { setTransactions } = actions;
 
 export default reducer;

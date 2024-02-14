@@ -5,12 +5,13 @@ import { USER_TOKEN } from "./CONSTANTS";
 export const GetUserById = async (userId) => {
   const token = localStorage.getItem(USER_TOKEN);
   const id = JSON.parse(userId);
+  const parsedToken = JSON.parse(token);
 
   const response = await axios.get(
     `${process.env.REACT_APP_API_BASE_URL}/${GET_USER_BY_ID}/${id}`,
     {
       headers: {
-        Authorization: token,
+        Authorization: parsedToken,
         "Access-Control-Allow-Origin": "*",
       },
     }

@@ -111,14 +111,18 @@ const Dashboard = () => {
   const { page, initialLoad } = state;
   const { userId } = useParams();
 
+  const { transactions } = useAppSelector((state) => state.transaction);
   const { user } = useAppSelector((state) => state.user);
-  console.log("my user", user);
+  // transaction is an array, loop through it and use it, you can pass it as prop @ temi
+  console.log("User Transactions", transactions);
+  // user is an object, you can pass it as props @ temi
+  console.log("User Details", user);
 
   const logOut = () => {
     googleLogout();
     // setUser({}); // Clear user state
     // setProfile({}); // Clear profile state
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
   };
@@ -217,7 +221,7 @@ const Dashboard = () => {
         </StyledSideBar>
 
         <StyledRight>
-          {page === "home" && <Home />}
+          {page === "home" && <Home user={user} transactions={transactions} />}
           {page === "profile" && <Profile />}
           {page === "transactions" && <Transactions navigateTo={navigateTo} />}
           {page === "wallet" && <Wallet />}

@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/logo/favicon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import Switch from "react-switch";
+
 import { userContext } from "../../App";
+import { useAppSelector } from "../../redux/hooks";
+
+import logo from "../../assets/logo/favicon.png";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -72,6 +75,9 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { profile } = useContext(userContext);
 
+  const { user } = useAppSelector((state) => state.user);
+
+  // don't set state inside use Effect like this @temi
   useEffect(() => {
     setIsLoading(false);
   }, [profile]);
@@ -113,6 +119,8 @@ const Header = () => {
     fetchImage();
   }, []);
 
+  const displayName = `${user?.lastName} ${user?.firstName}`;
+
   return (
     <StyledContainer>
       <StyledLogo to="/">
@@ -132,7 +140,7 @@ const Header = () => {
                   <StyledAccountIcon icon={faUser} />
                 )}
                 <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
-                  {profile.name || "User"}
+                  {profile.name || displayName || "User"}
                 </span>
               </>
             )}

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { getUserById, setUser } from "./features/userSlice";
 import { useAppDispatch } from "./redux/hooks";
 import { USER_ID } from "./services/CONSTANTS";
+import { setTransactions } from "./features/transactionSlice";
 
-const AuthGuard = ({ children }) => {
+const Guard = ({ children }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -12,8 +14,6 @@ const AuthGuard = ({ children }) => {
 
   const handleError = () => {
     navigate("/login");
-
-    // To clear the current profile and its associated Redux store.
     window.location.reload();
   };
 
@@ -21,14 +21,15 @@ const AuthGuard = ({ children }) => {
     dispatch(getUserById(userId))
       .then((resp) => {
         const { data } = resp?.payload;
-        dispatch(setUser(data));
+        dispatch(setUser(data?.user));
+        dispatch(setTransactions(data?.transactions));
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
 
-  const shouldGetProfile = ![
+  const getProfile = ![
     "/login",
     "/",
     "/register",
@@ -36,14 +37,16 @@ const AuthGuard = ({ children }) => {
     "/forgot-password",
   ].includes(pathname);
 
-  useEffect(() => {
-    if (shouldGetProfile && localStorage?.USER_ID) {
-      handleGetUser(userId);
-    }
-  }, [shouldGetProfile, localStorage?.USER_TOKEN]);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (!localStorage?.USER_ID && shouldGetProfile) {
+    if (getProfile && localStorage?.USER_ID) {
+      handleGetUser(userId);
+    }
+  }, [getProfile, localStorage?.USER_TOKEN]);
+
+  useEffect(() => {
+    if (!localStorage?.USER_ID && getProfile) {
       handleError();
     }
   }, [localStorage?.USER_ID, pathname]);
@@ -51,4 +54,4 @@ const AuthGuard = ({ children }) => {
   return children;
 };
 
-export default AuthGuard;
+export default Guard;
