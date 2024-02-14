@@ -345,12 +345,14 @@ const Header = () => {
           Support
         </StyledLink>
         {isUserLoggedIn ? (
-          <NavLink
-            to="/dashboard"
-            onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <StyledDashboardBtn>Explore Dashboard</StyledDashboardBtn>
-          </NavLink>
+          <AuthIcons>
+            <NavLink
+              to="/dashboard"
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <StyledDashboardBtn>Explore Dashboard</StyledDashboardBtn>
+            </NavLink>
+          </AuthIcons>
         ) : (
           <AuthIcons>
             <NavLink
