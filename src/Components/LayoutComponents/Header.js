@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import favicon from "../../assets/logo/favicon.png";
 import { Link } from "react-scroll";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -197,6 +198,11 @@ const Header = () => {
     setMobileMenuOpen((prev) => !prev);
   };
 
+  const userId = localStorage.getItem(USER_ID);
+  const token = localStorage.getItem(USER_TOKEN);
+
+  const isUserLoggedIn = userId || token;
+
   return (
     <StyledContainer>
       {isMobileMenuOpen && (
@@ -322,20 +328,29 @@ const Header = () => {
         >
           Support
         </StyledLink>
-        <AuthIcons>
+        {isUserLoggedIn ? (
           <NavLink
-            to="/login"
+            to="/dashboard"
             onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <StyledSigninBtn>Log in</StyledSigninBtn>
+            <StyledSignUpBtn>Explore Dashboard</StyledSignUpBtn>
           </NavLink>
-          <NavLink
-            to="/signup"
-            onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <StyledSignUpBtn>Sign Up</StyledSignUpBtn>
-          </NavLink>
-        </AuthIcons>
+        ) : (
+          <AuthIcons>
+            <NavLink
+              to="/login"
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <StyledSigninBtn>Log in</StyledSigninBtn>
+            </NavLink>
+            <NavLink
+              to="/signup"
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <StyledSignUpBtn>Sign Up</StyledSignUpBtn>
+            </NavLink>
+          </AuthIcons>
+        )}
       </StyledLinks>
     </StyledContainer>
   );
