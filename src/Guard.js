@@ -31,6 +31,7 @@ const Guard = ({ children }) => {
 
   const getProfile = ![
     "/login",
+    "/signup",
     "/",
     "/register",
     "/reset-password/*",
