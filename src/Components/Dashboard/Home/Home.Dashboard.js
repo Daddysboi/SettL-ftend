@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,6 +9,7 @@ import {
 
 import Table_transaction_data from "../../../Data/Table_transaction_data.json";
 import TransactionFormPopup from "./TransactionPopup.Home";
+import OngoingTransactions from "./OngoingTransactions";
 
 const StyledCardContainerTop = styled.div`
   display: flex;
@@ -89,61 +90,6 @@ const StyledBtnCreate = styled.button`
   }
 `;
 
-const StyledCardOngoing = styled.div`
-  height: 14rem;
-  font-size: 1rem;
-  font-weight: 400;
-  width: 30rem;
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    width: 15rem;
-    padding-bottom: 1rem;
-  }
-`;
-
-const StyledCardOngoingTop = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledCardOngoingTopTxt = styled.h4`
-  margin: 0 2rem 0 0;
-`;
-
-const StyledCardOngoingBtm = styled.div`
-  height: 10rem;
-  border-radius: 0.5rem;
-  box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
-  padding: 1rem 2rem 0 2rem;
-  background-color: #fff;
-  margin-top: 1rem;
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    padding-bottom: 1rem;
-  }
-`;
-
-const StyledLine = styled.div`
-  width: 25rem;
-  height: 2px;
-  background: #000000;
-  opacity: 0.2;
-  margin-bottom: 1rem;
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    width: 10rem;
-  }
-`;
-const StyledDetailsBtn = styled.button`
-  background-color: #f26600;
-  color: #ffffff;
-  border-radius: 0.4rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  &:hover {
-    border: 1px solid #f26600;
-    color: #f26600;
-    background-color: #fff;
-  }
-`;
-
 const StyledCardHeaderBtm = styled.h4`
   @media only screen and (min-width: 320px) and (max-width: 480px) {
     display: none;
@@ -206,27 +152,49 @@ const Home = ({ user, transactions }) => {
   const [revenue, setRevenue] = useState(0);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
 
+  const filterTransactions = (trnx) => {
+    // List of statuses to exclude
+    const excludedStatuses = ["DECLINED", "REFUNDED", "APPROVED"];
+
+    // Filter transactions based on excluded statuses
+    const filteredTransactions = trnx.filter((transaction) => {
+      // Check if the transaction status is not in the excluded statuses list
+      return !excludedStatuses.includes(transaction.status);
+    });
+
+    return filteredTransactions;
+  };
+
+  const ongoingTransactions = useMemo(
+    () => filterTransactions(transactions),
+    [transactions]
+  );
+
   const handleCreateTransaction = () => {
     setTransactionFormOpen(false);
   };
 
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const url = "";
-    //     const { data } = await axios.get(url);
-    //     setTotalTransactions(data.totalTransactions || 0);
-    //     setWalletBalance(data.walletBalance || 0);
-    //     setWithdrawalCount(data.withdrawalCount || 0);
-    //     setRevenue(data.revenue || 0);
-    //     setOngoingTransactions(data.ongoingTransactions || []);
-    //     setRecentTransactions(data.recentTransactions || []);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchData();
-  }, []);
+  // useEffect(() => {
+  // const fetchData = async () => {
+  //   try {
+  //     const url = "";
+  //     const { data } = await axios.get(url);
+  //     setTotalTransactions(data.totalTransactions || 0);
+  //     setWalletBalance(data.walletBalance || 0);
+  //     setWithdrawalCount(data.withdrawalCount || 0);
+  //     setRevenue(data.revenue || 0);
+  //     setOngoingTransactions(data.ongoingTransactions || []);
+  //     setRecentTransactions(data.recentTransactions || []);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+  // fetchData();
+  // }, []);
+
+  // const handleProcessTransaction = () => {
+  //   alert("Hello world");
+  // };
 
   return (
     <>
@@ -265,7 +233,12 @@ const Home = ({ user, transactions }) => {
                 Create
               </StyledBtnCreate>
             </StyledWalletCard>
-            <StyledCardOngoing>
+            <OngoingTransactions
+              transactions={transactions}
+              user={user}
+              ongoingTransactions={ongoingTransactions}
+            />
+            {/* <StyledCardOngoing>
               <StyledCardOngoingTop>
                 <StyledCardOngoingTopTxt>
                   Ongoing Transactions:{" "}
@@ -314,11 +287,16 @@ const Home = ({ user, transactions }) => {
                 <StyledCardTxt>New pair of shoes</StyledCardTxt>
                 <StyledCardTxt>Counterparty: Footwarefairy</StyledCardTxt>
                 <StyledLine></StyledLine>
-                <StyledDetailsBtn>
-                  Mark Transaction as Complete
+                <StyledDetailsBtn
+                  type="button"
+                  onClick={handleProcessTransaction}
+                >
+                  {user?.role === "buyer"
+                    ? "Mark Transaction as Completed"
+                    : "Mark Transaction as Received"}
                 </StyledDetailsBtn>
               </StyledCardOngoingBtm>
-            </StyledCardOngoing>
+            </StyledCardOngoing> */}
           </StyledCardContainerMid>
           <StyledCardHeaderBtm>Recent Transactions</StyledCardHeaderBtm>
           <StyledCardContainerBtm>

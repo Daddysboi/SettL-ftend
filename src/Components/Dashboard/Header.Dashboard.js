@@ -134,13 +134,16 @@ const Header = () => {
               <StyledLoader />
             ) : (
               <>
-                {profile.picture ? (
-                  <StyledProfilePix src={profile.picture} alt={profile.name} />
+                {profile?.picture ? (
+                  <StyledProfilePix
+                    src={profile?.picture}
+                    alt={profile?.name}
+                  />
                 ) : (
                   <StyledAccountIcon icon={faUser} />
                 )}
                 <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
-                  {profile.name || displayName || "User"}
+                  {profile?.name || displayName || "User"}
                 </span>
               </>
             )}

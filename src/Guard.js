@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { getUserById, setUser } from "./features/userSlice";
@@ -17,8 +17,8 @@ const Guard = ({ children }) => {
     window.location.reload();
   };
 
-  const handleGetUser = async (userId) => {
-    dispatch(getUserById(userId))
+  const handleGetUser = async (id) => {
+    dispatch(getUserById(id))
       .then((resp) => {
         const { data } = resp?.payload;
         dispatch(setUser(data?.user));
@@ -33,12 +33,9 @@ const Guard = ({ children }) => {
     "/login",
     "/signup",
     "/",
-    "/register",
     "/reset-password/*",
     "/forgot-password",
   ].includes(pathname);
-
-  const initialized = useRef(false);
 
   useEffect(() => {
     if (getProfile && localStorage?.USER_ID) {
