@@ -3,10 +3,7 @@ import styled from "styled-components";
 import img from "../../assets/images/photo.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import {
-  faTelegram,
-  faTelegramPlane,
-} from "@fortawesome/free-brands-svg-icons";
+import { faTelegram } from "@fortawesome/free-brands-svg-icons";
 
 import EventTimeline from "../ReUseableComponent/EventTimeLine";
 
@@ -152,15 +149,45 @@ const StyledTranStatus = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const StyledBtnCtn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 15rem;
+`;
+
+const StyleCtnTop = styled.div`
+  display: flex;
+`;
 
 const StyledBtnTop = styled.button`
+  border: 1px solid #f26600;
+  background-color: #fff;
+  color: #f26600;
+  border-radius: 0.4rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  width: 7rem;
+
+  &:hover {
+    background-color: #f26600;
+    border: 1px solid #f26600;
+    color: #ffffff;
+  }
+  @media only screen and (min-width: 320px) and (max-width: 480px) {
+    font-size: 0.8rem;
+    width: 5rem;
+    padding: 0.5rem 0.3rem;
+  }
+`;
+const StyledBtnBtm = styled.button`
   background-color: #f26600;
   color: #ffffff;
   border-radius: 0.4rem;
   padding: 0.5rem 1rem;
   border: none;
   border: 1px solid #f26600;
-  width: 14rem;
+  width: 100%;
   margin-bottom: 0.5rem;
   &:hover {
     border: 1px solid #f26600;
@@ -175,26 +202,7 @@ const StyledBtnTop = styled.button`
   }
 `;
 
-const StyledBtn = styled.button`
-  border: 1px solid #f26600;
-  background-color: #fff;
-  color: #f26600;
-  border-radius: 0.4rem;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-  width: 7rem;
-  &:hover {
-    background-color: #f26600;
-    border: 1px solid #f26600;
-    color: #ffffff;
-  }
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 0.8rem;
-    width: 5rem;
-    padding: 0.5rem 0.3rem;
-  }
-`;
-const Transactions = ({ navigateTo }) => {
+const Transactions = ({ navigateTo, user, transactions }) => {
   const [state, setState] = useState("");
   const handleClick = (action) => {
     switch (action) {
@@ -296,29 +304,40 @@ const Transactions = ({ navigateTo }) => {
           <StyledSpanHead>
             Update transaction progress to keep other party updates
           </StyledSpanHead>
-          <StyledTranStatusCtn>
-            <StyledTranStatus style={{ flex: "5" }}>
-              <EventTimeline
-                orderAccepted={true}
-                orderDispatched={true}
-                orderCompleted={true}
-              />
-            </StyledTranStatus>
-          </StyledTranStatusCtn>
-          <StyledSpanCtn style={{ display: "block" }}>
+
+          {transactions?.length ? (
             <div>
-              <StyledBtn
-                onClick={() => handleClick("resolution")}
-                style={{ marginRight: "1rem" }}
-              >
-                Dispute
-              </StyledBtn>{" "}
-              <StyledBtn onClick={() => handleClick("tracker")}>
-                Track Order
-              </StyledBtn>
+              <StyledTranStatusCtn>
+                <StyledTranStatus style={{ flex: "5" }}>
+                  <EventTimeline
+                    orderAccepted={true}
+                    orderDispatched={true}
+                    orderCompleted={true}
+                  />
+                </StyledTranStatus>
+              </StyledTranStatusCtn>
+              <StyledBtnCtn style={{ display: "block" }}>
+                <StyleCtnTop>
+                  <StyledBtnTop
+                    onClick={() => handleClick("resolution")}
+                    style={{ marginRight: "1rem" }}
+                  >
+                    Dispute
+                  </StyledBtnTop>{" "}
+                  <StyledBtnTop onClick={() => handleClick("tracker")}>
+                    Track Order
+                  </StyledBtnTop>
+                </StyleCtnTop>
+                <StyledBtnBtm>
+                  {user?.role === "buyer"
+                    ? "Mark Transaction as Received"
+                    : "Mark Transaction as Completed"}
+                </StyledBtnBtm>
+              </StyledBtnCtn>
             </div>
-            <StyledBtnTop>Mark Transaction as Complete</StyledBtnTop>
-          </StyledSpanCtn>
+          ) : (
+            <div> No Transaction Found</div>
+          )}
         </StyledRight>
       </StyledContainer>
     </div>
