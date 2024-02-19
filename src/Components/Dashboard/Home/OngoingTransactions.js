@@ -100,16 +100,6 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
 
   const disabledButton = ["VERIFIED", "RECEIVED"];
 
-  const approvedTransactions = ongoingTransactions.filter(
-    (transaction) =>
-      transaction.status !== "DECLINED" || transaction.status !== "RECEIVED"
-  ).length;
-
-  console.log(
-    !disabledButton.includes(currentTransaction?.status),
-    currentTransaction?.status
-  );
-
   const handleProcessTransaction = () => {
     if (user?.role === "seller") {
       if (currentTransaction?.status !== "RECEIVED") {
@@ -141,7 +131,7 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
                 marginLeft: "1rem",
               }}
             >
-              {currentTransaction ? approvedTransactions : 0}
+              {currentTransaction ? currentIndex + 1 : 0}
             </span>
           </StyledCardOngoingTopTxt>
           <div>

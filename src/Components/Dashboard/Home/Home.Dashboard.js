@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
@@ -87,18 +87,13 @@ const StyledBtnCreate = styled.button`
 `;
 
 const Home = ({ user, transactions }) => {
-  // const [totalTransactions, setTotalTransactions] = useState(0);
   const [withdrawalCount, setWithdrawalCount] = useState(0);
   const [revenue, setRevenue] = useState(0);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
 
   const filterTransactions = (trnx) => {
-    // List of statuses to exclude
     const excludedStatuses = ["DECLINED", "REFUNDED", "APPROVED"];
-
-    // Filter transactions based on excluded statuses
     const filteredTransactions = trnx.filter((transaction) => {
-      // Check if the transaction status is not in the excluded statuses list
       return !excludedStatuses.includes(transaction.status);
     });
 
@@ -113,28 +108,6 @@ const Home = ({ user, transactions }) => {
   const handleCreateTransaction = () => {
     setTransactionFormOpen(false);
   };
-
-  // useEffect(() => {
-  // const fetchData = async () => {
-  //   try {
-  //     const url = "";
-  //     const { data } = await axios.get(url);
-  //     setTotalTransactions(data.totalTransactions || 0);
-  //     setWalletBalance(data.walletBalance || 0);
-  //     setWithdrawalCount(data.withdrawalCount || 0);
-  //     setRevenue(data.revenue || 0);
-  //     setOngoingTransactions(data.ongoingTransactions || []);
-  //     setRecentTransactions(data.recentTransactions || []);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-  // fetchData();
-  // }, []);
-
-  // const handleProcessTransaction = () => {
-  //   alert("Hello world");
-  // };
 
   return (
     <>
@@ -183,7 +156,6 @@ const Home = ({ user, transactions }) => {
               </StyledBtnCreate>
             </StyledWalletCard>
             <OngoingTransactions
-              transactions={transactions}
               user={user}
               ongoingTransactions={ongoingTransactions}
             />
