@@ -86,7 +86,7 @@ const StyledBtnCreate = styled.button`
   }
 `;
 
-const Home = ({ user, transactions }) => {
+const Home = ({ user, transactions, handleNext, handlePrevious }) => {
   const [withdrawalCount, setWithdrawalCount] = useState(0);
   const [revenue, setRevenue] = useState(0);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
@@ -158,6 +158,8 @@ const Home = ({ user, transactions }) => {
             <OngoingTransactions
               user={user}
               ongoingTransactions={ongoingTransactions}
+              handleNext={handleNext}
+              handlePrevious={handlePrevious}
             />
           </StyledCardContainerMid>
 

@@ -106,7 +106,7 @@ const Faqs = () => {
               onClick={() => toggleAccordion(index)}
             >
               <StyledQuestion>
-                {item.question}{" "}
+                {item.question}
                 <FontAwesomeIcon
                   style={{ fontSize: "0.8rem" }}
                   icon={accordion === index ? faChevronUp : faChevronDown}
