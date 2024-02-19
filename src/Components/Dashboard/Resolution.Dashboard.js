@@ -67,9 +67,9 @@ const Resolution = () => {
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       let request = {
-        transactionId: values.transactionId,
-        reason: values.reason,
-        description: values.description,
+        transactionId: values?.transactionId,
+        reason: values?.reason,
+        description: values?.description,
         userId: userId,
       };
 
