@@ -5,11 +5,7 @@ import {
   CONTACT_OUR_SUPPORT,
   DISPUTE_TRANSACTION,
   UPDATE_TRANSACTION_STATUS,
-  USER_TOKEN,
 } from "../services/CONSTANTS";
-
-const token = localStorage.getItem(USER_TOKEN);
-const parsedToken = JSON.parse(token);
 
 export const SaveEmailToMailingList = async ({ email }) => {
   const data = { email };
@@ -65,7 +61,6 @@ export const UpdateTransactionStatus = async ({ transactionId, newStatus }) => {
     data,
     {
       headers: {
-        Authorization: parsedToken,
         "Access-Control-Allow-Origin": "*",
       },
     }
