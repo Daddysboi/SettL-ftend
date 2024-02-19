@@ -6,27 +6,32 @@ import { useAppDispatch } from "./redux/hooks";
 import { USER_ID } from "./services/CONSTANTS";
 import { setTransactions } from "./features/transactionSlice";
 
+export const useFetchUserData = () => {
+  const userId = localStorage.getItem(USER_ID);
+  const dispatch = useAppDispatch();
+
+  const handleGetUser = async () => {
+    try {
+      const resp = await dispatch(getUserById(userId));
+      const { data } = resp.payload;
+      dispatch(setUser(data?.user));
+      dispatch(setTransactions(data?.transactions));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  return handleGetUser;
+};
+
 const Guard = ({ children }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const userId = localStorage.getItem(USER_ID);
+  const fetchUserData = useFetchUserData();
 
   const handleError = () => {
     navigate("/login");
     window.location.reload();
-  };
-
-  const handleGetUser = async (id) => {
-    dispatch(getUserById(id))
-      .then((resp) => {
-        const { data } = resp?.payload;
-        dispatch(setUser(data?.user));
-        dispatch(setTransactions(data?.transactions));
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
   };
 
   const getProfile = ![
@@ -39,7 +44,7 @@ const Guard = ({ children }) => {
 
   useEffect(() => {
     if (getProfile && localStorage?.USER_ID) {
-      handleGetUser(userId);
+      fetchUserData();
     }
   }, [getProfile, localStorage?.USER_TOKEN]);
 

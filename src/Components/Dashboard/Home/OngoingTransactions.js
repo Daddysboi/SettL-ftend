@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { updateTransactionStatus } from "../../../features/utilitySlice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { useNavigate } from "react-router-dom";
+import { useFetchUserData } from "../../../Guard";
 
 const StyledCardOngoing = styled.div`
   height: 14rem;
@@ -89,6 +90,7 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const fetchUserData = useFetchUserData();
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
@@ -156,7 +158,7 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
       toast.error(error?.message || "Something went wrong");
     } finally {
       setLoading(false);
-      window.location.reload();
+      fetchUserData();
     }
   };
 

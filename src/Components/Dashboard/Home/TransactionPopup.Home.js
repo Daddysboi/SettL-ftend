@@ -15,7 +15,6 @@ import styled from "styled-components";
 import "react-toastify/dist/ReactToastify.css";
 import { TailSpin as Loader } from "react-loader-spinner";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 import {
   createTransaction,
@@ -23,8 +22,11 @@ import {
 } from "../../../features/transactionSlice";
 import { USER_ID } from "../../../services/CONSTANTS";
 import { useAppDispatch } from "../../../redux/hooks";
+import { useFetchUserData } from "../../../Guard";
+
 import popupimg from "../../../assets/images/popupimg.png";
 
+import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
 
 const StyledModal = styled(Modal)`
@@ -165,6 +167,7 @@ const TransactionFormPopup = ({
   }/confirm-transaction`;
   const encodedLink = encodeURI(text);
   const dispatch = useAppDispatch();
+  const fetchUserData = useFetchUserData();
 
   const formik = useFormik({
     initialValues: {
@@ -254,7 +257,8 @@ const TransactionFormPopup = ({
         }
         onRequestClose();
         toast.success(resp?.payload?.message || "Please check your inbox");
-        window.location.reload();
+        // window.location.reload();
+        fetchUserData();
         setLoading(false);
       })
       .catch((error) => {
