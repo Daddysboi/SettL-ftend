@@ -17,3 +17,21 @@
     padding: 6px;
   }
 }
+
+/* Date Picker */
+.rasta-stripes {
+  color: #f26600;
+  font-family: poppins;
+  font-size: 0.6rem;
+
+  border: none;
+  .react-datepicker__week:nth-child(3n + 1) {
+    background-color: #ffffff;  
+  }
+  .react-datepicker__week:nth-child(3n + 2) {
+    background-color: rgba(233, 199, 175, 0.3);
+  }
+  .react-datepicker__week:nth-child(3n + 3) {
+    background-color: rgba(223, 140, 82, 0.3);
+  }
+}

@@ -1,6 +1,10 @@
 import axios from "axios";
 
-import { MAILING_LIST, CONTACT_OUR_SUPPORT } from "../services/CONSTANTS";
+import {
+  MAILING_LIST,
+  CONTACT_OUR_SUPPORT,
+  DISPUTE_TRANSACTION,
+} from "../services/CONSTANTS";
 
 export const SaveEmailToMailingList = async ({ email }) => {
   const data = { email };
@@ -34,8 +38,9 @@ export const DisputeTransaction = async ({
   transactionId,
   reason,
   description,
+  userId,
 }) => {
-  const data = { transactionId, reason, description };
+  const data = { transactionId, reason, description, userId };
   const response = await axios.post(
     `${process.env.REACT_APP_API_BASE_URL}/${DISPUTE_TRANSACTION}`,
     data,

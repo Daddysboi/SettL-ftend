@@ -26,6 +26,7 @@ import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
 import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 
+import img from "../../assets/images/db-bg.png";
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -295,7 +296,13 @@ const Dashboard = () => {
         <StyledRight>
           {page === "home" && <Home user={user} transactions={transactions} />}
           {page === "profile" && <Profile />}
-          {page === "transactions" && <Transactions navigateTo={navigateTo} />}
+          {page === "transactions" && (
+            <Transactions
+              navigateTo={navigateTo}
+              user={user}
+              transactions={transactions}
+            />
+          )}
           {page === "wallet" && <Wallet />}
           {page === "settings" && <Settings />}
           {page === "tracker" && <Tracker navigateTo={navigateTo} />}

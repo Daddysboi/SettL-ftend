@@ -28,6 +28,7 @@ const StyledLogo = styled(NavLink)`
   color: #f26600;
   font-size: 2rem;
   text-decoration: none;
+  font-weight: 600;
 `;
 
 const StyledImg = styled.img`

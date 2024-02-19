@@ -27,6 +27,14 @@ const StyledCardOngoingTopTxt = styled.h4`
   margin: 0 2rem 0 0;
 `;
 
+const FontAwesome = styled(FontAwesomeIcon)`
+  color: #4db6ac;
+  cursor: pointer;
+  &:hover {
+    color: #557e7e;
+  }
+`;
+
 const StyledCardOngoingBtm = styled.div`
   height: 10rem;
   border-radius: 0.5rem;
@@ -92,6 +100,11 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
 
   const disabledButton = ["VERIFIED", "RECEIVED"];
 
+  const approvedTransactions = ongoingTransactions.filter(
+    (transaction) =>
+      transaction.status !== "DECLINED" || transaction.status !== "RECEIVED"
+  ).length;
+
   console.log(
     !disabledButton.includes(currentTransaction?.status),
     currentTransaction?.status
@@ -128,24 +141,18 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
                 marginLeft: "1rem",
               }}
             >
-              {currentTransaction ? currentIndex + 1 : 0}
+              {currentTransaction ? approvedTransactions : 0}
             </span>
           </StyledCardOngoingTopTxt>
           <div>
-            <FontAwesomeIcon
+            <FontAwesome
               icon={faArrowCircleLeft}
               style={{
                 marginRight: "0.5rem",
-                color: "#4db6ac",
-                cursor: "pointer",
               }}
               onClick={handlePrevious}
             />
-            <FontAwesomeIcon
-              icon={faArrowCircleRight}
-              style={{ color: "#4db6ac", cursor: "pointer" }}
-              onClick={handleNext}
-            />
+            <FontAwesome icon={faArrowCircleRight} onClick={handleNext} />
           </div>
         </StyledCardOngoingTop>
         {ongoingTransactions?.length || currentTransaction ? (
