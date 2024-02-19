@@ -55,16 +55,17 @@ export const updateTransactionStatus = createAsyncThunk(
 
 export const disputeTransaction = createAsyncThunk(
   "disputeTransaction",
-  async ({ fullName, email, message }) => {
+  async ({ transactionId, reason, description, userId }) => {
     try {
       const resp = await DisputeTransaction({
-        fullName,
-        email,
-        message,
+        transactionId,
+        reason,
+        description,
+        userId,
       });
       return resp;
     } catch (error) {
-      throw error; // Throw the error to let Redux Toolkit handle the rejection
+      throw error;
     }
   }
 );
@@ -97,6 +98,18 @@ export const utilitySlice = createSlice({
     builder.addCase(contactOurSupport.rejected, (state) => {
       state.isLoggedIn = false;
       // state.user = null;
+      state.isLoading = false;
+    });
+
+    // disputeTransaction actions
+    builder.addCase(disputeTransaction.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(disputeTransaction.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(disputeTransaction.rejected, (state) => {
+      state.isLoggedIn = false;
       state.isLoading = false;
     });
 
