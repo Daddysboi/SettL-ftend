@@ -3,6 +3,7 @@ import {
   ContactOurSupport,
   SaveEmailToMailingList,
   DisputeTransaction,
+  UpdateTransactionStatus,
 } from "../services/utility.services";
 
 const initialState = {};
@@ -29,6 +30,21 @@ export const contactOurSupport = createAsyncThunk(
         fullName,
         email,
         message,
+      });
+      return resp;
+    } catch (error) {
+      throw error; // Throw the error to let Redux Toolkit handle the rejection
+    }
+  }
+);
+
+export const updateTransactionStatus = createAsyncThunk(
+  "updateTransactionStatus",
+  async ({ transactionId, newStatus }) => {
+    try {
+      const resp = await UpdateTransactionStatus({
+        transactionId,
+        newStatus,
       });
       return resp;
     } catch (error) {
@@ -81,6 +97,18 @@ export const utilitySlice = createSlice({
     builder.addCase(contactOurSupport.rejected, (state) => {
       state.isLoggedIn = false;
       // state.user = null;
+      state.isLoading = false;
+    });
+
+    // updateTransactionStatus actions
+    builder.addCase(updateTransactionStatus.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateTransactionStatus.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updateTransactionStatus.rejected, (state) => {
+      state.isLoggedIn = false;
       state.isLoading = false;
     });
   },

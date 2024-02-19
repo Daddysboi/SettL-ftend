@@ -10,6 +10,7 @@ export const DISPUTE_TRANSACTION = "dispute-transaction";
 export const CREATE_TRANSACTION = "create-transaction";
 export const VERIFY_TRANSACTION = "verify-transaction";
 export const VERIFY_TRANSACTION_DETAILS = "verify-transaction-details";
+export const UPDATE_TRANSACTION_STATUS = "update-transaction-status";
 
 export const GET_USER_BY_ID = "getUserById";
 

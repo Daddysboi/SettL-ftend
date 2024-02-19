@@ -254,6 +254,7 @@ const TransactionFormPopup = ({
         }
         onRequestClose();
         toast.success(resp?.payload?.message || "Please check your inbox");
+        window.location.reload();
         setLoading(false);
       })
       .catch((error) => {

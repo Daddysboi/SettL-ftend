@@ -4,7 +4,12 @@ import {
   MAILING_LIST,
   CONTACT_OUR_SUPPORT,
   DISPUTE_TRANSACTION,
+  UPDATE_TRANSACTION_STATUS,
+  USER_TOKEN,
 } from "../services/CONSTANTS";
+
+const token = localStorage.getItem(USER_TOKEN);
+const parsedToken = JSON.parse(token);
 
 export const SaveEmailToMailingList = async ({ email }) => {
   const data = { email };
@@ -46,6 +51,21 @@ export const DisputeTransaction = async ({
     data,
     {
       headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const UpdateTransactionStatus = async ({ transactionId, newStatus }) => {
+  const data = { transactionId, newStatus };
+  const response = await axios.post(
+    `${process.env.REACT_APP_API_BASE_URL}/${UPDATE_TRANSACTION_STATUS}`,
+    data,
+    {
+      headers: {
+        Authorization: parsedToken,
         "Access-Control-Allow-Origin": "*",
       },
     }

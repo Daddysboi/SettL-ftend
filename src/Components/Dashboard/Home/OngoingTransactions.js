@@ -6,6 +6,9 @@ import {
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { updateTransactionStatus } from "../../../features/utilitySlice";
+import { useAppDispatch } from "../../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
 const StyledCardOngoing = styled.div`
   height: 14rem;
@@ -83,6 +86,9 @@ const StyledCardTxt = styled.p`
 
 const OngoingTransactions = ({ user, ongoingTransactions }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
@@ -98,17 +104,79 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
 
   const currentTransaction = ongoingTransactions[currentIndex];
 
-  const disabledButton = ["VERIFIED", "RECEIVED"];
+  const disabledButton = ["VERIFIED", "DISPATCHED", "RECEIVED"];
 
-  const handleProcessTransaction = () => {
+  // PENDING, DECLINED, REFUNDED, VERIFIED, DISPATCHED,  RECEIVED, COMPLETED transaction status
+
+  const handleProcessTransaction = async () => {
+    let newStatus;
+    let errorMessage;
+
     if (user?.role === "seller") {
-      if (currentTransaction?.status !== "RECEIVED") {
-        return toast.error("Transaction has not been received by the customer");
+      if (currentTransaction?.status === "VERIFIED") {
+        newStatus = "DISPATCHED";
+      } else if (currentTransaction?.status !== "RECEIVED") {
+        errorMessage = "Transaction has not been received by the customer";
+      } else {
+        newStatus = "COMPLETED";
       }
-      alert("Call update transaction status to approved here seller");
-      return;
     }
-    alert("Call update transaction status to approved here buyer");
+
+    if (user?.role === "buyer") {
+      if (currentTransaction?.status === "RECEIVED") {
+        errorMessage = "Product has already been received by the seller.";
+      } else if (currentTransaction?.status !== "DISPATCHED") {
+        errorMessage = "Product has not been dispatched by the seller.";
+      } else {
+        newStatus = "RECEIVED";
+      }
+    }
+
+    if (errorMessage) {
+      return toast.error(errorMessage);
+    }
+
+    setLoading(true);
+
+    try {
+      const resp = await dispatch(
+        updateTransactionStatus({
+          transactionId: currentTransaction?._id,
+          newStatus: newStatus,
+        })
+      );
+
+      if (resp?.payload?.status === 200) {
+        toast.success(resp?.payload?.message || "Successfully logged in");
+        navigate("/dashboard");
+      } else {
+        toast.error(resp?.payload?.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      window.location.reload();
+    }
+  };
+
+  const handleGetButtonTitle = () => {
+    let title = "Mark Transaction as Received";
+
+    if (user?.role === "seller") {
+      title = "Mark Transaction as Dispatched";
+    }
+
+    if (
+      user?.role === "seller" &&
+      ["DISPATCHED", "RECEIVED", "COMPLETED"].includes(
+        currentTransaction?.status
+      )
+    ) {
+      title = "Mark Transaction as Completed";
+    }
+
+    return title;
   };
 
   return (
@@ -179,9 +247,7 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
               onClick={handleProcessTransaction}
               type="button"
             >
-              {user?.role === "buyer"
-                ? "Mark Transaction as Received"
-                : "Mark Transaction as Completed"}
+              {loading ? "Processing" : handleGetButtonTitle()}
             </StyledDetailsBtn>
           </StyledCardOngoingBtm>
         ) : (
