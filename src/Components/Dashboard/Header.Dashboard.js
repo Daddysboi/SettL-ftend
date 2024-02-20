@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import axios from "axios";
 import Switch from "react-switch";
 
 import { userContext } from "../../App";
@@ -75,6 +74,7 @@ const StyledLoader = styled.div`
 const Header = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { profile } = useContext(userContext);
+  // const [isSellerMode, setIsSellerMode] = useState(true);
 
   const { user } = useAppSelector((state) => state.user);
 
@@ -83,42 +83,9 @@ const Header = () => {
     setIsLoading(false);
   }, [profile]);
 
-  // const [isSellerMode, setIsSellerMode] = useState(true);
-
   // const handleModeToggle = (checked) => {
   //   setIsSellerMode(checked);
   // };
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const url =
-          "https://res.cloudinary.com/daj31htoa/image/upload/v1706072203/WhatsApp_Image_2022-12-22_at_4.29.04_AM_-_Copy_b0ui8d.jpg";
-        const res = await axios.get(url, userData, {});
-
-        if (res.status === 200) {
-          const contentType = res.headers["content-type"];
-          if (contentType.includes("image")) {
-            // console.log("Image data:", res.data);
-            setUserData((prevUserData) => ({
-              ...prevUserData,
-              profilePicture: url,
-            }));
-          }
-        } else {
-          console.error("Failed to fetch user data");
-          const jsonData = JSON.parse(new TextDecoder().decode(res.data));
-          console.log("JSON data:", jsonData);
-        }
-      } catch (error) {
-        console.error("Error loading user data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImage();
-  }, []);
 
   const displayName = `${user?.lastName} ${user?.firstName}`;
 

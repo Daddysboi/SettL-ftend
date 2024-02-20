@@ -17,16 +17,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { userContext } from "../../App";
 import Home from "./Home/Home.Dashboard";
-import Settings from "./Settings.Dashboard";
+import Settings from "./Settings/Settings.Dashboard";
 import Transactions from "./Transactions/Transactions.Dashboard";
 import Wallet from "./Wallet.Dashboard";
-import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
 import { USER_ID, USER_TOKEN } from "../../services/CONSTANTS";
 
-import img from "../../assets/images/db-bg.png";
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -315,8 +313,10 @@ const Dashboard = () => {
               ongoingTransactions={ongoingTransactions}
             />
           )}
-          {page === "wallet" && <Wallet />}
-          {page === "settings" && <Settings />}
+          {page === "wallet" && (
+            <Wallet user={user} transactions={transactions} />
+          )}
+          {page === "settings" && <Settings user={user} />}
           {page === "tracker" && <Tracker navigateTo={navigateTo} />}
           {page === "resolution" && <Resolution />}
         </StyledRight>

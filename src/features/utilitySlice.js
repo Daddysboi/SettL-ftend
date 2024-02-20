@@ -124,19 +124,6 @@ export const utilitySlice = createSlice({
       state.isLoggedIn = false;
       state.isLoading = false;
     });
-
-    // dispute Transaction actions
-    builder.addCase(disputeTransaction.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(disputeTransaction.fulfilled, (state) => {
-      state.isLoading = false;
-    });
-    builder.addCase(disputeTransaction.rejected, (state) => {
-      state.isLoggedIn = false;
-      // state.user = null;
-      state.isLoading = false;
-    });
   },
 });
 
