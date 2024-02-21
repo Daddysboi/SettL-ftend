@@ -1,27 +1,16 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import styled from "styled-components";
 
 import AppInput from "../../ReUseableComponent/AppInput";
+import ErrorRed from "../../ReUseableComponent/ErrorRed";
 
-const Container = styled.div`
-  width: 30rem;
-  margin-left: 4rem;
-`;
-
-const StyledForm = styled(Form)`
-  width: 20rem;
-`;
-
-const Button = styled.button`
-  margin-top: 2rem;
-  background: #3bb75e;
-  border: none;
-  border-radius: 0.2rem;
-  padding: 0.5rem;
-  color: #fff;
-`;
-const AccountDetails = ({ user }) => {
+const AccountDetails = ({
+  user,
+  PropsContainer,
+  Button,
+  StyledForm,
+  Title,
+}) => {
   const initialValues = {
     bankName: "",
     accountName: "",
@@ -41,15 +30,8 @@ const AccountDetails = ({ user }) => {
   });
 
   return (
-    <Container>
-      <div
-        style={{
-          color: "gray",
-          marginBottom: "1.5rem",
-        }}
-      >
-        Set Up Your Account
-      </div>
+    <PropsContainer>
+      <Title>Set Up Your Account</Title>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -64,12 +46,12 @@ const AccountDetails = ({ user }) => {
                 type="bankName"
                 id="bankName"
                 name="bankName"
-                width="95%"
+                width="100%"
                 component={AppInput}
                 height="2rem"
                 labelColor="gray"
               />
-              <ErrorMessage name="firstname" />
+              <ErrorMessage name="bankName" component={ErrorRed} />
             </div>
 
             <div>
@@ -84,7 +66,7 @@ const AccountDetails = ({ user }) => {
                 labelColor="gray"
                 height="2rem"
               />
-              <ErrorMessage name="email" />
+              <ErrorMessage name="accountNumber" component={ErrorRed} />
             </div>
 
             <div>
@@ -99,7 +81,7 @@ const AccountDetails = ({ user }) => {
                 labelColor="gray"
                 height="2rem"
               />
-              <ErrorMessage name="accountName" />
+              <ErrorMessage name="accountName" component={ErrorRed} />
             </div>
 
             <div
@@ -120,14 +102,14 @@ const AccountDetails = ({ user }) => {
                 height="2rem"
                 eyeTop="6px"
               />
-              <ErrorMessage name="password" />
+              <ErrorMessage name="password" component={ErrorRed} />
             </div>
 
             <Button type="submit">Save Changes</Button>
           </>
         </StyledForm>
       </Formik>
-    </Container>
+    </PropsContainer>
   );
 };
 

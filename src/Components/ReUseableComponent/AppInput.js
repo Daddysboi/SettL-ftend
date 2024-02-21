@@ -7,6 +7,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const StyledInputContainer = styled.div`
   position: relative;
   margin-bottom: 12px;
+  input[type="file"]::-webkit-file-upload-button {
+    border: 1px solid #3bb75e;
+    background-color: #3bb75e;
+    border-radius: 0.2rem;
+    color: #fff;
+
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* For Firefox */
+  input[type="file"]::-moz-file-upload-button {
+    border: 1px solid #3bb75e;
+    background-color: #3bb75e;
+    border-radius: 0.2rem;
+    color: #fff;
+
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* For Microsoft Edge */
+  input[type="file"]::-ms-browse {
+    border: 1px solid #3bb75e;
+    background-color: #3bb75e;
+    border-radius: 0.2rem;
+    color: #fff;
+    padding: 0.2rem 0.4rem;
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -19,13 +46,12 @@ const StyledLabel = styled.label`
 const StyledInput = styled.input`
   width: 100%;
   height: ${(props) => props.height || "42px"};
-  background-color: ${(props) => props.backgroundColor || "transparent"};
-  /* border: ${(props) => props.border || "rgba(223, 140, 82, 0.3)"}; */
+  background: ${(props) => props.backgroundColor || "transparent"};
+  border: ${(props) => props.border || "1px solid rgba(223, 140, 82, 0.3)"};
   padding: 0.5rem;
   box-sizing: border-box;
   display: block;
   border-radius: 0.3rem;
-  border: 1px solid rgba(223, 140, 82, 0.3);
   outline: none;
   &::placeholder {
     opacity: 0.5;
@@ -63,6 +89,23 @@ const StyledPasswordInput = styled.input`
   }
 `;
 
+const StyledSelect = styled.select`
+  width: ${(props) => props.width || "100%"};
+  height: ${(props) => props.height || "42px"};
+  background: ${(props) => props.backgroundColor || "transparent"};
+  border: ${(props) => props.border || "1px solid rgba(223, 140, 82, 0.3)"};
+  padding: 0.5rem;
+  box-sizing: border-box;
+  display: block;
+  border-radius: 0.3rem;
+  outline: none;
+  color: ${(props) => props.color || "inherit"};
+
+  &:focus {
+    border: 1px solid rgb(194, 194, 194);
+  }
+`;
+
 const ErrorContainer = styled.div`
   width: 100%;
   position: absolute;
@@ -88,6 +131,7 @@ const StyledTextarea = styled.textarea`
 
 const AppInput = ({
   type,
+  accept,
   name,
   value,
   placeholder,
@@ -102,9 +146,11 @@ const AppInput = ({
   onBlur,
   labelColor,
   eyeTop,
-  backgroundColor,
+  background,
   border,
+  color,
   showEyeIcon = true,
+  display,
   ...props
 }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -155,6 +201,7 @@ const AppInput = ({
                 top: "50%",
                 transform: "translateY(-50%)",
                 cursor: "pointer",
+                color: "gray",
               }}
             />
           )}
@@ -192,6 +239,27 @@ const AppInput = ({
       </StyledInputContainer>
     );
   }
+
+  if (type === "select") {
+    return (
+      <StyledInputContainer>
+        <StyledLabel style={{ color: labelColor }} htmlFor={name}>
+          {label}
+        </StyledLabel>
+        <StyledSelect
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          style={{ width, height, color, border, background, display }}
+          {...props}
+        >
+          {props.children}
+        </StyledSelect>
+        {error && <ErrorContainer>{error}</ErrorContainer>}
+      </StyledInputContainer>
+    );
+  }
   return (
     <StyledInputContainer>
       <StyledLabel style={{ color: labelColor }} htmlFor="">
@@ -199,13 +267,12 @@ const AppInput = ({
       </StyledLabel>
       <StyledInput
         type={type}
+        accept={accept}
         name={name}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
-        backgroundColor={backgroundColor}
-        border={border}
-        style={{ width, height }}
+        style={{ width, height, color, border, background, display }}
         {...props}
       />
       {error && <ErrorContainer>{error}</ErrorContainer>}

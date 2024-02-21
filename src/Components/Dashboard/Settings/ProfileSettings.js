@@ -2,28 +2,16 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Switch from "react-switch";
-import styled from "styled-components";
-
 import AppInput from "../../ReUseableComponent/AppInput";
+import ErrorRed from "../../ReUseableComponent/ErrorRed";
 
-const Container = styled.div`
-  width: 30rem;
-  margin-left: 4rem;
-`;
-
-const StyledForm = styled(Form)`
-  width: 20rem;
-`;
-
-const Button = styled.button`
-  margin-top: 2rem;
-  background: #3bb75e;
-  border: none;
-  border-radius: 0.2rem;
-  padding: 0.5rem;
-  color: #fff;
-`;
-const ProfileSettings = ({ user }) => {
+const ProfileSettings = ({
+  user,
+  PropsContainer,
+  Button,
+  StyledForm,
+  Title,
+}) => {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
 
   const initialValues = {
@@ -48,15 +36,8 @@ const ProfileSettings = ({ user }) => {
   });
 
   return (
-    <Container>
-      <div
-        style={{
-          color: "gray",
-          marginBottom: "1.5rem",
-        }}
-      >
-        Your Profile
-      </div>
+    <PropsContainer>
+      <Title>Your Profile</Title>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -81,7 +62,7 @@ const ProfileSettings = ({ user }) => {
                 height="2rem"
                 labelColor="gray"
               />
-              <ErrorMessage name="firstname" />
+              <ErrorMessage name="firstname" component={ErrorRed} />
 
               <Field
                 label="Last Name"
@@ -94,13 +75,13 @@ const ProfileSettings = ({ user }) => {
                 labelColor="gray"
                 height="2rem"
               />
-              <ErrorMessage name="firstname" />
+              <ErrorMessage name="firstname" component={ErrorRed} />
             </div>
 
             <div>
               <Field
                 label="SettL Id"
-                value={user?._Id}
+                value={user?._id}
                 type="text"
                 id="id"
                 name="id"
@@ -108,8 +89,9 @@ const ProfileSettings = ({ user }) => {
                 width="20rem"
                 labelColor="gray"
                 height="2rem"
-                backgroundColor="#f2f2f2"
-                border="none"
+                background="#DBDBDB"
+                border="1px solid #DBDBDB"
+                color="gray"
               />
             </div>
 
@@ -125,7 +107,7 @@ const ProfileSettings = ({ user }) => {
                 labelColor="gray"
                 height="2rem"
               />
-              <ErrorMessage name="email" />
+              <ErrorMessage name="email" component={ErrorRed} />
             </div>
 
             <div>
@@ -140,7 +122,7 @@ const ProfileSettings = ({ user }) => {
                 labelColor="gray"
                 height="2rem"
               />
-              <ErrorMessage name="phoneNumber" />
+              <ErrorMessage name="phoneNumber" component={ErrorRed} />
             </div>
 
             <div
@@ -150,7 +132,7 @@ const ProfileSettings = ({ user }) => {
               }}
             >
               <Field
-                label="password"
+                label="Password"
                 inputType="password"
                 placeholder="••••••••••"
                 id="password"
@@ -165,6 +147,20 @@ const ProfileSettings = ({ user }) => {
               <ErrorMessage name="password" />
             </div>
 
+            <div>
+              <Field
+                label="Upload Picture"
+                type="file"
+                placeholder={user?.profilePicture || "Enter Phone Number"}
+                id="uploadPicture"
+                name="uploadPicture"
+                component={AppInput}
+                labelColor="gray"
+                accept="image/*"
+                border="none"
+              />
+              <ErrorMessage name="uploadPicture" component={ErrorRed} />
+            </div>
             <div
               style={{
                 display: "flex",
@@ -204,7 +200,7 @@ const ProfileSettings = ({ user }) => {
           </>
         </StyledForm>
       </Formik>
-    </Container>
+    </PropsContainer>
   );
 };
 

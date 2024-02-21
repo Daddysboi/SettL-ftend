@@ -5,6 +5,7 @@ import {
   CONTACT_OUR_SUPPORT,
   DISPUTE_TRANSACTION,
   UPDATE_TRANSACTION_STATUS,
+  ADD_LOCATION,
 } from "../services/CONSTANTS";
 
 export const SaveEmailToMailingList = async ({ email }) => {
@@ -66,4 +67,21 @@ export const UpdateTransactionStatus = async ({ transactionId, newStatus }) => {
     }
   );
   return response.data;
+};
+
+export const AddLocation = async ({ location }) => {
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_BASE_URL}/your_endpoint_here`,
+      { ADD_LOCATION },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

@@ -1,5 +1,6 @@
 import { useReducer } from "react";
 import styled from "styled-components";
+import { Form } from "formik";
 
 import AccountDetails from "./AccountDetails";
 import ProfileSettings from "./ProfileSettings";
@@ -36,6 +37,32 @@ const TabBtn = styled.button`
   }
 `;
 
+const PropsContainer = styled.div`
+  width: 30rem;
+  margin-left: 4rem;
+`;
+
+const StyledForm = styled(Form)`
+  width: 20rem;
+`;
+
+const Button = styled.button`
+  margin-top: 2rem;
+  background: #3bb75e;
+  border: none;
+  border-radius: 0.2rem;
+  padding: 0.5rem;
+  color: #fff;
+  width: 20rem;
+  &:hover {
+    background: green;
+  }
+`;
+
+const Title = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
 const initialState = {
   activeSection: "profileSettings",
 };
@@ -70,18 +97,24 @@ const Settings = ({ user }) => {
         >
           Profile Settings
         </TabBtn>
-        <TabBtn
-          onClick={() => handleSectionClick("ACCOUNT_DETAILS")}
-          isActive={state.activeSection === "accountDetails"}
-        >
-          Account Details
-        </TabBtn>
-        <TabBtn
-          onClick={() => handleSectionClick("KYC")}
-          isActive={state.activeSection === "kyc"}
-        >
-          KYC
-        </TabBtn>
+        {user?.role === "seller" ? (
+          <>
+            <TabBtn
+              onClick={() => handleSectionClick("ACCOUNT_DETAILS")}
+              isActive={state.activeSection === "accountDetails"}
+            >
+              Account Details
+            </TabBtn>
+            <TabBtn
+              onClick={() => handleSectionClick("KYC")}
+              isActive={state.activeSection === "kyc"}
+            >
+              KYC
+            </TabBtn>
+          </>
+        ) : (
+          ""
+        )}
         <TabBtn
           onClick={() => handleSectionClick("CONTACT_DETAILS")}
           isActive={state.activeSection === "contactDetails"}
@@ -91,14 +124,40 @@ const Settings = ({ user }) => {
       </HeaderContainer>
       <div>
         {state.activeSection === "profileSettings" && (
-          <ProfileSettings user={user} />
+          <ProfileSettings
+            user={user}
+            PropsContainer={PropsContainer}
+            Button={Button}
+            Title={Title}
+            StyledForm={StyledForm}
+          />
         )}
         {state.activeSection === "accountDetails" && (
-          <AccountDetails user={user} />
+          <AccountDetails
+            user={user}
+            PropsContainer={PropsContainer}
+            Button={Button}
+            Title={Title}
+            StyledForm={StyledForm}
+          />
         )}
-        {state.activeSection === "kyc" && <Kyc user={user} />}
+        {state.activeSection === "kyc" && (
+          <Kyc
+            user={user}
+            PropsContainer={PropsContainer}
+            Button={Button}
+            Title={Title}
+            StyledForm={StyledForm}
+          />
+        )}
         {state.activeSection === "contactDetails" && (
-          <ContactDetails user={user} />
+          <ContactDetails
+            user={user}
+            PropsContainer={PropsContainer}
+            Button={Button}
+            StyledForm={StyledForm}
+            Title={Title}
+          />
         )}
       </div>
     </Container>
