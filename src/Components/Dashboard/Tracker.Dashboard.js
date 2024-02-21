@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCodeCommit,
-  faEdit,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCodeCommit } from "@fortawesome/free-solid-svg-icons";
+import { Formik, Field, ErrorMessage, Form } from "formik";
+import * as Yup from "yup";
+
+import { addLocation } from "../../features/utilitySlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const TrackerContainer = styled.div`
   margin: 0 auto;
@@ -23,7 +24,7 @@ const MilestoneList = styled.ul`
   margin-top: 4rem;
 `;
 
-const StyledInput = styled.input`
+const StyledField = styled(Field)`
   width: 20rem;
   min-height: 42px;
   padding: 0.5rem;
@@ -67,15 +68,6 @@ const IconWrapper = styled.div`
   transform: rotate(90deg);
 `;
 
-const Line = styled.div`
-  /* width: 1px;
-  background-color: #4db6ac;
-  position: absolute;
-  top: ${({ top }) => top}px;
-  bottom: ${({ bottom }) => bottom}px;
-  left: 5px; */
-`;
-
 const MilestoneText = styled.div`
   display: flex;
   align-items: center;
@@ -87,92 +79,74 @@ const LocationText = styled.div`
   margin-right: 10px;
 `;
 
-const DeleteButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #4db6ac;
-  margin-left: 5px;
-`;
-
-const DateTimeWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
 const DateText = styled.div`
   color: #4db6ac;
   font-size: 0.55rem;
   margin-bottom: 0.25rem;
 `;
+
 const TimeText = styled.div`
   font-size: 0.55rem;
   color: #4db6ac;
   margin-top: 0.25rem;
 `;
 
-const Timestamp = ({ timestamp }) => {
-  const formattedDate = new Date(timestamp).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  const formattedTime = new Date(timestamp).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return (
-    <DateTimeWrapper>
-      <DateText>{formattedDate}</DateText>
-      <TimeText>{formattedTime}</TimeText>
-    </DateTimeWrapper>
-  );
-};
-
 const Tracker = () => {
-  const [currentLocation, setCurrentLocation] = useState("");
+  const [loading, setLoading] = useState(false);
   const [milestones, setMilestones] = useState([]);
+  const dispatch = useAppDispatch();
 
-  const handleAddMilestone = () => {
-    if (currentLocation.trim() !== "") {
-      const timestamp = new Date().toISOString(); // Get current timestamp
-      setMilestones([...milestones, { location: currentLocation, timestamp }]);
-      setCurrentLocation("");
-    }
+  const initialValues = {
+    currentLocation: "",
   };
 
-  const handleEditMilestone = (index, newLocation) => {
-    const updatedMilestones = [...milestones];
-    updatedMilestones[index].location = newLocation;
-    setMilestones(updatedMilestones);
+  const validationSchema = Yup.object({
+    currentLocation: Yup.string().required("Current location is required"),
+  });
+
+  const onSubmit = async (values, { resetForm }) => {
+    try {
+      await dispatch(addLocation({ location: values.currentLocation }));
+      dispatch(addLocation(request)).then((resp) => {
+        if (resp?.payload?.status !== 201) {
+          toast.error(resp?.payload?.message || "Something went wrong");
+          setLoading(false);
+          return;
+        }
+        toast.success(resp?.payload?.message || "Successfully subscribed");
+        resetForm();
+        setLoading(false);
+      });
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+      setLoading(false);
+    }
   };
 
   return (
     <TrackerContainer>
       <TrackerHeader>Order Tracking</TrackerHeader>
-      <div>
-        <StyledInput
-          type="text"
-          value={currentLocation}
-          placeholder="Enter current location"
-          onChange={(e) => setCurrentLocation(e.target.value)}
-        />
-        <SubmitButton onClick={handleAddMilestone}>
-          Submit Location
-        </SubmitButton>
-      </div>
+      <Formik
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+        initialValues={initialValues}
+      >
+        <Form>
+          <StyledField
+            id="location"
+            name="currentLocation"
+            type="text"
+            placeholder="Enter current location"
+          />
+          <ErrorMessage name="currentLocation" component="div" />
+          <SubmitButton type="submit">Submit Location</SubmitButton>
+        </Form>
+      </Formik>
       <MilestoneList>
         <h2>Current Stop</h2>
         {milestones.map((milestone, index) => (
           <MilestoneItem key={index}>
-            {index !== 0 && <Line top={(index - 1) * 26} bottom={26} />}
+            {index !== 0}
             <IconWrapper>
               <FontAwesomeIcon icon={faCodeCommit} size="lg" color="#4db6ac" />
             </IconWrapper>

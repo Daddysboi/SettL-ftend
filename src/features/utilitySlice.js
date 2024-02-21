@@ -4,6 +4,7 @@ import {
   SaveEmailToMailingList,
   DisputeTransaction,
   UpdateTransactionStatus,
+  AddLocation,
 } from "../services/utility.services";
 
 const initialState = {};
@@ -62,6 +63,19 @@ export const disputeTransaction = createAsyncThunk(
         reason,
         description,
         userId,
+      });
+      return resp;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const addLocation = createAsyncThunk(
+  "addLocation",
+  async ({ location }) => {
+    try {
+      const resp = await AddLocation({
+        location,
       });
       return resp;
     } catch (error) {

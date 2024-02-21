@@ -55,7 +55,8 @@ const disputeValidationSchema = Yup.object().shape({
 const Resolution = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const userId = localStorage.getItem(USER_ID);
+  const userId = localStorage.getItem(USER_ID).replace(/"/g, "");
+
   const disputeFormik = useFormik({
     initialValues: {
       transactionId: "",
@@ -71,11 +72,13 @@ const Resolution = () => {
         description: values?.description,
         userId: userId,
       };
+
       dispatch(disputeTransaction(request))
         .then((resp) => {
           if (resp?.payload?.status !== 201) {
             toast.error(resp?.payload?.message || "Something went wrong");
             setLoading(false);
+
             return;
           }
           toast.success(

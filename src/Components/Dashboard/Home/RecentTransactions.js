@@ -82,25 +82,22 @@ const StyledTd = styled.td`
 `;
 
 const RecentTransactions = ({ user, transactions }) => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentTable, setCurrentTable] = useState(0);
 
-  const itemsPerPage = 4;
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, transactions.length);
+  const itemsPerTable = 4;
+  const startIndex = currentTable * itemsPerTable;
+  const endIndex = Math.min(startIndex + itemsPerTable, transactions.length);
 
-  const nextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+  const nextTable = () => {
+    setCurrentTable((prevTable) => prevTable + 1);
   };
 
-  const prevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  const prevTable = () => {
+    setCurrentTable((prevTable) => Math.max(prevTable - 1, 0));
   };
 
   const formatDate = (dateString) => {
-    // Create a new Date object from the dateString
     const date = new Date(dateString);
-
-    // Format the date as desired
     const formattedDate = date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
@@ -111,16 +108,14 @@ const RecentTransactions = ({ user, transactions }) => {
   };
 
   const formatAmount = (amount) => {
-    // Convert amount to number
     const numAmount = parseFloat(amount);
-    // Check if the amount has more than 3 digits
     if (numAmount >= 1000) {
-      // Format with comma for thousands
       return numAmount.toLocaleString();
     } else {
       return amount;
     }
   };
+
   return (
     <div>
       <StyledCardContainer>
@@ -131,9 +126,9 @@ const RecentTransactions = ({ user, transactions }) => {
             style={{
               marginRight: "0.5rem",
             }}
-            onClick={prevPage}
+            onClick={prevTable}
           />
-          <FontAwesome icon={faArrowCircleRight} onClick={nextPage} />
+          <FontAwesome icon={faArrowCircleRight} onClick={nextTable} />
         </div>
       </StyledCardContainer>
       <StyledCardContainerBtm>
@@ -168,7 +163,7 @@ const RecentTransactions = ({ user, transactions }) => {
               </tr>
             ))}
           </tbody>
-        </StyledTable>{" "}
+        </StyledTable>
       </StyledCardContainerBtm>
     </div>
   );
