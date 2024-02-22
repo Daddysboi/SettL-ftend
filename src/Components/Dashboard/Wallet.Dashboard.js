@@ -176,26 +176,26 @@ const Wallet = ({ user, transactions }) => {
   }
   return (
     <div>
-      {/* {user?.role === "seller" ? ( */}{" "}
-      <StyledCardPair>
-        <StyledCard>
-          <StyledCardHead>Wallet Balance</StyledCardHead>
-          <p>NGN {user?.walletDetails?.toFixed(2) || 0}</p>
-        </StyledCard>
-        <StyledCard>
-          <StyledCardHead>Withdraw</StyledCardHead>
-          <StyledCardTxt>
-            Seamlessly withdraw funds for financial flexibility.
-          </StyledCardTxt>
+      {user?.role === "seller" ? (
+        <StyledCardPair>
+          <StyledCard>
+            <StyledCardHead>Wallet Balance</StyledCardHead>
+            <p>NGN {user?.walletDetails?.toFixed(2) || 0}</p>
+          </StyledCard>
+          <StyledCard>
+            <StyledCardHead>Withdraw</StyledCardHead>
+            <StyledCardTxt>
+              Seamlessly withdraw funds for financial flexibility.
+            </StyledCardTxt>
 
-          <StyledBtn onClick={handleWithdrawal} disabled={withdrawal}>
-            Withdraw Balance
-          </StyledBtn>
-        </StyledCard>
-      </StyledCardPair>
-      {/* ) : (
-                ""
-              )} */}
+            <StyledBtn onClick={handleWithdrawal} disabled={withdrawal}>
+              Withdraw Balance
+            </StyledBtn>
+          </StyledCard>
+        </StyledCardPair>
+      ) : (
+        ""
+      )}
       <div>
         <StyledCardContainer>
           <StyledCardHeaderBtm>Transactions History</StyledCardHeaderBtm>

@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import EventTimeline from "./EventTimeLine";
+
+import { userContext } from "../../../App";
 
 const StyledSpanHead = styled.span`
   font-size: 0.7rem;
@@ -47,27 +49,6 @@ const StyledBtnTop = styled.button`
     padding: 0.5rem 0.3rem;
   }
 `;
-const StyledBtnBtm = styled.button`
-  background-color: #f26600;
-  color: #ffffff;
-  border-radius: 0.4rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border: 1px solid #f26600;
-  width: 100%;
-  margin-bottom: 0.5rem;
-  &:hover {
-    border: 1px solid #f26600;
-    color: #f26600;
-    background-color: #fff;
-  }
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-    font-size: 0.8rem;
-    width: 11rem;
-
-    padding: 0.5rem 0.3rem;
-  }
-`;
 
 const StyledDetailsBtn = styled.button.attrs((props) => ({
   disabled: props.disabled,
@@ -97,11 +78,14 @@ const TransactionProgress = ({
   StyledSpanCtn,
   disabledButton,
   handleProcessTransaction,
+  navigateTo,
   currentIndex,
 }) => {
-  const [transactionData, setTransactionData] = useState(currentTransaction);
+  // const [setTransactionData] = useState(currentTransaction);
+  const { setcurrentTransactionId } = useContext(userContext);
 
   const handleClick = (action) => {
+    setcurrentTransactionId(currentTransaction?._id);
     switch (action) {
       case "resolution":
         navigateTo("resolution");
@@ -113,12 +97,11 @@ const TransactionProgress = ({
         break;
     }
   };
-  useEffect(() => {
-    setTransactionData(currentTransaction);
-  }, [currentTransaction]);
+  // useEffect(() => {
+  //   setTransactionData(currentTransaction);
+  // }, [currentTransaction]);
   return (
     <div>
-      {" "}
       <StyledSpanCtn>
         <StyledHeader style={{ marginBottom: "1rem" }}>
           Transaction Progress

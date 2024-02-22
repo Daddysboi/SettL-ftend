@@ -1,9 +1,23 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import styled from "styled-components";
+
 import AppInput from "../../ReUseableComponent/AppInput";
 import ErrorRed from "../../ReUseableComponent/ErrorRed";
 
-const AddContact = ({ user, PropsContainer, Button, StyledForm, Title }) => {
+const AddContact = ({
+  user,
+  PropsContainer,
+  Button,
+  Txt,
+  StyledForm,
+  Title,
+  FileInputContainer,
+  StyledLabel,
+  StyledInput,
+  UploadButton,
+  FaCloudUploadAlt,
+}) => {
   const initialValues = {
     homeAddress: "",
     landmark: "",
@@ -91,22 +105,46 @@ const AddContact = ({ user, PropsContainer, Button, StyledForm, Title }) => {
             />
             <ErrorMessage name="postalCode" component={ErrorRed} />
           </div>
+
           <div>
-            <Field
-              label="Proof of Address"
-              placeholder={user?.proofOfAddress || ""}
-              type="file"
-              id="proofOfAddress"
-              name="proofOfAddress"
-              component={AppInput}
-              width="20rem"
-              labelColor="gray"
-              height="2rem"
-              accept="image/*"
-              border="none"
-            />
-            <ErrorMessage name="proofOfAddress" component={ErrorRed} />
+            <Field name="uploadPicture">
+              {({ form, field }) => (
+                <FileInputContainer>
+                  <StyledLabel htmlFor="uploadPicture">
+                    Proof of Address (Max 2MB)
+                  </StyledLabel>
+                  <div>
+                    <UploadButton htmlFor="proofOfAddress">
+                      <FaCloudUploadAlt />
+                    </UploadButton>
+                    <StyledInput
+                      id="proofOfAddress"
+                      name="proofOfAddress"
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) => {
+                        form.setFieldValue(
+                          "proofOfAddress",
+                          event.currentTarget.files[0]
+                        );
+                      }}
+                    />
+                  </div>{" "}
+                  <Txt>Utility bill must not be more that 3 months old</Txt>
+                  <ErrorMessage name="proofOfAddress" component={ErrorRed} />
+                  <span
+                    style={{
+                      opacity: "0.5",
+                      fontSize: "0.6rem",
+                    }}
+                  >
+                    {field.value && field.value.name}
+                  </span>
+                </FileInputContainer>
+              )}
+            </Field>
           </div>
+
           <Button type="submit">Add Contact</Button>
         </StyledForm>
       </Formik>

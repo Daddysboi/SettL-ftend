@@ -5,7 +5,6 @@ import {
   faArrowCircleLeft,
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
 
 const StyledCardContainer = styled.div`
   display: flex;

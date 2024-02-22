@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import styled from "styled-components";
 import AppInput from "../ReUseableComponent/AppInput";
 import { USER_ID } from "../../services/CONSTANTS";
 import { useAppDispatch } from "../../redux/hooks";
+import { userContext } from "../../App";
 
 import { disputeTransaction } from "../../features/utilitySlice";
 
@@ -56,6 +57,8 @@ const Resolution = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const userId = localStorage.getItem(USER_ID).replace(/"/g, "");
+  const { currentTransactionId, setcurrentTransactionId } =
+    useContext(userContext);
 
   const disputeFormik = useFormik({
     initialValues: {
@@ -103,7 +106,7 @@ const Resolution = () => {
             label="Transaction ID"
             type="text"
             name="transactionId"
-            value={disputeFormik.values.transactionId}
+            value={currentTransactionId}
             placeholder="Enter Transaction ID"
             onChange={disputeFormik.handleChange}
             error={

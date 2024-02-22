@@ -4,6 +4,9 @@ export const SEND_OTP = "send-otp";
 export const LOGIN = "signin";
 export const REQUEST_PASSWORD_RESET = "request-password-reset";
 export const RESET_PASSWORD = "password-reset";
+
+export const UPDATE_PASSWORD = "password-update";
+
 export const MAILING_LIST = "mailing-list";
 export const CONTACT_OUR_SUPPORT = "contact-our-support";
 export const DISPUTE_TRANSACTION = "dispute-transaction";

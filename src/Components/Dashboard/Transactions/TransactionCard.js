@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import img from "../../../assets/images/photo.jpeg";
+import StatusIcon from "./StatusIcon";
 
 const DivCtn = styled.div`
   height: 3rem;
@@ -22,15 +23,12 @@ const StyledImg = styled.img`
 const TransactionCard = ({
   transactions,
   currentTransaction,
-  user,
   StyledSpanCtn,
   StyledHeader,
-  handleNext,
-  handlePrevious,
   currentIndex,
   ongoingTransactions,
 }) => {
-  const [transactionData, setTransactionData] = useState(currentTransaction);
+  // const [transactionData, setTransactionData] = useState(currentTransaction);
 
   const formatAmount = (amount) => {
     const numAmount = parseFloat(amount);
@@ -51,9 +49,9 @@ const TransactionCard = ({
     return formattedDate;
   };
 
-  useEffect(() => {
-    setTransactionData(ongoingTransactions[currentIndex]);
-  }, [currentIndex, ongoingTransactions]);
+  // useEffect(() => {
+  //   setTransactionData(ongoingTransactions[currentIndex]);
+  // }, [currentIndex, ongoingTransactions]);
   return (
     <div>
       {transactions?.length ? (
@@ -61,7 +59,7 @@ const TransactionCard = ({
           <DivCtn>
             <StyledSpanCtn>
               <StyledHeader>
-                {transactionData?.formData?.productName}
+                {currentTransaction?.formData?.productName}
               </StyledHeader>
             </StyledSpanCtn>
           </DivCtn>
@@ -76,8 +74,8 @@ const TransactionCard = ({
                   <StyledImg src={img} alt="" />
                 </span>
                 <span style={{ display: "flex", flexDirection: "column" }}>
-                  <span>{currentTransaction?.formData?.name}</span>
-                  <span>{currentTransaction?.formData?.phoneNumber}</span>
+                  <span>{currentTransaction?.formData?.counterpartyName}</span>
+                  <span>{currentTransaction?.formData?.counterpartyPhone}</span>
                 </span>
               </StyledSpan>
               <StyledSpan>
@@ -91,7 +89,9 @@ const TransactionCard = ({
               <StyledSpanHead>Date Due</StyledSpanHead>
             </StyledSpanCtn>
             <StyledSpanCtn>
-              <StyledSpan>{formatDate(transactionData?.createAt)}</StyledSpan>
+              <StyledSpan>
+                {formatDate(currentTransaction?.createAt)}
+              </StyledSpan>
               <StyledSpan>{formatDate(currentTransaction?.dateDue)}</StyledSpan>
             </StyledSpanCtn>
           </DivCtn>
@@ -101,7 +101,12 @@ const TransactionCard = ({
               <StyledSpanHead>Transaction Type</StyledSpanHead>
             </StyledSpanCtn>
             <StyledSpanCtn>
-              <StyledSpan>{transactionData?.status}</StyledSpan>
+              <StyledSpan>
+                <span style={{ display: "flex", gap: "0.5rem" }}>
+                  {currentTransaction?.status}:
+                  <StatusIcon status={currentTransaction?.status} />
+                </span>
+              </StyledSpan>
               <StyledSpan>
                 {currentTransaction?.formData?.transactionType}
               </StyledSpan>

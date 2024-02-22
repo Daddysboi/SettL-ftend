@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Switch from "react-switch";
+import styled from "styled-components";
+
 import AppInput from "../../ReUseableComponent/AppInput";
 import ErrorRed from "../../ReUseableComponent/ErrorRed";
 
@@ -11,6 +13,11 @@ const ProfileSettings = ({
   Button,
   StyledForm,
   Title,
+  FileInputContainer,
+  StyledLabel,
+  StyledInput,
+  UploadButton,
+  FaCloudUploadAlt,
 }) => {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
 
@@ -19,7 +26,6 @@ const ProfileSettings = ({
     lastname: user?.lastName || "",
     email: user?.email || "",
     phoneNumber: user?.phoneNumber || "",
-    password: user?.password || "",
     twoFactorAuth: false,
   };
 
@@ -32,7 +38,14 @@ const ProfileSettings = ({
     lastname: Yup.string(),
     email: Yup.string().email("Invalid email address"),
     phoneNumber: Yup.string().required("Phone number is required"),
-    password: Yup.string(),
+    uploadPicture: Yup.mixed().test(
+      "fileSize",
+      "Picture must not be more than 2MB",
+      function (value) {
+        if (!value || !value.size) return true;
+        return value.size <= 2 * 1024 * 1024;
+      }
+    ),
   });
 
   return (
@@ -77,7 +90,6 @@ const ProfileSettings = ({
               />
               <ErrorMessage name="firstname" component={ErrorRed} />
             </div>
-
             <div>
               <Field
                 label="SettL Id"
@@ -94,7 +106,6 @@ const ProfileSettings = ({
                 color="gray"
               />
             </div>
-
             <div>
               <Field
                 label="E-Mail"
@@ -109,7 +120,6 @@ const ProfileSettings = ({
               />
               <ErrorMessage name="email" component={ErrorRed} />
             </div>
-
             <div>
               <Field
                 label="Phone Number"
@@ -125,42 +135,44 @@ const ProfileSettings = ({
               <ErrorMessage name="phoneNumber" component={ErrorRed} />
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Field
-                label="Password"
-                inputType="password"
-                placeholder="••••••••••"
-                id="password"
-                name="password"
-                component={AppInput}
-                width="20rem"
-                labelColor="gray"
-                height="2rem"
-                eyeTop="6px"
-                showEyeIcon={false}
-              />
-              <ErrorMessage name="password" />
+            <div>
+              <Field name="uploadPicture">
+                {({ form, field }) => (
+                  <FileInputContainer>
+                    <StyledLabel htmlFor="uploadPicture">
+                      Upload Picture (Max 2MB)
+                    </StyledLabel>
+                    <div>
+                      <UploadButton htmlFor="uploadPicture">
+                        <FaCloudUploadAlt />
+                      </UploadButton>
+                      <StyledInput
+                        id="uploadPicture"
+                        name="uploadPicture"
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => {
+                          form.setFieldValue(
+                            "uploadPicture",
+                            event.currentTarget.files[0]
+                          );
+                        }}
+                      />
+                    </div>
+                    <ErrorMessage name="uploadPicture" component={ErrorRed} />
+                    <span
+                      style={{
+                        opacity: "0.5",
+                        fontSize: "0.6rem",
+                      }}
+                    >
+                      {field.value && field.value.name}
+                    </span>
+                  </FileInputContainer>
+                )}
+              </Field>
             </div>
 
-            <div>
-              <Field
-                label="Upload Picture"
-                type="file"
-                placeholder={user?.profilePicture || "Enter Phone Number"}
-                id="uploadPicture"
-                name="uploadPicture"
-                component={AppInput}
-                labelColor="gray"
-                accept="image/*"
-                border="none"
-              />
-              <ErrorMessage name="uploadPicture" component={ErrorRed} />
-            </div>
             <div
               style={{
                 display: "flex",
@@ -195,7 +207,6 @@ const ProfileSettings = ({
               />
               {twoFactorAuth && <span> Enabled</span>}
             </div>
-
             <Button type="submit">Save Changes</Button>
           </>
         </StyledForm>

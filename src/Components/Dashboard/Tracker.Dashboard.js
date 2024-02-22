@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCodeCommit } from "@fortawesome/free-solid-svg-icons";
@@ -7,10 +7,10 @@ import * as Yup from "yup";
 
 import { addLocation } from "../../features/utilitySlice";
 import { useAppDispatch } from "../../redux/hooks";
+import { userContext } from "../../App";
 
 const TrackerContainer = styled.div`
-  margin: 0 auto;
-  padding: 20px;
+  margin: 0;
 `;
 
 const TrackerHeader = styled.h2`
@@ -21,7 +21,6 @@ const TrackerHeader = styled.h2`
 const MilestoneList = styled.ul`
   list-style: none;
   padding: 0;
-  margin-top: 4rem;
 `;
 
 const StyledField = styled(Field)`
@@ -32,6 +31,7 @@ const StyledField = styled(Field)`
   border-radius: 0.3rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
   outline: none;
+  margin-bottom: 1rem;
   &::placeholder {
     opacity: 0.5;
   }
@@ -59,7 +59,7 @@ const SubmitButton = styled.button`
 const MilestoneItem = styled.li`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   position: relative;
 `;
 
@@ -91,10 +91,16 @@ const TimeText = styled.div`
   margin-top: 0.25rem;
 `;
 
-const Tracker = () => {
+const IdStyle = styled.div`
+  font-size: 0.6rem;
+  opacity: 0.5;
+  margin-top: -1rem;
+`;
+const Tracker = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [milestones, setMilestones] = useState([]);
   const dispatch = useAppDispatch();
+  const { currentTransactionId } = useContext(userContext);
 
   const initialValues = {
     currentLocation: "",
@@ -113,7 +119,7 @@ const Tracker = () => {
           setLoading(false);
           return;
         }
-        toast.success(resp?.payload?.message || "Successfully subscribed");
+        toast.success(resp?.payload?.message || "Successfully Updated");
         resetForm();
         setLoading(false);
       });
@@ -125,25 +131,33 @@ const Tracker = () => {
 
   return (
     <TrackerContainer>
-      <TrackerHeader>Order Tracking</TrackerHeader>
-      <Formik
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-        initialValues={initialValues}
-      >
-        <Form>
-          <StyledField
-            id="location"
-            name="currentLocation"
-            type="text"
-            placeholder="Enter current location"
-          />
-          <ErrorMessage name="currentLocation" component="div" />
-          <SubmitButton type="submit">Submit Location</SubmitButton>
-        </Form>
-      </Formik>
+      {user?.role === "seller" ? (
+        <>
+          <TrackerHeader>Order Tracking</TrackerHeader>
+          <Formik
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            initialValues={initialValues}
+          >
+            <Form>
+              <StyledField
+                id="location"
+                name="currentLocation"
+                type="text"
+                placeholder="Enter current location"
+              />
+              <ErrorMessage name="currentLocation" component="div" />
+              <SubmitButton type="submit">Submit Location</SubmitButton>
+            </Form>
+          </Formik>
+        </>
+      ) : (
+        ""
+      )}
       <MilestoneList>
         <h2>Current Stop</h2>
+        <IdStyle>ID: {currentTransactionId}</IdStyle>
+
         {milestones.map((milestone, index) => (
           <MilestoneItem key={index}>
             {index !== 0}

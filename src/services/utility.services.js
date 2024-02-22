@@ -57,7 +57,7 @@ export const DisputeTransaction = async ({
 
 export const UpdateTransactionStatus = async ({ transactionId, newStatus }) => {
   const data = { transactionId, newStatus };
-  const response = await axios.post(
+  const response = await axios.patch(
     `${process.env.REACT_APP_API_BASE_URL}/${UPDATE_TRANSACTION_STATUS}`,
     data,
     {
