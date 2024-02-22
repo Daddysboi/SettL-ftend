@@ -144,6 +144,7 @@ const router = createBrowserRouter(
 function App() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [currentTransactionId, setcurrentTransactionId] = useState("");
 
   useEffect(() => {
     Aos.init({
@@ -152,7 +153,16 @@ function App() {
   }, []);
 
   return (
-    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
+    <userContext.Provider
+      value={{
+        user,
+        setUser,
+        profile,
+        setProfile,
+        currentTransactionId,
+        setcurrentTransactionId,
+      }}
+    >
       <div className="App">
         <RouterProvider router={router}>
           <React.Suspense

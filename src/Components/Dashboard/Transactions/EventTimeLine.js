@@ -1,7 +1,23 @@
 import React from "react";
 
-const EventTimeline = ({ orderAccepted, orderDispatched, orderCompleted }) => {
+const EventTimeline = ({
+  orderAccepted,
+  orderDispatched,
+  orderCompleted,
+  transactionData,
+}) => {
   const circleRadius = 15;
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    });
+
+    return formattedDate;
+  };
 
   return (
     <svg height="220" width="100%">
@@ -39,7 +55,7 @@ const EventTimeline = ({ orderAccepted, orderDispatched, orderCompleted }) => {
             fontSize="8"
             fill={orderAccepted ? "black" : "gray"}
           >
-            Jan 1, 2024
+            {formatDate(transactionData?.createAt)}
           </text>
           {/* Tick mark for "Accepted" */}
           <text

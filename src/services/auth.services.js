@@ -94,3 +94,17 @@ export const ResetPassword = async ({ userId, resetString, newPassword }) => {
   );
   return response.data;
 };
+
+export const UpdatePassword = async ({ userId, oldPssword, newPassword }) => {
+  const details = { userId, oldPssword, newPassword };
+  const response = await axios.post(
+    `${process.env.REACT_APP_API_BASE_URL}/${RESET_PASSWORD}`,
+    details,
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
+  return response.data;
+};

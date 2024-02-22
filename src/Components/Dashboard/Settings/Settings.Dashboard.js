@@ -1,11 +1,13 @@
 import { useReducer } from "react";
 import styled from "styled-components";
 import { Form } from "formik";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 import AccountDetails from "./AccountDetails";
 import ProfileSettings from "./ProfileSettings";
 import Kyc from "./Kyc";
 import ContactDetails from "./ContactDetails";
+import ResetPassword from "./ResetPassword";
 
 const Container = styled.div`
   display: flex;
@@ -63,6 +65,33 @@ const Title = styled.div`
   margin-bottom: 1.5rem;
 `;
 
+const Txt = styled.p`
+  font-size: 0.55rem;
+  /* margin-top: -0.5rem; */
+  color: red;
+`;
+
+const FileInputContainer = styled.div`
+  margin-top: 0.5rem;
+`;
+const UploadButton = styled.label`
+  display: inline-block;
+  color: green;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 2rem;
+  height: 2rem;
+`;
+const StyledInput = styled.input`
+  display: none;
+`;
+const StyledLabel = styled.label`
+  font-size: 0.65rem;
+  letter-spacing: -0.01rem;
+  position: relative;
+  opacity: 0.5;
+`;
+
 const initialState = {
   activeSection: "profileSettings",
 };
@@ -76,6 +105,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, activeSection: "kyc" };
     case "CONTACT_DETAILS":
       return { ...state, activeSection: "contactDetails" };
+    case "PASSWORD_RESET":
+      return { ...state, activeSection: "resetPassword" };
 
     default:
       return state;
@@ -97,29 +128,35 @@ const Settings = ({ user }) => {
         >
           Profile Settings
         </TabBtn>
-        {user?.role === "seller" ? (
-          <>
-            <TabBtn
-              onClick={() => handleSectionClick("ACCOUNT_DETAILS")}
-              isActive={state.activeSection === "accountDetails"}
-            >
-              Account Details
-            </TabBtn>
-            <TabBtn
-              onClick={() => handleSectionClick("KYC")}
-              isActive={state.activeSection === "kyc"}
-            >
-              KYC
-            </TabBtn>
-          </>
-        ) : (
+        {/* {user?.role === "seller" ? ( */}
+        <>
+          <TabBtn
+            onClick={() => handleSectionClick("ACCOUNT_DETAILS")}
+            isActive={state.activeSection === "accountDetails"}
+          >
+            Account Details
+          </TabBtn>
+          <TabBtn
+            onClick={() => handleSectionClick("KYC")}
+            isActive={state.activeSection === "kyc"}
+          >
+            KYC
+          </TabBtn>
+        </>
+        {/* ) : (
           ""
-        )}
+        )} */}
         <TabBtn
           onClick={() => handleSectionClick("CONTACT_DETAILS")}
           isActive={state.activeSection === "contactDetails"}
         >
           Contact
+        </TabBtn>
+        <TabBtn
+          onClick={() => handleSectionClick("PASSWORD_RESET")}
+          isActive={state.activeSection === "resetPassword"}
+        >
+          Password Update
         </TabBtn>
       </HeaderContainer>
       <div>
@@ -130,6 +167,12 @@ const Settings = ({ user }) => {
             Button={Button}
             Title={Title}
             StyledForm={StyledForm}
+            Txt={Txt}
+            FileInputContainer={FileInputContainer}
+            StyledLabel={StyledLabel}
+            StyledInput={StyledInput}
+            UploadButton={UploadButton}
+            FaCloudUploadAlt={FaCloudUploadAlt}
           />
         )}
         {state.activeSection === "accountDetails" && (
@@ -148,10 +191,30 @@ const Settings = ({ user }) => {
             Button={Button}
             Title={Title}
             StyledForm={StyledForm}
+            FileInputContainer={FileInputContainer}
+            StyledLabel={StyledLabel}
+            StyledInput={StyledInput}
+            UploadButton={UploadButton}
+            FaCloudUploadAlt={FaCloudUploadAlt}
           />
         )}
         {state.activeSection === "contactDetails" && (
           <ContactDetails
+            user={user}
+            PropsContainer={PropsContainer}
+            Button={Button}
+            StyledForm={StyledForm}
+            Title={Title}
+            Txt={Txt}
+            FileInputContainer={FileInputContainer}
+            StyledLabel={StyledLabel}
+            StyledInput={StyledInput}
+            UploadButton={UploadButton}
+            FaCloudUploadAlt={FaCloudUploadAlt}
+          />
+        )}{" "}
+        {state.activeSection === "resetPassword" && (
+          <ResetPassword
             user={user}
             PropsContainer={PropsContainer}
             Button={Button}

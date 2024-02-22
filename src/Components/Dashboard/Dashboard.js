@@ -83,33 +83,30 @@ const StyledSideBar = styled.div`
 
 const StyledBtnContainer = styled.div`
   display: flex;
+  gap: 1rem;
   flex-direction: column;
 `;
 
 const StyledBtn = styled.button`
   border: none;
   background: none;
-  margin-bottom: 0.5rem;
   text-align: left;
   color: #ffffff;
   font-weight: 200;
   padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+
   ${({ active }) =>
     active &&
     css`
       color: #4db6ac;
-      border-radius: 0.5rem;
-      padding: 0.5rem;
+      background-color: #ffffff;
     `}
+
   &:hover {
-    color: #4db6ac;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-  }
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    background-color: #4db6ac;
+    color: #ffffff;
   }
 `;
 
@@ -130,20 +127,25 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 const SignoutLink = styled(Link)`
   border: none;
   background: none;
-  margin-bottom: 0.5rem;
   text-align: left;
   color: #ffffff;
+  font-weight: 200;
+  padding: 0.5rem;
   font-size: 0.6rem;
   text-decoration: none;
+  border-radius: 0.5rem;
+
+  transition: background-color 0.2s ease;
   ${({ active }) =>
     active &&
     css`
       color: #4db6ac;
-      border-radius: 0.5rem;
+      background-color: #ffffff;
     `}
+
   &:hover {
-    color: #4db6ac;
-    border-radius: 0.5rem;
+    background-color: #4db6ac;
+    color: #ffffff;
   }
 `;
 
@@ -259,7 +261,6 @@ const Dashboard = () => {
               <StyledFontAwesomeIcon icon={faHome} />
               <StyledBtnName>Home</StyledBtnName>
             </StyledBtn>
-
             <StyledBtn
               active={page === "transactions"}
               onClick={() => navigateTo("transactions")}
@@ -282,18 +283,19 @@ const Dashboard = () => {
               <StyledBtnName>Settings</StyledBtnName>
             </StyledBtn>
             <StyledBtn
-              active={page === "tracker"}
-              onClick={() => navigateTo("tracker")}
-            >
-              <StyledFontAwesomeIcon icon={faTruck} />
-              <StyledBtnName> Tracking</StyledBtnName>
-            </StyledBtn>
-            <StyledBtn
               active={page === "resolution"}
               onClick={() => navigateTo("resolution")}
             >
               <StyledFontAwesomeIcon icon={faHandshake} />
               <StyledBtnName> Resolution</StyledBtnName>
+            </StyledBtn>{" "}
+            <StyledBtn
+              style={{ display: "none" }}
+              active={page === "tracker"}
+              onClick={() => navigateTo("tracker")}
+            >
+              <StyledFontAwesomeIcon icon={faTruck} />
+              <StyledBtnName> Tracking</StyledBtnName>
             </StyledBtn>
           </StyledBtnContainer>
 
@@ -317,7 +319,9 @@ const Dashboard = () => {
             <Wallet user={user} transactions={transactions} />
           )}
           {page === "settings" && <Settings user={user} />}
-          {page === "tracker" && <Tracker navigateTo={navigateTo} />}
+          {page === "tracker" && (
+            <Tracker navigateTo={navigateTo} user={user} />
+          )}
           {page === "resolution" && <Resolution />}
         </StyledRight>
       </StyledContainer>

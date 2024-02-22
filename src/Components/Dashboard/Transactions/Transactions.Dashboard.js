@@ -228,6 +228,7 @@ const Transactions = ({
             handleProcessTransaction={handleProcessTransaction}
             handleNext={handleNext}
             handlePrevious={handlePrevious}
+            navigateTo={navigateTo}
             currentIndex={currentIndex}
           />
         </StyledRight>

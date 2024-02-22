@@ -180,6 +180,7 @@ const TransactionFormPopup = ({
       counterpartyEmail: "",
       counterpartyPhone: "",
       setConditions: "",
+      dateDue: "",
       termsAndConditions: "",
     },
     validationSchema: Yup.object({

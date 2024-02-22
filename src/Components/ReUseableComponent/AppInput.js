@@ -7,33 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const StyledInputContainer = styled.div`
   position: relative;
   margin-bottom: 12px;
-  input[type="file"]::-webkit-file-upload-button {
-    border: 1px solid #3bb75e;
-    background-color: #3bb75e;
-    border-radius: 0.2rem;
-    color: #fff;
-
-    padding: 0.2rem 0.4rem;
-  }
-
-  /* For Firefox */
-  input[type="file"]::-moz-file-upload-button {
-    border: 1px solid #3bb75e;
-    background-color: #3bb75e;
-    border-radius: 0.2rem;
-    color: #fff;
-
-    padding: 0.2rem 0.4rem;
-  }
-
-  /* For Microsoft Edge */
-  input[type="file"]::-ms-browse {
-    border: 1px solid #3bb75e;
-    background-color: #3bb75e;
-    border-radius: 0.2rem;
-    color: #fff;
-    padding: 0.2rem 0.4rem;
-  }
 `;
 
 const StyledLabel = styled.label`
@@ -54,7 +27,7 @@ const StyledInput = styled.input`
   border-radius: 0.3rem;
   outline: none;
   &::placeholder {
-    opacity: 0.5;
+    opacity: 0.3;
   }
   &:focus {
     border: 1px solid rgb(194, 194, 194);
@@ -80,6 +53,7 @@ const StyledPasswordInput = styled.input`
   display: flex;
   justify-content: center;
   align-items: center;
+  background: transparent;
   outline: none;
   &::placeholder {
     opacity: 0.5;

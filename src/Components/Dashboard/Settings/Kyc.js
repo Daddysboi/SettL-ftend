@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
 import * as Yup from "yup";
+
 import AppInput from "../../ReUseableComponent/AppInput";
 import ErrorRed from "../../ReUseableComponent/ErrorRed";
 import WebcamCapture from "./WebcamCapture";
@@ -15,10 +16,17 @@ const Section = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const KYC = ({ user, Button, Title }) => {
-  const webcamRef = useRef(null);
+const KYC = ({
+  user,
+  Button,
+  Title,
+  FileInputContainer,
+  StyledLabel,
+  StyledInput,
+  UploadButton,
+  FaCloudUploadAlt,
+}) => {
   const [imageSrc, setImageSrc] = useState("");
-  const [webcamActive, setWebcamActive] = useState(false);
 
   const initialValues = {
     idType: "",
@@ -38,29 +46,18 @@ const KYC = ({ user, Button, Title }) => {
       "Contact Number of Next of Kin is required"
     ),
     bvn: Yup.string().required("BVN is required"),
+
+    takePicture: Yup.mixed().required("Please take a picture."),
+    uploadPicture: Yup.mixed().required("Please upload a picture."),
   });
 
   const onSubmit = (values) => {
-    console.log("Form submitted with values:", values);
+    if (imageSrc) {
+      const formData = { ...values, takePicture: imageSrc };
+      console.log("Form submitted with values:", formData);
+    }
   };
 
-  const startWebcam = () => {
-    setWebcamActive(true);
-  };
-
-  const stopWebcam = () => {
-    setWebcamActive(false);
-  };
-
-  const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImageSrc(imageSrc);
-    stopWebcam();
-  };
-  const recapture = () => {
-    setImageSrc("");
-    startWebcam();
-  };
   return (
     <KYCContainer>
       <Title>Know Your Customer</Title>
@@ -72,14 +69,8 @@ const KYC = ({ user, Button, Title }) => {
       >
         <Form>
           <section>
-            <WebcamCapture
-              webcamRef={webcamRef}
-              imageSrc={imageSrc}
-              webcamActive={webcamActive}
-              capture={capture}
-              recapture={recapture}
-              startWebcam={startWebcam}
-            />
+            <WebcamCapture imageSrc={imageSrc} setImageSrc={setImageSrc} />
+            <ErrorMessage name="uploadPicture" component={ErrorRed} />
           </section>
           <Title>Identification</Title>
           <Section>
@@ -114,6 +105,43 @@ const KYC = ({ user, Button, Title }) => {
               />
               <ErrorMessage name="idNumber" component={ErrorRed} />
             </div>{" "}
+            <div>
+              <Field name="uploadPicture">
+                {({ form, field }) => (
+                  <FileInputContainer>
+                    <StyledLabel htmlFor="uploadPicture">
+                      Upload Valid ID (Max 2MB)
+                    </StyledLabel>
+                    <div>
+                      <UploadButton htmlFor="uploadPicture">
+                        <FaCloudUploadAlt />
+                      </UploadButton>
+                      <StyledInput
+                        id="uploadPicture"
+                        name="uploadPicture"
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => {
+                          form.setFieldValue(
+                            "uploadPicture",
+                            event.currentTarget.files[0]
+                          );
+                        }}
+                      />
+                    </div>
+                    <ErrorMessage name="uploadPicture" component={ErrorRed} />
+                    <span
+                      style={{
+                        opacity: "0.5",
+                        fontSize: "0.6rem",
+                      }}
+                    >
+                      {field.value && field.value.name}
+                    </span>
+                  </FileInputContainer>
+                )}
+              </Field>
+            </div>
           </Section>
           <Section>
             <Title>Next of Kin</Title>

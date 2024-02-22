@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RequestResetPassword, ResetPassword } from "../services/auth.services";
+import {
+  RequestResetPassword,
+  ResetPassword,
+  UpdatePassword,
+} from "../services/auth.services";
 
 const initialState = {
   loginPhone: "",
@@ -24,6 +28,18 @@ export const resetPassword = createAsyncThunk(
   async ({ userId, resetString, newPassword }) => {
     try {
       const resp = await ResetPassword({ userId, resetString, newPassword });
+      return resp;
+    } catch (error) {
+      throw error; // Throw the error to let Redux Toolkit handle the rejection
+    }
+  }
+);
+
+export const updatePassword = createAsyncThunk(
+  "updatePassword",
+  async ({ userId, oldPassword, newPassword }) => {
+    try {
+      const resp = await UpdatePassword({ userId, oldPassword, newPassword });
       return resp;
     } catch (error) {
       throw error; // Throw the error to let Redux Toolkit handle the rejection
@@ -56,6 +72,18 @@ export const forgotPasswordSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(resetPassword.rejected, (state) => {
+      state.isLoggedIn = false;
+      state.isLoading = false;
+    });
+
+    // update password
+    builder.addCase(updatePassword.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updatePassword.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updatePassword.rejected, (state) => {
       state.isLoggedIn = false;
       state.isLoading = false;
     });

@@ -2,13 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import Switch from "react-switch";
+import {
+  faUser,
+  faCheckCircle,
+  faTimesCircle,
+} from "@fortawesome/free-regular-svg-icons";
+import { MdVerified } from "react-icons/md";
 
 import { userContext } from "../../App";
 import { useAppSelector } from "../../redux/hooks";
 
 import logo from "../../assets/logo/favicon.png";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -75,6 +80,7 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { profile } = useContext(userContext);
   // const [isSellerMode, setIsSellerMode] = useState(true);
+  const verified = true;
 
   const { user } = useAppSelector((state) => state.user);
 
@@ -109,6 +115,11 @@ const Header = () => {
                   />
                 ) : (
                   <StyledAccountIcon icon={faUser} />
+                )}
+                {verified ? (
+                  <MdVerified style={{ color: "green" }} />
+                ) : (
+                  <MdVerified style={{ color: "gray" }} />
                 )}
                 <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
                   {profile?.name || displayName || "User"}

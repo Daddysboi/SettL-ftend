@@ -9,6 +9,7 @@ const StyledSelectContainer = styled.div`
 const StyledLabel = styled.label`
   font-size: 0.65rem;
   letter-spacing: -0.01rem;
+  opacity: 0.5;
 `;
 
 const StyledSelect = styled.select`
@@ -20,11 +21,18 @@ const StyledSelect = styled.select`
   border-radius: 0.3rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
   outline: none;
+  background: transparent;
+
   &:focus {
     border: 1px solid rgb(194, 194, 194);
   }
 `;
-
+const StyledOption = styled.option`
+  font-size: 10px;
+  color: #333;
+  opacity: 0.5;
+  background-color: #fff;
+`;
 const ErrorContainer = styled.div`
   width: 100%;
   position: absolute;
@@ -38,7 +46,7 @@ const AppSelectInput = ({ label, value, onChange, error, options }) => {
     <StyledSelectContainer>
       <StyledLabel htmlFor="role">{label}</StyledLabel>
       <StyledSelect name="role" value={value} onChange={onChange}>
-        <option value="">Select...</option>
+        <StyledOption value="">Select...</StyledOption>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

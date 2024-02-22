@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../redux/hooks";
+
 import AppInput from "../Components/ReUseableComponent/AppInput";
 import AuthBackground from "../Components/LayoutComponents/AuthBackground";
 import { resetPassword } from "../features/forgotPasswordSlice";
@@ -25,7 +26,7 @@ const StyledBtn = styled.button`
 `;
 
 export const resetPasswordValidationSchema = Yup?.object()?.shape({
-  password: Yup.string()
+  newPassword: Yup.string()
     .required("Required")
     .min(8, "Must be at least 8 characters long")
     .matches(/[A-Z]/, "Must contain at least one uppercase letter")
@@ -33,8 +34,9 @@ export const resetPasswordValidationSchema = Yup?.object()?.shape({
     .matches(/(\W)/, "Must contain at least one special character"),
   confirmPassword: Yup.string()
     .required("Required")
-    .oneOf([Yup.ref("password")], "Passwords must match")
+    .oneOf([Yup.ref("newPassword")], "Passwords must match")
     .nullable(),
+  oldPassword: Yup.string().required("Required"),
 });
 
 const ResetPassword = () => {
@@ -47,7 +49,7 @@ const ResetPassword = () => {
   const resetPasswordFormik = useFormik({
     validationSchema: resetPasswordValidationSchema,
     initialValues: {
-      password: "",
+      newPassword: "",
       confirmPassword: "",
     },
     onSubmit: async (values) => {
@@ -55,7 +57,7 @@ const ResetPassword = () => {
       let request = {
         userId,
         resetString,
-        newPassword: values?.password,
+        newPassword: values?.newPassword,
       };
       dispatch(resetPassword(request))
         .then((resp) => {
@@ -82,14 +84,14 @@ const ResetPassword = () => {
     >
       <AppInput
         inputType="password"
-        label="Password"
-        name="password"
-        value={resetPasswordFormik.values.password}
-        placeholder="Enter your password"
+        label="New Password"
+        name="newPassword"
+        value={resetPasswordFormik.values.newPassword}
+        placeholder="Enter your New password"
         onChange={resetPasswordFormik.handleChange}
         error={
           resetPasswordFormik.submitCount > 0 &&
-          resetPasswordFormik.errors.password
+          resetPasswordFormik.errors.newPassword
         }
       />
 
