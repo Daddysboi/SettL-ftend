@@ -137,7 +137,7 @@ const Home = ({ user, transactions, handleNext, handlePrevious }) => {
                 </StyledCard>
                 <StyledCard>
                   <StyledCardTxt>Revenue</StyledCardTxt>
-                  <p>NGN {revenue.toFixed(2)}</p>
+                  <p>NGN {user?.walletDetails?.toFixed(2) || 0}</p>
                 </StyledCard>
               </StyledCardPair>
             ) : (

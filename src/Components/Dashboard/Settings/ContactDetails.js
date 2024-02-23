@@ -28,12 +28,10 @@ const AddContact = ({
   user,
   PropsContainer,
   Button,
-  Txt,
   StyledForm,
   Title,
   FileInputContainer,
   StyledLabel,
-  StyledInput,
   UploadButton,
   FaCloudUploadAlt,
 }) => {

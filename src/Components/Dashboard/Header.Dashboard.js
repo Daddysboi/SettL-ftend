@@ -2,18 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faCheckCircle,
-  faTimesCircle,
-} from "@fortawesome/free-regular-svg-icons";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { MdVerified } from "react-icons/md";
+import { TailSpin as Loader } from "react-loader-spinner";
 
 import { userContext } from "../../App";
 import { useAppSelector } from "../../redux/hooks";
 
 import logo from "../../assets/logo/favicon.png";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -37,6 +33,7 @@ const StyledLogo = styled(NavLink)`
 
 const StyledImg = styled.img`
   height: 2rem;
+  padding-right: 0.5rem;
 `;
 
 const StyledAccount = styled.div``;
@@ -77,7 +74,7 @@ const StyledLoader = styled.div`
 `;
 
 const Header = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { profile } = useContext(userContext);
   // const [isSellerMode, setIsSellerMode] = useState(true);
   const verified = true;
@@ -86,14 +83,27 @@ const Header = () => {
 
   // don't set state inside use Effect like this @temi
   useEffect(() => {
-    setIsLoading(false);
+    setLoading(false);
   }, [profile]);
 
   // const handleModeToggle = (checked) => {
   //   setIsSellerMode(checked);
   // };
 
-  const displayName = `${user?.lastName} ${user?.firstName}`;
+  const displayName =
+    user?.lastName === undefined || user?.firstName === undefined ? (
+      <Loader
+        type="TailSpin"
+        color="#ff4500"
+        height={20}
+        width={20}
+        style={{ margin: "auto" }}
+      />
+    ) : (
+      `${user?.lastName} ${user?.firstName}`
+    );
+
+  // const displayName = `${user?.lastName} ${user?.firstName}`;
 
   return (
     <StyledContainer>
@@ -104,8 +114,14 @@ const Header = () => {
       <div>
         <StyledNavLink to="signup">
           <StyledAccount>
-            {isLoading ? (
-              <StyledLoader />
+            {loading ? (
+              <Loader
+                type="TailSpin"
+                color="#ff4500"
+                height={20}
+                width={20}
+                style={{ margin: "auto" }}
+              />
             ) : (
               <>
                 {user?.profilePicture || profile?.picture ? (

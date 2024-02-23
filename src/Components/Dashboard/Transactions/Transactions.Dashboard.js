@@ -5,6 +5,7 @@ import {
   faArrowCircleLeft,
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 import TransactionProgress from "./TransactionProgress";
 import TransactionCard from "./TransactionCard";

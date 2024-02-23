@@ -48,7 +48,7 @@ const ResetPassword = ({ user, PropsContainer, Button, StyledForm, Title }) => {
 
   return (
     <PropsContainer>
-      <Title>Your Profile</Title>
+      <Title>Change Password</Title>
       <Formik
         initialValues={initialValues}
         validationSchema={resetPasswordValidationSchema}

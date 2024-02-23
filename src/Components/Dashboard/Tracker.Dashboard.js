@@ -22,6 +22,21 @@ const MilestoneList = styled.ul`
   list-style: none;
   padding: 0;
 `;
+const StyledInput = styled.input`
+  width: 20rem;
+  min-height: 42px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  outline: none;
+  &::placeholder {
+    opacity: 0.5;
+  }
+  &:focus {
+    border: 1px solid rgb(194, 194, 194);
+  }
+`;
 
 const StyledField = styled(Field)`
   width: 20rem;
@@ -96,71 +111,131 @@ const IdStyle = styled.div`
   opacity: 0.5;
   margin-top: -1rem;
 `;
-const Tracker = ({ user }) => {
+// const Tracker = ({ user }) => {
+//   const [loading, setLoading] = useState(false);
+//   const [milestones, setMilestones] = useState([]);
+//   const dispatch = useAppDispatch();
+//   const { currentTransactionId } = useContext(userContext);
+
+//   const initialValues = {
+//     currentLocation: "",
+//   };
+
+//   const validationSchema = Yup.object({
+//     currentLocation: Yup.string().required("Current location is required"),
+//   });
+
+//   const onSubmit = async (values, { resetForm }) => {
+//     try {
+//       await dispatch(addLocation({ location: values.currentLocation }));
+//       dispatch(addLocation(request)).then((resp) => {
+//         if (resp?.payload?.status !== 201) {
+//           toast.error(resp?.payload?.message || "Something went wrong");
+//           setLoading(false);
+//           return;
+//         }
+//         toast.success(resp?.payload?.message || "Successfully Updated");
+//         resetForm();
+//         setLoading(false);
+//       });
+//     } catch (error) {
+//       toast.error(error?.message || "Something went wrong");
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <TrackerContainer>
+//       {user?.role === "seller" ? (
+//         <>
+//           <TrackerHeader>Order Tracking</TrackerHeader>
+//           <Formik
+//             onSubmit={onSubmit}
+//             validationSchema={validationSchema}
+//             initialValues={initialValues}
+//           >
+//             <Form>
+//               <StyledField
+//                 id="location"
+//                 name="currentLocation"
+//                 type="text"
+//                 placeholder="Enter current location"
+//               />
+//               <ErrorMessage name="currentLocation" component="div" />
+//               <SubmitButton type="submit">Submit Location</SubmitButton>
+//             </Form>
+//           </Formik>
+//         </>
+//       ) : (
+//         ""
+//       )}
+//       <MilestoneList>
+//         <h2>Current Stop</h2>
+//         <IdStyle>ID: {currentTransactionId}</IdStyle>
+
+//         {milestones.map((milestone, index) => (
+//           <MilestoneItem key={index}>
+//             {index !== 0}
+//             <IconWrapper>
+//               <FontAwesomeIcon icon={faCodeCommit} size="lg" color="#4db6ac" />
+//             </IconWrapper>
+//             <MilestoneText>
+//               <div>
+//                 <LocationText>{milestone.location}</LocationText>
+//                 <DateText>{milestone.timestamp.split("T")[0]}</DateText>
+//                 <TimeText>{milestone.timestamp.split("T")[1]}</TimeText>
+//               </div>
+//             </MilestoneText>
+//           </MilestoneItem>
+//         ))}
+//       </MilestoneList>
+//     </TrackerContainer>
+//   );
+// };
+
+// export default Tracker;
+
+const Tracker = () => {
+  const [currentLocation, setCurrentLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [milestones, setMilestones] = useState([]);
   const dispatch = useAppDispatch();
   const { currentTransactionId } = useContext(userContext);
 
-  const initialValues = {
-    currentLocation: "",
+  const handleAddMilestone = () => {
+    if (currentLocation.trim() !== "") {
+      const timestamp = new Date().toISOString(); // Get current timestamp
+      setMilestones([...milestones, { location: currentLocation, timestamp }]);
+      setCurrentLocation("");
+    }
   };
 
-  const validationSchema = Yup.object({
-    currentLocation: Yup.string().required("Current location is required"),
-  });
-
-  const onSubmit = async (values, { resetForm }) => {
-    try {
-      await dispatch(addLocation({ location: values.currentLocation }));
-      dispatch(addLocation(request)).then((resp) => {
-        if (resp?.payload?.status !== 201) {
-          toast.error(resp?.payload?.message || "Something went wrong");
-          setLoading(false);
-          return;
-        }
-        toast.success(resp?.payload?.message || "Successfully Updated");
-        resetForm();
-        setLoading(false);
-      });
-    } catch (error) {
-      toast.error(error?.message || "Something went wrong");
-      setLoading(false);
-    }
+  const handleEditMilestone = (index, newLocation) => {
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index].location = newLocation;
+    setMilestones(updatedMilestones);
   };
 
   return (
     <TrackerContainer>
-      {user?.role === "seller" ? (
-        <>
-          <TrackerHeader>Order Tracking</TrackerHeader>
-          <Formik
-            onSubmit={onSubmit}
-            validationSchema={validationSchema}
-            initialValues={initialValues}
-          >
-            <Form>
-              <StyledField
-                id="location"
-                name="currentLocation"
-                type="text"
-                placeholder="Enter current location"
-              />
-              <ErrorMessage name="currentLocation" component="div" />
-              <SubmitButton type="submit">Submit Location</SubmitButton>
-            </Form>
-          </Formik>
-        </>
-      ) : (
-        ""
-      )}
+      <TrackerHeader>Order Tracking</TrackerHeader>
+      <div>
+        <StyledInput
+          type="text"
+          value={currentLocation}
+          placeholder="Enter current location"
+          onChange={(e) => setCurrentLocation(e.target.value)}
+        />
+        <SubmitButton onClick={handleAddMilestone}>
+          Submit Location
+        </SubmitButton>
+      </div>
       <MilestoneList>
         <h2>Current Stop</h2>
         <IdStyle>ID: {currentTransactionId}</IdStyle>
 
         {milestones.map((milestone, index) => (
           <MilestoneItem key={index}>
-            {index !== 0}
             <IconWrapper>
               <FontAwesomeIcon icon={faCodeCommit} size="lg" color="#4db6ac" />
             </IconWrapper>

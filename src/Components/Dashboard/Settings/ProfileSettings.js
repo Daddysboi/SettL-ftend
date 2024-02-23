@@ -219,24 +219,48 @@ const ProfileSettings = ({
                 }}
               >
                 <div onClick={() => setImgPlaceholder(false)}>
-                  <Field
-                    label="Upload Picture"
-                    type="file"
-                    id="uploadPicture"
-                    name="uploadPicture"
-                    onChange={(event) => {
-                      setFieldValue(
-                        "uploadPicture",
-                        event.currentTarget.files[0]
-                      );
-                    }}
-                    component={AppInput}
-                    labelColor="gray"
-                    accept="image/*"
-                    border="none"
-                  />
-                  <ErrorMessage name="uploadPicture" component={ErrorRed} />
+                  <FileInputContainer>
+                    <StyledLabel htmlFor="uploadPicture">
+                      Upload Picture
+                    </StyledLabel>
+                    <div>
+                      <UploadButton htmlFor="uploadPicture">
+                        <FaCloudUploadAlt />
+                      </UploadButton>
+                      <div
+                        style={{
+                          display: "none",
+                        }}
+                      >
+                        <Field
+                          type="file"
+                          id="uploadPicture"
+                          name="uploadPicture"
+                          onChange={(event) => {
+                            setFieldValue(
+                              "uploadPicture",
+                              event.currentTarget.files[0]
+                            );
+                          }}
+                          component={AppInput}
+                          labelColor="gray"
+                          accept="image/*"
+                          border="none"
+                        />
+                      </div>
+                    </div>
+                    <ErrorMessage name="uploadPicture" component={ErrorRed} />
+                    <span
+                      style={{
+                        opacity: "0.5",
+                        fontSize: "0.6rem",
+                      }}
+                    >
+                      {values?.uploadPicture && values?.uploadPicture.name}
+                    </span>
+                  </FileInputContainer>
                 </div>
+
                 {user?.profilePicture &&
                   !values?.uploadPicture &&
                   imgPlaceholder && (

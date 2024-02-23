@@ -93,11 +93,11 @@ const FontAwesome = styled(FontAwesomeIcon)`
 `;
 
 const StyledCardContainerBtm = styled.div`
-  height: 25rem;
-  width: 35rem;
+  height: 28rem;
+  width: 30rem;
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px 2px rgba(0.1, 0.1, 0.1, 0.1);
-  padding: 1rem 2rem 0 2rem;
+  padding: 0 2rem 0 0;
   background-color: #fff;
   margin-top: 1rem;
 
@@ -218,8 +218,12 @@ const Wallet = ({ user, transactions }) => {
                   <StyledTd style={{ textAlign: "right" }}>
                     {formatDate(transaction.createAt)}
                   </StyledTd>
-                  <StyledTd style={{ textAlign: "center" }}>
-                    withdrawal/Paid
+                  <StyledTd style={{ textAlign: "center", color: "green" }}>
+                    {user?.role === "seller" ? (
+                      <span style={{ color: "Red" }}>Withdrawn</span>
+                    ) : (
+                      <span style={{ color: "Red" }}>Paid</span>
+                    )}
                   </StyledTd>
                   <StyledTd style={{ textAlign: "right" }}>
                     {`₦ ${formatAmount(transaction.formData.amount)}`}
