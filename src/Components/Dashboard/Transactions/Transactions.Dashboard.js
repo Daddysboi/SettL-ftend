@@ -139,13 +139,13 @@ const Transactions = ({
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === ongoingTransactions.length - 1 ? 0 : prevIndex + 1
+      prevIndex === ongoingTransactions?.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? ongoingTransactions.length - 1 : prevIndex - 1
+      prevIndex === 0 ? ongoingTransactions?.length - 1 : prevIndex - 1
     );
   };
 

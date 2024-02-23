@@ -85,7 +85,7 @@ const RecentTransactions = ({ user, transactions }) => {
 
   const itemsPerTable = 4;
   const startIndex = currentTable * itemsPerTable;
-  const endIndex = Math.min(startIndex + itemsPerTable, transactions.length);
+  const endIndex = Math.min(startIndex + itemsPerTable, transactions?.length);
 
   const nextTable = () => {
     setCurrentTable((prevTable) => prevTable + 1);
@@ -143,7 +143,7 @@ const RecentTransactions = ({ user, transactions }) => {
             </tr>
           </thead>
           <tbody>
-            {transactions.slice(startIndex, endIndex).map((transaction) => (
+            {transactions?.slice(startIndex, endIndex).map((transaction) => (
               <tr key={transaction._id}>
                 <StyledTd style={{ textAlign: "center" }}>
                   {transaction._id}

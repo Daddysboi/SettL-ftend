@@ -216,9 +216,9 @@ const Dashboard = () => {
     const excludedStatuses = ["DECLINED", "REFUNDED", "APPROVED"];
 
     // Filter transactions based on excluded statuses
-    const filteredTransactions = trnx.filter((transaction) => {
+    const filteredTransactions = trnx?.filter((transaction) => {
       // Check if the transaction status is not in the excluded statuses list
-      return !excludedStatuses.includes(transaction.status);
+      return !excludedStatuses?.includes(transaction?.status);
     });
 
     return filteredTransactions;

@@ -133,7 +133,7 @@ const Wallet = ({ user, transactions }) => {
 
   const itemsPerTable = 10;
   const startIndex = currentTable * itemsPerTable;
-  const endIndex = Math.min(startIndex + itemsPerTable, transactions.length);
+  const endIndex = Math.min(startIndex + itemsPerTable, transactions?.length);
 
   const nextTable = () => {
     setCurrentTable((prevTable) => prevTable + 1);
@@ -213,7 +213,7 @@ const Wallet = ({ user, transactions }) => {
         <StyledCardContainerBtm>
           <StyledTable style={{ borderCollapse: "collapse" }}>
             <tbody>
-              {transactions.slice(startIndex, endIndex).map((transaction) => (
+              {transactions?.slice(startIndex, endIndex).map((transaction) => (
                 <tr key={transaction._id}>
                   <StyledTd style={{ textAlign: "right" }}>
                     {formatDate(transaction.createAt)}

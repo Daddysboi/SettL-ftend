@@ -219,6 +219,7 @@ const ProfileSettings = ({
                 }}
               >
                 <div onClick={() => setImgPlaceholder(false)}>
+<<<<<<< Updated upstream
                   <FileInputContainer>
                     <StyledLabel htmlFor="uploadPicture">
                       Upload Picture
@@ -259,6 +260,25 @@ const ProfileSettings = ({
                       {values?.uploadPicture && values?.uploadPicture.name}
                     </span>
                   </FileInputContainer>
+=======
+                  <Field
+                    label="Upload Picture"
+                    type="file"
+                    id="uploadPicture"
+                    name="uploadPicture"
+                    onChange={(event) => {
+                      setFieldValue(
+                        "uploadPicture",
+                        event?.currentTarget?.files[0]
+                      );
+                    }}
+                    component={AppInput}
+                    labelColor="gray"
+                    accept="image/*"
+                    border="none"
+                  />
+                  <ErrorMessage name="uploadPicture" component={ErrorRed} />
+>>>>>>> Stashed changes
                 </div>
 
                 {user?.profilePicture &&

@@ -199,7 +199,7 @@ const AddContact = ({
                         onChange={(event) => {
                           setFieldValue(
                             "proofOfAddress",
-                            event.currentTarget.files[0]
+                            event?.currentTarget?.files[0]
                           );
                         }}
                         component={AppInput}

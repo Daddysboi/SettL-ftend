@@ -215,7 +215,7 @@ const KYC = ({
                           onChange={(event) => {
                             setFieldValue(
                               "uploadPicture",
-                              event.currentTarget.files[0]
+                              event?.currentTarget?.files[0]
                             );
                           }}
                           component={AppInput}

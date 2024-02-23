@@ -93,8 +93,8 @@ const Home = ({ user, transactions, handleNext, handlePrevious }) => {
 
   const filterTransactions = (trnx) => {
     const excludedStatuses = ["DECLINED", "REFUNDED", "APPROVED"];
-    const filteredTransactions = trnx.filter((transaction) => {
-      return !excludedStatuses.includes(transaction.status);
+    const filteredTransactions = trnx?.filter((transaction) => {
+      return !excludedStatuses?.includes(transaction?.status);
     });
 
     return filteredTransactions;

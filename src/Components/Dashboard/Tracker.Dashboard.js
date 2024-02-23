@@ -241,9 +241,9 @@ const Tracker = () => {
             </IconWrapper>
             <MilestoneText>
               <div>
-                <LocationText>{milestone.location}</LocationText>
-                <DateText>{milestone.timestamp.split("T")[0]}</DateText>
-                <TimeText>{milestone.timestamp.split("T")[1]}</TimeText>
+                <LocationText>{milestone?.location}</LocationText>
+                <DateText>{milestone?.timestamp?.split("T")[0]}</DateText>
+                <TimeText>{milestone?.timestamp?.split("T")[1]}</TimeText>
               </div>
             </MilestoneText>
           </MilestoneItem>

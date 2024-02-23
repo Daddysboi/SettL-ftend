@@ -95,17 +95,19 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === ongoingTransactions.length - 1 ? 0 : prevIndex + 1
+      prevIndex === ongoingTransactions?.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? ongoingTransactions.length - 1 : prevIndex - 1
+      prevIndex === 0 ? ongoingTransactions?.length - 1 : prevIndex - 1
     );
   };
 
-  const currentTransaction = ongoingTransactions[currentIndex];
+  const currentTransaction = ongoingTransactions?.length
+    ? ongoingTransactions[currentIndex]
+    : null;
 
   const disabledButton = ["VERIFIED", "DISPATCHED", "RECEIVED"];
 
@@ -203,6 +205,9 @@ const OngoingTransactions = ({ user, ongoingTransactions }) => {
               }}
             >
               {currentTransaction ? currentIndex + 1 : 0}
+              {/* {ongoingTransactions?.length || currentTransaction
+                ? currentIndex + 1
+                : 0} */}
             </span>
           </StyledCardOngoingTopTxt>
           <div>
