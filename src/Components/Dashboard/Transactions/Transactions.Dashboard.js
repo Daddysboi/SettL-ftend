@@ -149,7 +149,9 @@ const Transactions = ({
     );
   };
 
-  const currentTransaction = ongoingTransactions[currentIndex];
+  const currentTransaction = ongoingTransactions?.length
+    ? ongoingTransactions[currentIndex]
+    : null;
 
   const disabledButton = ["VERIFIED", "RECEIVED"];
 
