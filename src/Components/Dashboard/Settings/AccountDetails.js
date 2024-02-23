@@ -1,9 +1,14 @@
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 import AppInput from "../../ReUseableComponent/AppInput";
 import ErrorRed from "../../ReUseableComponent/ErrorRed";
 import AppSelectInput from "../../ReUseableComponent/AppSelectInput";
+import { useState } from "react";
+import { useAppDispatch } from "../../../redux/hooks";
+import { useFetchUserData } from "../../../Guard";
+import { updateUserBankDetails } from "../../../features/userSlice";
 
 const AccountDetails = ({
   user,
@@ -13,14 +18,46 @@ const AccountDetails = ({
   Title,
 }) => {
   const initialValues = {
-    bankName: "",
-    accountName: "",
-    accountNumber: "",
+    bankName: user?.accountDetails?.bankName || "",
+    accountName: user?.accountDetails?.accountName || "",
+    accountNumber: user?.accountDetails?.accountNumber || "",
     password: "",
   };
 
-  const onSubmit = (values) => {
-    console.log("Form submitted with values:", values);
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const fetchUserData = useFetchUserData();
+
+  const onSubmit = (values, { resetForm }) => {
+    setLoading(true);
+    dispatch(
+      updateUserBankDetails({
+        userId: user?._id,
+        accountName: values?.accountName,
+        bankName: values?.bankName,
+        accountNumber: values?.accountNumber,
+        password: values?.password,
+      })
+    )
+      .then((resp) => {
+        if (resp?.payload?.status !== 200) {
+          toast.error(resp?.payload?.message || "Something went wrong");
+          setLoading(false);
+          return;
+        }
+        toast.success(resp?.payload?.message || "Successfully logged in");
+        resetForm({
+          ...initialValues, // Reset other form fields if needed
+          password: "", // Reset password field to empty string
+        });
+        fetchUserData();
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error?.message || "Something went wrong");
+        setLoading(false);
+      });
   };
 
   const validationSchema = Yup.object().shape({
@@ -63,77 +100,89 @@ const AccountDetails = ({
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        <StyledForm>
-          <>
-            <div>
-              <Field
-                label="Account Name"
-                type="text"
-                placeholder={user?.accountName || "Enter Account Name"}
-                id="accountName"
-                name="accountName"
-                component={AppInput}
-                width="20rem"
-                labelColor="gray"
-                height="2rem"
-              />
-              <ErrorMessage name="accountName" component={ErrorRed} />
-            </div>
+        {({ values, handleChange, setFieldValue }) => (
+          <StyledForm>
+            <>
+              <div>
+                <Field
+                  label="Account Name"
+                  type="text"
+                  placeholder="Enter Account Name"
+                  id="accountName"
+                  name="accountName"
+                  value={values.accountName}
+                  onChange={handleChange}
+                  component={AppInput}
+                  width="20rem"
+                  labelColor="gray"
+                  height="2rem"
+                />
+                <ErrorMessage name="accountName" component={ErrorRed} />
+              </div>
 
-            <div>
-              <Field
-                label="Bank Name"
-                name="bankName"
-                component={AppSelectInput}
-                width="100%"
-                height="2rem"
-                labelColor="gray"
-                options={bankOptions}
-              />
-              <ErrorMessage name="bankName" component={ErrorRed} />
-            </div>
+              <div>
+                <Field
+                  label="Bank Name"
+                  name="bankName"
+                  value={values.bankName}
+                  onChange={(e) => setFieldValue("bankName", e.target.value)}
+                  component={AppSelectInput}
+                  width="100%"
+                  height="2rem"
+                  labelColor="gray"
+                  options={bankOptions}
+                />
+                <ErrorMessage name="bankName" component={ErrorRed} />
+              </div>
 
-            <div>
-              <Field
-                label="Account Number"
-                placeholder={user?.accountNumber || "Enter Account Number"}
-                type="accouuntNumber"
-                id="accouuntNumber"
-                name="accouuntNumber"
-                component={AppInput}
-                width="20rem"
-                labelColor="gray"
-                height="2rem"
-              />
-              <ErrorMessage name="accountNumber" component={ErrorRed} />
-            </div>
+              <div>
+                <Field
+                  label="Account Number"
+                  placeholder="Enter Account Number"
+                  type="accountNumber"
+                  id="accountNumber"
+                  name="accountNumber"
+                  value={values.accountNumber}
+                  onChange={handleChange}
+                  component={AppInput}
+                  width="20rem"
+                  labelColor="gray"
+                  height="2rem"
+                />
+                <ErrorMessage name="accountNumber" component={ErrorRed} />
+              </div>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
 
-                justifyContent: "space-between",
-              }}
-            >
-              <Field
-                label="Password"
-                inputType="password"
-                placeholder="Enter password"
-                id="password"
-                name="password"
-                component={AppInput}
-                width="20rem"
-                labelColor="gray"
-                height="2rem"
-                eyeTop="6px"
-              />
-              <ErrorMessage name="password" component={ErrorRed} />
-            </div>
+                  justifyContent: "space-between",
+                }}
+              >
+                <Field
+                  label="Password"
+                  inputType="password"
+                  placeholder="Enter password"
+                  id="password" // Added id attribute
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  component={AppInput}
+                  width="20rem"
+                  labelColor="gray"
+                  height="2rem"
+                  eyeTop="6px"
+                />
+                <ErrorMessage name="password" component={ErrorRed} />
+              </div>
 
-            <Button type="submit">Validate & Save Changes</Button>
-          </>
-        </StyledForm>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Updating" : "Validate & Save Changes"}
+              </Button>
+            </>
+          </StyledForm>
+        )}
       </Formik>
     </PropsContainer>
   );

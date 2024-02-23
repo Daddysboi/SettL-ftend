@@ -128,24 +128,24 @@ const Settings = ({ user }) => {
         >
           Profile Settings
         </TabBtn>
-        {/* {user?.role === "seller" ? ( */}
-        <>
-          <TabBtn
-            onClick={() => handleSectionClick("ACCOUNT_DETAILS")}
-            isActive={state.activeSection === "accountDetails"}
-          >
-            Account Details
-          </TabBtn>
-          <TabBtn
-            onClick={() => handleSectionClick("KYC")}
-            isActive={state.activeSection === "kyc"}
-          >
-            KYC
-          </TabBtn>
-        </>
-        {/* ) : (
+        {user?.role === "seller" ? (
+          <>
+            <TabBtn
+              onClick={() => handleSectionClick("ACCOUNT_DETAILS")}
+              isActive={state.activeSection === "accountDetails"}
+            >
+              Account Details
+            </TabBtn>
+            <TabBtn
+              onClick={() => handleSectionClick("KYC")}
+              isActive={state.activeSection === "kyc"}
+            >
+              KYC
+            </TabBtn>
+          </>
+        ) : (
           ""
-        )} */}
+        )}
         <TabBtn
           onClick={() => handleSectionClick("CONTACT_DETAILS")}
           isActive={state.activeSection === "contactDetails"}

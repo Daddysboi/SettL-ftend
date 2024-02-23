@@ -124,9 +124,9 @@ const Header = () => {
               />
             ) : (
               <>
-                {profile?.picture ? (
+                {user?.profilePicture || profile?.picture ? (
                   <StyledProfilePix
-                    src={profile?.picture}
+                    src={user?.profilePicture || profile?.picture}
                     alt={profile?.name}
                   />
                 ) : (
