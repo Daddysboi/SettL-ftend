@@ -125,6 +125,7 @@ const AppInput = ({
   color,
   showEyeIcon = true,
   display,
+  disabled,
   ...props
 }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -145,12 +146,14 @@ const AppInput = ({
             type={passwordVisibility ? "text" : "password"}
             name={name}
             value={value}
+            id={name}
             placeholder={placeholder}
             onChange={onChange}
             width={width}
             height={height}
             eyeTop={eyeTop}
             ref={passwordRef}
+            {...props}
           />
           {showEyeIcon ? (
             <EyeIcon
@@ -247,6 +250,7 @@ const AppInput = ({
         placeholder={placeholder}
         onChange={onChange}
         style={{ width, height, color, border, background, display }}
+        disabled={disabled}
         {...props}
       />
       {error && <ErrorContainer>{error}</ErrorContainer>}
