@@ -1,6 +1,5 @@
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import styled from "styled-components";
 
 import AppInput from "../../ReUseableComponent/AppInput";
 import ErrorRed from "../../ReUseableComponent/ErrorRed";

@@ -51,15 +51,15 @@ const TransactionChatBox = ({
   StyledHeader,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [transactionData, setTransactionData] = useState(currentTransaction);
+  // const [transactionData, setTransactionData] = useState(currentTransaction);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    setTransactionData(currentTransaction);
-  }, [currentTransaction]);
+  // useEffect(() => {
+  //   setTransactionData(currentTransaction);
+  // }, [currentTransaction]);
   return (
     <div>
       {transactions?.length ? (

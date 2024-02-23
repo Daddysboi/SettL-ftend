@@ -4,7 +4,7 @@ const EventTimeline = ({
   orderAccepted,
   orderDispatched,
   orderCompleted,
-  transactionData,
+  currentTransaction,
 }) => {
   const circleRadius = 15;
 
@@ -55,7 +55,7 @@ const EventTimeline = ({
             fontSize="8"
             fill={orderAccepted ? "black" : "gray"}
           >
-            {formatDate(transactionData?.createAt)}
+            {formatDate(currentTransaction?.createAt)}
           </text>
           {/* Tick mark for "Accepted" */}
           <text

@@ -5,7 +5,7 @@ import {
   REGISTER,
   SEND_OTP,
   REQUEST_PASSWORD_RESET,
-  RESET_PASSWORD,
+  RESET_PASSWORD,UPDATE_PASSWORD
 } from "../services/CONSTANTS";
 
 export const Signin = async ({ email, password }) => {
@@ -98,7 +98,7 @@ export const ResetPassword = async ({ userId, resetString, newPassword }) => {
 export const UpdatePassword = async ({ userId, oldPssword, newPassword }) => {
   const details = { userId, oldPssword, newPassword };
   const response = await axios.post(
-    `${process.env.REACT_APP_API_BASE_URL}/${RESET_PASSWORD}`,
+    `${process.env.REACT_APP_API_BASE_URL}/${UPDATE_PASSWORD}`,
     details,
     {
       headers: {

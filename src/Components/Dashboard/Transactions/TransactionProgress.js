@@ -115,6 +115,7 @@ const TransactionProgress = ({
           <StyledTranStatusCtn>
             <StyledTranStatus style={{ flex: "5" }}>
               <EventTimeline
+                currentTransaction={currentTransaction}
                 orderAccepted={currentTransaction?.status === "VERIFIED"}
                 orderDispatched={currentTransaction?.status === "DISPATCHED"}
                 orderCompleted={currentTransaction?.status === "COMPLETED"}
