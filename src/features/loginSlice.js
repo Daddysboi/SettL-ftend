@@ -6,7 +6,7 @@ export const login = createAsyncThunk("login", async ({ email, password }) => {
   try {
     const resp = await Signin({ email, password });
     if (resp?.data) {
-      localStorage.setItem(USER_ID, JSON.stringify(resp?.data?.user[0]._id));
+      localStorage.setItem(USER_ID, JSON.stringify(resp?.data?.user[0]?._id));
       localStorage.setItem(USER_TOKEN, JSON.stringify(resp?.data?.token));
     }
     return resp;
@@ -31,7 +31,8 @@ export const loginSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(login.fulfilled, (state) => {
-      state.isLoading = false; state.isLoggedIn = true;
+      state.isLoading = false;
+      state.isLoggedIn = true;
     });
     builder.addCase(login.rejected, (state) => {
       state.isLoggedIn = false;

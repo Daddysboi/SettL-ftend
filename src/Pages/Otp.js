@@ -74,7 +74,7 @@ const OtpVerification = () => {
       <AppOtpInput value={otp} onChange={setOtp} />
       <StyledBtn
         type="button"
-        disabled={otp.length < 4 || loading}
+        disabled={otp?.length < 4 || loading}
         onClick={handleRegisterUser}
       >
         {loading ? "Submitting..." : "Submit"}

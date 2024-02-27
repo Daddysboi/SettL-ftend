@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/logo/favicon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import axios from "axios";
-import Switch from "react-switch";
+import { MdVerified } from "react-icons/md";
+import { TailSpin as Loader } from "react-loader-spinner";
+
 import { userContext } from "../../App";
+import { useAppSelector } from "../../redux/hooks";
+
+import logo from "../../assets/logo/favicon.png";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -25,10 +28,12 @@ const StyledLogo = styled(NavLink)`
   color: #f26600;
   font-size: 2rem;
   text-decoration: none;
+  font-weight: 600;
 `;
 
 const StyledImg = styled.img`
   height: 2rem;
+  padding-right: 0.5rem;
 `;
 
 const StyledAccount = styled.div``;
@@ -69,49 +74,36 @@ const StyledLoader = styled.div`
 `;
 
 const Header = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { profile } = useContext(userContext);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, [profile]);
-
   // const [isSellerMode, setIsSellerMode] = useState(true);
+  const verified = true;
+
+  const { user } = useAppSelector((state) => state.user);
+
+  // don't set state inside use Effect like this @temi
+  useEffect(() => {
+    setLoading(false);
+  }, [profile]);
 
   // const handleModeToggle = (checked) => {
   //   setIsSellerMode(checked);
   // };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const url =
-          "https://res.cloudinary.com/daj31htoa/image/upload/v1706072203/WhatsApp_Image_2022-12-22_at_4.29.04_AM_-_Copy_b0ui8d.jpg";
-        const res = await axios.get(url, userData, {});
+  const displayName =
+    user?.lastName === undefined || user?.firstName === undefined ? (
+      <Loader
+        type="TailSpin"
+        color="#ff4500"
+        height={20}
+        width={20}
+        style={{ margin: "auto" }}
+      />
+    ) : (
+      `${user?.lastName} ${user?.firstName}`
+    );
 
-        if (res.status === 200) {
-          const contentType = res.headers["content-type"];
-          if (contentType.includes("image")) {
-            // console.log("Image data:", res.data);
-            setUserData((prevUserData) => ({
-              ...prevUserData,
-              profilePicture: url,
-            }));
-          }
-        } else {
-          console.error("Failed to fetch user data");
-          const jsonData = JSON.parse(new TextDecoder().decode(res.data));
-          console.log("JSON data:", jsonData);
-        }
-      } catch (error) {
-        console.error("Error loading user data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImage();
-  }, []);
+  // const displayName = `${user?.lastName} ${user?.firstName}`;
 
   return (
     <StyledContainer>
@@ -122,17 +114,31 @@ const Header = () => {
       <div>
         <StyledNavLink to="signup">
           <StyledAccount>
-            {isLoading ? (
-              <StyledLoader />
+            {loading ? (
+              <Loader
+                type="TailSpin"
+                color="#ff4500"
+                height={20}
+                width={20}
+                style={{ margin: "auto" }}
+              />
             ) : (
               <>
-                {profile.picture ? (
-                  <StyledProfilePix src={profile.picture} alt={profile.name} />
+                {user?.profilePicture || profile?.picture ? (
+                  <StyledProfilePix
+                    src={user?.profilePicture || profile?.picture}
+                    alt={profile?.name}
+                  />
                 ) : (
                   <StyledAccountIcon icon={faUser} />
                 )}
+                {verified ? (
+                  <MdVerified style={{ color: "green" }} />
+                ) : (
+                  <MdVerified style={{ color: "gray" }} />
+                )}
                 <span style={{ marginLeft: "0.5rem", textDecoration: "none" }}>
-                  {profile.name || "User"}
+                  {profile?.name || displayName || "User"}
                 </span>
               </>
             )}

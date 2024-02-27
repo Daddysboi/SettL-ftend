@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useEffect, useContext, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import {
@@ -17,10 +17,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { userContext } from "../../App";
 import Home from "./Home/Home.Dashboard";
-import Settings from "./Settings.Dashboard";
-import Transactions from "./Transactions.Dashboard";
+import Settings from "./Settings/Settings.Dashboard";
+import Transactions from "./Transactions/Transactions.Dashboard";
 import Wallet from "./Wallet.Dashboard";
-import Profile from "./Profile.Dashboard";
 import DashboardHeader from "./Header.Dashboard";
 import Tracker from "./Tracker.Dashboard";
 import Resolution from "./Resolution.Dashboard";
@@ -84,33 +83,30 @@ const StyledSideBar = styled.div`
 
 const StyledBtnContainer = styled.div`
   display: flex;
+  gap: 1rem;
   flex-direction: column;
 `;
 
 const StyledBtn = styled.button`
   border: none;
   background: none;
-  margin-bottom: 0.5rem;
   text-align: left;
   color: #ffffff;
   font-weight: 200;
   padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+
   ${({ active }) =>
     active &&
     css`
       color: #4db6ac;
-      border-radius: 0.5rem;
-      padding: 0.5rem;
+      background-color: #ffffff;
     `}
+
   &:hover {
-    color: #4db6ac;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-  }
-  @media only screen and (min-width: 320px) and (max-width: 480px) {
-  }
-  // iPads, Tablets
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
+    background-color: #4db6ac;
+    color: #ffffff;
   }
 `;
 
@@ -131,20 +127,25 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 const SignoutLink = styled(Link)`
   border: none;
   background: none;
-  margin-bottom: 0.5rem;
   text-align: left;
   color: #ffffff;
+  font-weight: 200;
+  padding: 0.5rem;
   font-size: 0.6rem;
   text-decoration: none;
+  border-radius: 0.5rem;
+
+  transition: background-color 0.2s ease;
   ${({ active }) =>
     active &&
     css`
       color: #4db6ac;
-      border-radius: 0.5rem;
+      background-color: #ffffff;
     `}
+
   &:hover {
-    color: #4db6ac;
-    border-radius: 0.5rem;
+    background-color: #4db6ac;
+    color: #ffffff;
   }
 `;
 
@@ -200,20 +201,33 @@ const reducer = (state, action) => {
 const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { page, initialLoad } = state;
-  const { userId } = useParams();
-  const { setProfile, setUser } = useContext(userContext);
 
+  const { transactions } = useAppSelector((state) => state.transaction);
   const { user } = useAppSelector((state) => state.user);
-  console.log("my user", user);
 
   const logOut = () => {
     googleLogout();
-    // setUser({}); // Clear user state
-    // setProfile({}); // Clear profile state
-    localStorage.removeItem("token");
     localStorage.removeItem(USER_TOKEN);
     localStorage.removeItem(USER_ID);
   };
+
+  const filterTransactions = (trnx) => {
+    // List of statuses to exclude
+    const excludedStatuses = ["DECLINED", "REFUNDED", "APPROVED"];
+
+    // Filter transactions based on excluded statuses
+    const filteredTransactions = trnx?.filter((transaction) => {
+      // Check if the transaction status is not in the excluded statuses list
+      return !excludedStatuses?.includes(transaction?.status);
+    });
+
+    return filteredTransactions;
+  };
+
+  const ongoingTransactions = useMemo(
+    () => filterTransactions(transactions),
+    [transactions]
+  );
 
   useEffect(() => {
     if (initialLoad) {
@@ -239,13 +253,6 @@ const Dashboard = () => {
               <StyledBtnName>Home</StyledBtnName>
             </StyledBtn>
             <StyledBtn
-              active={page === "profile"}
-              onClick={() => navigateTo("profile")}
-            >
-              <StyledFontAwesomeIcon icon={faUser} />
-              <StyledBtnName>Profile</StyledBtnName>
-            </StyledBtn>
-            <StyledBtn
               active={page === "transactions"}
               onClick={() => navigateTo("transactions")}
             >
@@ -267,18 +274,19 @@ const Dashboard = () => {
               <StyledBtnName>Settings</StyledBtnName>
             </StyledBtn>
             <StyledBtn
-              active={page === "tracker"}
-              onClick={() => navigateTo("tracker")}
-            >
-              <StyledFontAwesomeIcon icon={faTruck} />
-              <StyledBtnName> Tracking</StyledBtnName>
-            </StyledBtn>
-            <StyledBtn
               active={page === "resolution"}
               onClick={() => navigateTo("resolution")}
             >
               <StyledFontAwesomeIcon icon={faHandshake} />
               <StyledBtnName> Resolution</StyledBtnName>
+            </StyledBtn>{" "}
+            <StyledBtn
+              style={{ display: "none" }}
+              active={page === "tracker"}
+              onClick={() => navigateTo("tracker")}
+            >
+              <StyledFontAwesomeIcon icon={faTruck} />
+              <StyledBtnName> Tracking</StyledBtnName>
             </StyledBtn>
           </StyledBtnContainer>
 
@@ -289,12 +297,22 @@ const Dashboard = () => {
         </StyledSideBar>
 
         <StyledRight>
-          {page === "home" && <Home />}
-          {page === "profile" && <Profile />}
-          {page === "transactions" && <Transactions navigateTo={navigateTo} />}
-          {page === "wallet" && <Wallet />}
-          {page === "settings" && <Settings />}
-          {page === "tracker" && <Tracker navigateTo={navigateTo} />}
+          {page === "home" && <Home user={user} transactions={transactions} />}
+          {page === "transactions" && (
+            <Transactions
+              navigateTo={navigateTo}
+              user={user}
+              transactions={transactions}
+              ongoingTransactions={ongoingTransactions}
+            />
+          )}
+          {page === "wallet" && (
+            <Wallet user={user} transactions={transactions} />
+          )}
+          {page === "settings" && <Settings user={user} />}
+          {page === "tracker" && (
+            <Tracker navigateTo={navigateTo} user={user} />
+          )}
           {page === "resolution" && <Resolution />}
         </StyledRight>
       </StyledContainer>

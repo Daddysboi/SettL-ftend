@@ -14,6 +14,7 @@ import { PaystackButton } from "react-paystack";
 import styled from "styled-components";
 import "react-toastify/dist/ReactToastify.css";
 import { TailSpin as Loader } from "react-loader-spinner";
+import DatePicker from "react-datepicker";
 
 import {
   createTransaction,
@@ -21,7 +22,11 @@ import {
 } from "../../../features/transactionSlice";
 import { USER_ID } from "../../../services/CONSTANTS";
 import { useAppDispatch } from "../../../redux/hooks";
+import { useFetchUserData } from "../../../Guard";
 
+import popupimg from "../../../assets/images/popupimg.png";
+
+import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css";
 
 const StyledModal = styled(Modal)`
@@ -57,6 +62,9 @@ const StyledBtnRole = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  border: 1px solid #f8701c;
+  margin-right: 0.5rem;
+  margin-top: 1rem;
 
   &:hover {
     background-color: transparent;
@@ -73,7 +81,6 @@ const StyledButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  // position: absolute;
   bottom: 0.5rem;
   right: 6rem;
 
@@ -94,6 +101,7 @@ const StyledFormDiv = styled.div`
 const Styledlabel = styled.label`
   margin-top: 1rem;
   font-size: 0.7rem;
+  display: block;
 `;
 
 const StyledBackButton = styled.button`
@@ -127,6 +135,14 @@ const StyledTextArea = styled.textarea`
   border-radius: 3px;
   display: block;
 `;
+const StyledDatePicker = styled(DatePicker)`
+  padding: 0.2rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  border-radius: 3px;
+  width: 6rem;
+  margin-bottom: -2rem;
+  font-size: 0.7rem;
+`;
 
 const StyledError = styled.p`
   color: red;
@@ -151,6 +167,7 @@ const TransactionFormPopup = ({
   }/confirm-transaction`;
   const encodedLink = encodeURI(text);
   const dispatch = useAppDispatch();
+  const fetchUserData = useFetchUserData();
 
   const formik = useFormik({
     initialValues: {
@@ -163,6 +180,7 @@ const TransactionFormPopup = ({
       counterpartyEmail: "",
       counterpartyPhone: "",
       setConditions: "",
+      dateDue: "",
       termsAndConditions: "",
     },
     validationSchema: Yup.object({
@@ -174,7 +192,10 @@ const TransactionFormPopup = ({
       productName: Yup.string().required("Please enter the product name"),
       counterpartyName: Yup.string().when("role", {
         is: "buyer",
-        then: () => Yup.string().required("Please enter counterparty name"),
+        then: () =>
+          Yup.string()
+            .email("Invalid email format")
+            .required("Please enter counterparty email"),
       }),
       counterpartyEmail: Yup.string().when("role", {
         is: "buyer",
@@ -193,6 +214,9 @@ const TransactionFormPopup = ({
         then: () =>
           Yup.string().required("Please enter terms for seller to review"),
       }),
+      dateDue: Yup.date()
+        .min(new Date(), "Date must be in the future")
+        .required("Please select a date"),
       termsAndConditions: Yup.string().when("currentStep", {
         is: "payment",
         then: () => Yup.string().required("Please accept terms and conditions"),
@@ -220,6 +244,7 @@ const TransactionFormPopup = ({
         counterpartyEmail: formik.values.counterpartyEmail,
         counterpartyPhone: formik.values.counterpartyPhone,
         setConditions: formik.values.termsAndConditions,
+        dateDue: formik.values.dateDue,
         termsAndConditions: formik.values.termsAndConditions,
       },
       redirectUrl: encodedLink,
@@ -233,6 +258,7 @@ const TransactionFormPopup = ({
         }
         onRequestClose();
         toast.success(resp?.payload?.message || "Please check your inbox");
+        fetchUserData();
         setLoading(false);
       })
       .catch((error) => {
@@ -276,6 +302,7 @@ const TransactionFormPopup = ({
         counterpartyEmail: formik.values.counterpartyEmail?.toLowerCase(),
         counterpartyPhone: formik.values.counterpartyPhone,
         setConditions: formik.values.termsAndConditions,
+        dateDue: formik.values.dateDue,
         termsAndConditions: formik.values.termsAndConditions,
       },
     };
@@ -298,36 +325,6 @@ const TransactionFormPopup = ({
 
   const renderStepContent = () => {
     switch (currentModalStep) {
-      // case 1:
-      //   return (
-      //     <StyledFormDiv>
-      //       <StyledHeader>Create Transaction</StyledHeader>
-      //       <Styledlabel htmlFor="role">Select your role:</Styledlabel>
-      //       <div>
-      //         <StyledBtnRole
-      //           type="button"
-      //           onClick={() => {
-      //             formik.setFieldValue("role", "seller");
-      //             handleNext();
-      //           }}
-      //         >
-      //           <FontAwesomeIcon icon={faUser} /> Seller
-      //         </StyledBtnRole>{" "}
-      //         <StyledBtnRole
-      //           type="button"
-      //           onClick={() => {
-      //             formik.setFieldValue("role", "buyer");
-      //             handleNext();
-      //           }}
-      //         >
-      //           <FontAwesomeIcon icon={faMoneyBillWave} /> Buyer
-      //         </StyledBtnRole>
-      //       </div>
-      //       {formik.errors.role && formik.touched.role && (
-      //         <StyledError>{formik.errors.role}</StyledError>
-      //       )}
-      //     </StyledFormDiv>
-      //   );
       case 1:
         return (
           <StyledFormDiv>
@@ -508,26 +505,36 @@ const TransactionFormPopup = ({
             <Styledlabel htmlFor="termsAndConditions">
               Enter terms for purchase:
             </Styledlabel>
-
             <StyledTextArea
               type="text"
               name="termsAndConditions"
               id="termsAndConditions"
               cols="30"
-              rows="10"
+              rows="8"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.termsAndConditions}
               style={{ display: "block" }}
             ></StyledTextArea>
-
             {formik.errors.termsAndConditions &&
               formik.touched.termsAndConditions && (
                 <StyledError>{formik.errors.termsAndConditions}</StyledError>
               )}
+
+            <div>
+              <Styledlabel htmlFor="dateDue">Enter date due:</Styledlabel>
+              <StyledDatePicker
+                selected={formik.values.dateDue}
+                onChange={(date) => formik.setFieldValue("dateDue", date)}
+                dateFormat="yyyy-MM-dd"
+                calendarClassName="rasta-stripes"
+              />
+              {formik.errors.dateDue && formik.touched.dateDue && (
+                <StyledError>{formik.errors.dateDue}</StyledError>
+              )}
+            </div>
           </div>
         );
-
       default:
         return null;
     }
@@ -554,7 +561,9 @@ const TransactionFormPopup = ({
           width: "20rem",
           padding: "20px",
           height: "20rem",
-          borderRadius: "1rem",
+          backgroundImage: `url(${popupimg})`,
+          backgroundSize: "cover",
+          borderRadius: "0.5rem",
         },
       }}
     >
@@ -586,7 +595,7 @@ const TransactionFormPopup = ({
                   alignItems: "center",
                   gap: "1rem",
                   justifyContent: "flex-end",
-                  marginTop: "2rem",
+                  marginTop: "1.3rem",
                 }}
               >
                 {currentModalStep !== 1 && (

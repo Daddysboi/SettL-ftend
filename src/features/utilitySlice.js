@@ -3,6 +3,8 @@ import {
   ContactOurSupport,
   SaveEmailToMailingList,
   DisputeTransaction,
+  UpdateTransactionStatus,
+  AddLocation,
 } from "../services/utility.services";
 
 const initialState = {};
@@ -37,18 +39,47 @@ export const contactOurSupport = createAsyncThunk(
   }
 );
 
-export const disputeTransaction = createAsyncThunk(
-  "disputeTransaction",
-  async ({ fullName, email, message }) => {
+export const updateTransactionStatus = createAsyncThunk(
+  "updateTransactionStatus",
+  async ({ transactionId, newStatus }) => {
     try {
-      const resp = await DisputeTransaction({
-        fullName,
-        email,
-        message,
+      const resp = await UpdateTransactionStatus({
+        transactionId,
+        newStatus,
       });
       return resp;
     } catch (error) {
       throw error; // Throw the error to let Redux Toolkit handle the rejection
+    }
+  }
+);
+
+export const disputeTransaction = createAsyncThunk(
+  "disputeTransaction",
+  async ({ transactionId, reason, description, userId }) => {
+    try {
+      const resp = await DisputeTransaction({
+        transactionId,
+        reason,
+        description,
+        userId,
+      });
+      return resp;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const addLocation = createAsyncThunk(
+  "addLocation",
+  async ({ location }) => {
+    try {
+      const resp = await AddLocation({
+        location,
+      });
+      return resp;
+    } catch (error) {
+      throw error;
     }
   }
 );
@@ -81,6 +112,30 @@ export const utilitySlice = createSlice({
     builder.addCase(contactOurSupport.rejected, (state) => {
       state.isLoggedIn = false;
       // state.user = null;
+      state.isLoading = false;
+    });
+
+    // disputeTransaction actions
+    builder.addCase(disputeTransaction.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(disputeTransaction.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(disputeTransaction.rejected, (state) => {
+      state.isLoggedIn = false;
+      state.isLoading = false;
+    });
+
+    // updateTransactionStatus actions
+    builder.addCase(updateTransactionStatus.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateTransactionStatus.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updateTransactionStatus.rejected, (state) => {
+      state.isLoggedIn = false;
       state.isLoading = false;
     });
   },

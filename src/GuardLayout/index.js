@@ -1,12 +1,12 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AuthGuard from "../AuthGuard";
+import Guard from "../Guard";
 
 const GuardLayout = () => {
   return (
-    <AuthGuard>
+    <Guard>
       <Outlet />
-    </AuthGuard>
+    </Guard>
   );
 };
 

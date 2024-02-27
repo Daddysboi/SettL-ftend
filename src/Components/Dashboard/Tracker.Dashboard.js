@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCodeCommit,
-  faEdit,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCodeCommit } from "@fortawesome/free-solid-svg-icons";
+import { Formik, Field, ErrorMessage, Form } from "formik";
+import * as Yup from "yup";
+
+import { addLocation } from "../../features/utilitySlice";
+import { useAppDispatch } from "../../redux/hooks";
+import { userContext } from "../../App";
 
 const TrackerContainer = styled.div`
-  margin: 0 auto;
-  padding: 20px;
+  margin: 0;
 `;
 
 const TrackerHeader = styled.h2`
@@ -20,9 +21,7 @@ const TrackerHeader = styled.h2`
 const MilestoneList = styled.ul`
   list-style: none;
   padding: 0;
-  margin-top: 4rem;
 `;
-
 const StyledInput = styled.input`
   width: 20rem;
   min-height: 42px;
@@ -31,6 +30,23 @@ const StyledInput = styled.input`
   border-radius: 0.3rem;
   border: 1px solid rgba(223, 140, 82, 0.3);
   outline: none;
+  &::placeholder {
+    opacity: 0.5;
+  }
+  &:focus {
+    border: 1px solid rgb(194, 194, 194);
+  }
+`;
+
+const StyledField = styled(Field)`
+  width: 20rem;
+  min-height: 42px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(223, 140, 82, 0.3);
+  outline: none;
+  margin-bottom: 1rem;
   &::placeholder {
     opacity: 0.5;
   }
@@ -58,22 +74,13 @@ const SubmitButton = styled.button`
 const MilestoneItem = styled.li`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   position: relative;
 `;
 
 const IconWrapper = styled.div`
   margin-right: 10px;
   transform: rotate(90deg);
-`;
-
-const Line = styled.div`
-  /* width: 1px;
-  background-color: #4db6ac;
-  position: absolute;
-  top: ${({ top }) => top}px;
-  bottom: ${({ bottom }) => bottom}px;
-  left: 5px; */
 `;
 
 const MilestoneText = styled.div`
@@ -87,58 +94,113 @@ const LocationText = styled.div`
   margin-right: 10px;
 `;
 
-const DeleteButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #4db6ac;
-  margin-left: 5px;
-`;
-
-const DateTimeWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
 const DateText = styled.div`
   color: #4db6ac;
   font-size: 0.55rem;
   margin-bottom: 0.25rem;
 `;
+
 const TimeText = styled.div`
   font-size: 0.55rem;
   color: #4db6ac;
   margin-top: 0.25rem;
 `;
 
-const Timestamp = ({ timestamp }) => {
-  const formattedDate = new Date(timestamp).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  const formattedTime = new Date(timestamp).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return (
-    <DateTimeWrapper>
-      <DateText>{formattedDate}</DateText>
-      <TimeText>{formattedTime}</TimeText>
-    </DateTimeWrapper>
-  );
-};
+const IdStyle = styled.div`
+  font-size: 0.6rem;
+  opacity: 0.5;
+  margin-top: -1rem;
+`;
+// const Tracker = ({ user }) => {
+//   const [loading, setLoading] = useState(false);
+//   const [milestones, setMilestones] = useState([]);
+//   const dispatch = useAppDispatch();
+//   const { currentTransactionId } = useContext(userContext);
+
+//   const initialValues = {
+//     currentLocation: "",
+//   };
+
+//   const validationSchema = Yup.object({
+//     currentLocation: Yup.string().required("Current location is required"),
+//   });
+
+//   const onSubmit = async (values, { resetForm }) => {
+//     try {
+//       await dispatch(addLocation({ location: values.currentLocation }));
+//       dispatch(addLocation(request)).then((resp) => {
+//         if (resp?.payload?.status !== 201) {
+//           toast.error(resp?.payload?.message || "Something went wrong");
+//           setLoading(false);
+//           return;
+//         }
+//         toast.success(resp?.payload?.message || "Successfully Updated");
+//         resetForm();
+//         setLoading(false);
+//       });
+//     } catch (error) {
+//       toast.error(error?.message || "Something went wrong");
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <TrackerContainer>
+//       {user?.role === "seller" ? (
+//         <>
+//           <TrackerHeader>Order Tracking</TrackerHeader>
+//           <Formik
+//             onSubmit={onSubmit}
+//             validationSchema={validationSchema}
+//             initialValues={initialValues}
+//           >
+//             <Form>
+//               <StyledField
+//                 id="location"
+//                 name="currentLocation"
+//                 type="text"
+//                 placeholder="Enter current location"
+//               />
+//               <ErrorMessage name="currentLocation" component="div" />
+//               <SubmitButton type="submit">Submit Location</SubmitButton>
+//             </Form>
+//           </Formik>
+//         </>
+//       ) : (
+//         ""
+//       )}
+//       <MilestoneList>
+//         <h2>Current Stop</h2>
+//         <IdStyle>ID: {currentTransactionId}</IdStyle>
+
+//         {milestones.map((milestone, index) => (
+//           <MilestoneItem key={index}>
+//             {index !== 0}
+//             <IconWrapper>
+//               <FontAwesomeIcon icon={faCodeCommit} size="lg" color="#4db6ac" />
+//             </IconWrapper>
+//             <MilestoneText>
+//               <div>
+//                 <LocationText>{milestone.location}</LocationText>
+//                 <DateText>{milestone.timestamp.split("T")[0]}</DateText>
+//                 <TimeText>{milestone.timestamp.split("T")[1]}</TimeText>
+//               </div>
+//             </MilestoneText>
+//           </MilestoneItem>
+//         ))}
+//       </MilestoneList>
+//     </TrackerContainer>
+//   );
+// };
+
+// export default Tracker;
 
 const Tracker = () => {
   const [currentLocation, setCurrentLocation] = useState("");
+  const [loading, setLoading] = useState(false);
   const [milestones, setMilestones] = useState([]);
+  const dispatch = useAppDispatch();
+  const { currentTransactionId } = useContext(userContext);
 
   const handleAddMilestone = () => {
     if (currentLocation.trim() !== "") {
@@ -170,17 +232,18 @@ const Tracker = () => {
       </div>
       <MilestoneList>
         <h2>Current Stop</h2>
+        <IdStyle>ID: {currentTransactionId}</IdStyle>
+
         {milestones.map((milestone, index) => (
           <MilestoneItem key={index}>
-            {index !== 0 && <Line top={(index - 1) * 26} bottom={26} />}
             <IconWrapper>
               <FontAwesomeIcon icon={faCodeCommit} size="lg" color="#4db6ac" />
             </IconWrapper>
             <MilestoneText>
               <div>
-                <LocationText>{milestone.location}</LocationText>
-                <DateText>{milestone.timestamp.split("T")[0]}</DateText>
-                <TimeText>{milestone.timestamp.split("T")[1]}</TimeText>
+                <LocationText>{milestone?.location}</LocationText>
+                <DateText>{milestone?.timestamp?.split("T")[0]}</DateText>
+                <TimeText>{milestone?.timestamp?.split("T")[1]}</TimeText>
               </div>
             </MilestoneText>
           </MilestoneItem>

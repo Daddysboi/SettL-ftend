@@ -150,7 +150,6 @@ const SignIn = () => {
         })
       )
         .then((resp) => {
-          console.log(resp);
           if (resp?.payload?.status !== 200) {
             toast.error(resp?.payload?.message || "Something went wrong");
             setLoading(false);

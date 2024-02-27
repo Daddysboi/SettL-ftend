@@ -1,11 +1,12 @@
+import React, { createContext, useEffect, useState } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { createContext, useEffect, useState } from "react";
 import Aos from "aos";
+import { TailSpin as Loader } from "react-loader-spinner";
 import "aos/dist/aos.css";
 
 import "./App.css";
@@ -36,13 +37,10 @@ const router = createBrowserRouter(
         element={<ResetPassword />}
       />
       <Route path="/otp" element={<Otp />} />
-      <Route path="/dashboard" index element={<Dashboard />}></Route>
+      <Route path="/dashboard" index element={<Dashboard />} />
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/confirm-transaction"
-          element={<ConfirmTransaction />}
-        ></Route>
+        <Route path="/confirm-transaction" element={<ConfirmTransaction />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="*" element={<Error404 />} />
@@ -52,9 +50,9 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  // const [userData, setUserData] = useState("");
-  const [user, setUser] = useState([]);
-  const [profile, setProfile] = useState([]);
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [currentTransactionId, setcurrentTransactionId] = useState("");
 
   useEffect(() => {
     Aos.init({
@@ -63,10 +61,31 @@ function App() {
   }, []);
 
   return (
-    <userContext.Provider value={{ user, setUser, profile, setProfile }}>
+    <userContext.Provider
+      value={{
+        user,
+        setUser,
+        profile,
+        setProfile,
+        currentTransactionId,
+        setcurrentTransactionId,
+      }}
+    >
       <div className="App">
         <RouterProvider router={router}>
-          <RootLayout />
+          <React.Suspense
+            fallback={
+              <Loader
+                type="TailSpin"
+                color="#ff4500"
+                height={60}
+                width={60}
+                style={{ margin: "auto" }}
+              />
+            }
+          >
+            <RootLayout />
+          </React.Suspense>
         </RouterProvider>
       </div>
     </userContext.Provider>

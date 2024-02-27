@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import styled from "styled-components";
 import AppInput from "../ReUseableComponent/AppInput";
 import { USER_ID } from "../../services/CONSTANTS";
 import { useAppDispatch } from "../../redux/hooks";
+import { userContext } from "../../App";
 
 import { disputeTransaction } from "../../features/utilitySlice";
 
@@ -55,7 +56,10 @@ const disputeValidationSchema = Yup.object().shape({
 const Resolution = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const userId = localStorage.getItem(USER_ID);
+  const userId = localStorage.getItem(USER_ID).replace(/"/g, "");
+  const { currentTransactionId, setcurrentTransactionId } =
+    useContext(userContext);
+
   const disputeFormik = useFormik({
     initialValues: {
       transactionId: "",
@@ -66,16 +70,18 @@ const Resolution = () => {
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       let request = {
-        transactionId: values.transactionId,
-        reason: values.reason,
-        description: values.description,
+        transactionId: values?.transactionId,
+        reason: values?.reason,
+        description: values?.description,
         userId: userId,
       };
+
       dispatch(disputeTransaction(request))
         .then((resp) => {
           if (resp?.payload?.status !== 201) {
             toast.error(resp?.payload?.message || "Something went wrong");
             setLoading(false);
+
             return;
           }
           toast.success(
@@ -100,7 +106,7 @@ const Resolution = () => {
             label="Transaction ID"
             type="text"
             name="transactionId"
-            value={disputeFormik.values.transactionId}
+            value={currentTransactionId}
             placeholder="Enter Transaction ID"
             onChange={disputeFormik.handleChange}
             error={
